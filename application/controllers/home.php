@@ -7,7 +7,7 @@ class Home extends CI_Controller {
 	}
 	
 	function index() {
-		echo "<p>WVSU-JC Online Student Information System is under construction.</p>";
+		echo "<p>Wvsu-Jc Online Student Information System is under construction.</p>";
 	}
 	
 	
