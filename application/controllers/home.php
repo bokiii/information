@@ -10,5 +10,7 @@ class Home extends CI_Controller {
 		$this->load->view('template');
 	}
 	
-	
+	function test() {
+		echo "Hello this is a test..";
+	}
 }
