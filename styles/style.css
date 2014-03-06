@@ -1,0 +1,52 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	font: arial;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+body {
+	background: #f0f4f4;
+	color: #555555;
+}
+
+#container {
+	width: 1000px;
+	margin: 0px auto;
+}
+
+#container #header {
+	text-align: center;
+}
+
+#container #header h1 {
+	margin-top: 40px;
+	font-size: 35px;
+	font-weight: normal;
+}
+
+#container #header p {
+	font-size: 20px;
+	margin-top: 14px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
