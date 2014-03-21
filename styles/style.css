@@ -1,14 +1,29 @@
 * {
 	margin: 0px;
 	padding: 0px;
-	font: arial;
+	font: inherit;
 	font-size: 100%;
 	vertical-align: baseline;
 }
 
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+input:focus, textarea:focus, select:focus { 
+	outline: none;
+}
+
 body {
-	background: #f0f4f4;
-	color: #555555;
+	color: #333;
 }
 
 #container {
@@ -16,32 +31,104 @@ body {
 	margin: 0px auto;
 }
 
-#container #header {
+#header {
+	padding: 30px 10px 20px 10px;
+	background-color: #F1F1F1;
+	border-bottom: 1px solid #E5E5E5;
+} 
+
+
+#header #logo h1 {
+	font-size: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	font-weight: bold;
 	text-align: center;
 }
 
-#container #header h1 {
-	margin-top: 40px;
-	font-size: 35px;
-	font-weight: normal;
+#header form {
+	margin-top: 20px;
+	margin-left: 30px;
 }
 
-#container #header p {
-	font-size: 20px;
-	margin-top: 14px;
+#header form input[type='text'] {
+	padding: 4px;
+	width: 310px;
+	height: 20px;
+	border: 1px solid #CCCCCC;
 }
 
+#header form #search_button {
+	border: none;
+	margin-top: -.5px;
+	cursor: pointer;
+}
 
+#header ul {
+	margin-top: 23px;
+}
 
+#header ul li {
+	display: inline;
+	margin-right: 20px;
+}
 
+#header ul li a {
+	text-decoration: none;
+	color: #555555;
+	background-color: #E6E6E6;
+	padding: 10px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
 
+#content #delete_form table {
+	margin-top: 20px;
+	width: 100%;
+}
 
+#content #delete_form table {
+	border-collapse: collapse;
+}
 
+#content #delete_form  table th, #content table td {
+	border-top: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+	padding: 10px;
+	text-align: center;
+}
 
+#content #delete_form table th {
+	font-weight: bold;
+}
 
+#content #actions {	
+	margin-top: 20px;
+}
 
+#content #actions button {
+	padding: 10px;
+	border: none;
+	background-color: #4585F4;
+	margin-left: 2px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	cursor: pointer;
+}
 
+#footer {
+	margin-top: 20px;
+	padding: 70px 10px 70px 10px;
+	text-align: center;
+	border-bottom: 1px solid #E5E5E5;
+}
 
+#footer a {
+	color: #4585F2;
+	text-decoration: none;
+}
 
 
 

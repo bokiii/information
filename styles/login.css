@@ -1,0 +1,126 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+input:focus, textarea:focus, select:focus { 
+	outline: none;
+}
+
+body {
+	color: #333;
+}
+
+#container {
+	width: 1000px;
+	margin: 0px auto;
+}
+
+#container #header {
+	width: 400px;
+	margin: 50px auto 0px auto;
+}
+
+#container #header img {
+	margin-left: 94px;
+}
+
+#container #header h1 {
+	font-size: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#container #content {
+	margin-bottom: 70px;
+}
+
+#container #content #login {
+	width: 320px;
+	min-height: 300px;
+	margin: 0px auto 0px auto;
+	padding: 30px;
+	background-color: #F7F7F7;
+	border: 1px solid #E5E5E5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#container #content #login img {
+	display: block;
+	margin: 0px auto;
+}
+
+#container #content #login form {
+	margin-top: 20px;
+}
+
+#container #content #login form input[type='text'], #container #content #login form input[type='password'] {
+	padding: 10px;
+	margin-top: 10px;
+	width: 92.5%;
+	border: 1px solid #C0C0C0;
+}
+
+#container #content #login form input[type='submit'] {
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #4888EF;
+	color: #D0F6FF;
+	text-align: center;
+	width: 100%;
+	border: none;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+html {
+	overflow-x: hidden;
+}
+
+.full_width { 
+	position: relative;
+	background: #F1F1F1;
+}
+
+.full_width:before, .full_width:after {
+	content: "";
+	background: #F1F1F1;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 9999px;
+	height: 100%;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+.full_width:before {
+	right: 100%;
+
+}
+
+.full_width:after {
+	left: 100%;
+
+}
+
+.full_width:nth-of-type(1), .full_width:nth-of-type(1):before, .full_width:nth-of-type(1):after { 
+	background: #F1F1F1;
+}
+
+.full_width:nth-of-type(2), .full_width:nth-of-type(2):before, .full_width:nth-of-type(2):after { 
+	background: #F1F1F1;
+}
+
+.full_width:nth-of-type(3), .full_width:nth-of-type(3):before, .full_width:nth-of-type(3):after { 
+	background: #F1F1F1;
+}
+
+.left-only:after {
+  display: none;
+}
+
+.right-only:before {
+  width: 20px;
+}
+
+
+
