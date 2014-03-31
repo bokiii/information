@@ -115,6 +115,10 @@ body {
 	text-align: center;
 }
 
+#content #delete_form  table th, #content table td a {
+	color: #00008F;
+}
+
 #content #delete_form table th {
 	font-weight: bold;
 }
@@ -133,6 +137,9 @@ body {
 	-webkit-border-radius: 4px;
 	cursor: pointer;
 }
+
+
+
 
 #footer {
 	margin-top: 20px;

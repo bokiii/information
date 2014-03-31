@@ -34,7 +34,7 @@ class Students extends CI_Controller {
 		$data['popup'] = "
 			<a class='close' href='#'>&#215;</a>
 			<h1>Students</h1>
-			<form action='{$popup_form_action}' method='post' id='add_form'>
+			<form action='{$popup_form_action}' method='post' id='popup_form'>
 				<table>
 					<tr>
 						<td><label for='first_name'>First Name:</label></td>
@@ -84,10 +84,12 @@ class Students extends CI_Controller {
 					$middle_name = $row->middle_name;
 					$address = $row->address;
 				
+					$update_link = base_url() . "index.php/global_actions/students?action=update&id={$id}";
+					
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
-							<td>{$first_name}</td>
+							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
 							<td>{$address}</td>
@@ -111,10 +113,12 @@ class Students extends CI_Controller {
 					$middle_name = $row->middle_name;
 					$address = $row->address;
 				
+					$update_link = base_url() . "index.php/global_actions/students?action=update&id={$id}";
+				
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
-							<td>{$first_name}</td>
+							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
 							<td>{$address}</td>
@@ -186,6 +190,26 @@ class Students extends CI_Controller {
 		redirect("students");
 	}
 	
+	function update_student() {
+		
+		$data = array(
+			"id" => $this->input->post('id'),
+			"first_name" => $this->input->post('first_name'),
+			"last_name" => $this->input->post('last_name'),
+			"middle_name" => $this->input->post('middle_name'),
+			"address" => $this->input->post('address')
+		);
+		
+		$update_student = $this->global_model->update($this->table, $data, $data['id']);
+		
+		if($update_student) {
+			$data['status'] = true;
+		} else {
+			$data['status'] = false;
+		}
+		
+		redirect("students");
+	}
 	
 	
 } // end class

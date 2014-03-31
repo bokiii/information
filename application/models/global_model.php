@@ -33,4 +33,21 @@ class Global_model extends CI_Model {
 		}
 	}
 	
+	function update($table, $data, $id) {
+		$this->db->where('id', $id);
+		$query = $this->db->update($table, $data);
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function get_by_id($table, $id) {
+		$this->db->where('id', $id);
+		$query = $this->db->get($table);
+		return $query->result();
+	}
+	
 }
