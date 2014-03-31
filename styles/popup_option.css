@@ -1,17 +1,8 @@
-#popup_container {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	background-image: url('../images/popup_background.png');
-	display: none;
-}
-
-#popup_container #popup_content {
+#popup_option #popup_content {
 	position: relative;
 	width: 800px;
 	height: 400px;
+	margin: 40px auto 0px auto;
 	background-color: #F1F1F1;
 	border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -19,7 +10,7 @@
 	border: 1px solid #CCCCCC;
 }
 
-#popup_container #popup_content a.close {
+#popup_option #popup_content a.close {
 	position: absolute;
 	top: -1px;
 	right: -1px;
@@ -34,41 +25,34 @@
 	border-bottom-left-radius: 4px;
 }
 
-#popup_container #popup_content h1 {
-	font-size: 20px;
-	text-align: center;
-	margin: 25px auto 0px auto;
-	background-color: #4584F2;
+#popup_option #popup_content h1 {
 	padding: 10px;
-	width: 120px;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	display: block;
-	color: #FFF;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
 }
 
-#popup_container #popup_content  form {
+#popup_option #popup_content  form {
 	margin-top: 20px;
 }
 
-#popup_container #popup_content  form table {
+#popup_option #popup_content  form table {
 	border-collapse: collapse;
 }
 
-#popup_container #popup_content  form table td {
+#popup_option #popup_content  form table td {
 	padding: 10px;
 	text-align: left;
 }
 
-#popup_container #popup_content  form table td input[type='text'] {
+#popup_option #popup_content  form table td input[type='text'] {
 	padding: 3px;
 	border: 1px solid #D7D7D7;
 	width: 250px;
-	height: 30px;
+	height: 23px;
 }
 
-#popup_container #popup_content  form table td .popup_actions {
+#popup_option #popup_content  form table td .popup_actions {
 	padding: 10px;
 	background-color: #4585F4;
 	border: none;
@@ -79,6 +63,15 @@
 	-webkit-border-radius: 4px;
 	cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
 
 
 

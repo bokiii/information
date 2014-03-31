@@ -4,10 +4,7 @@
 		</div>
 	
 	</div> <!-- end container -->
-	
-	<!-- popup css below -->
-	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/popup.css" />
-	
+
 	<?php
 		$this->load->view('tools/popup.php');
 	?>
