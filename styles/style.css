@@ -62,25 +62,6 @@ body {
 	cursor: pointer;
 }
 
-#header ul {
-	margin-top: 23px;
-}
-
-#header ul li {
-	display: inline;
-	margin-right: 20px;
-}
-
-#header ul li a {
-	text-decoration: none;
-	color: #555555;
-	background-color: #E6E6E6;
-	padding: 10px;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-}
-
 #content h1 {
 	font-size: 20px;
 	text-align: center;
@@ -137,9 +118,6 @@ body {
 	-webkit-border-radius: 4px;
 	cursor: pointer;
 }
-
-
-
 
 #footer {
 	margin-top: 20px;

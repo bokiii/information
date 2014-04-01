@@ -180,7 +180,36 @@ var deleteModule = (function() {
 
 deleteModule.execute_checkbox();
 
-// search module below 
+// dropdown module below 
+
+var dropdownModule = (function() {
+	
+	var $first_level_li = $(".dropdown li");
+	var $second_level_ul = $(".dropdown li ul");
+	
+	var second_level_actions = function() {
+		
+		$first_level_li.mouseenter(function(){
+			$(this).children("ul").slideDown("fast");
+		});
+		
+		$second_level_ul.mouseleave(function(){
+			$(this).fadeOut("fast");
+		});
+		
+	
+	};
+	
+	return {
+		second_level_actions: second_level_actions
+	}
+	
+})()
+
+// execute dropdown module below 
+
+dropdownModule.second_level_actions();
+
 
 
 

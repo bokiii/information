@@ -5,6 +5,7 @@
 	<title>Student Information System</title>
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/style.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width.css" />
+	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/dropdown.css" />
 </head>
 <body>
 	<div id="container">
@@ -20,10 +21,19 @@
 				<img class="right" src="<?php echo base_url(); ?>images/search_button.png" id="search_button" alt="Search Button" />
 				<div class="clear"></div>
 			</form>
-			<ul class="right">
-				<li><a href="#">Maintenance</a></li>
-				<li><a href="#">Account</a></li>
+			<ul class="right dropdown">
+				<li><a href="#">Account</a>
+					
+				</li>
+				<li><a href="#">Maintenance</a>
+					<ul class="sub_menu">
+						<li><a href="#">Teachers</a></li>
+						<li><a href="#">Subjects</a></li>
+					</ul>
+				</li>
 			</ul>
 			<div class="clear"></div>
 		</div>
+		
+		
 		

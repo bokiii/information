@@ -1,0 +1,99 @@
+.dropdown {
+	margin-top: 23px;
+}
+
+.dropdown li {
+	float: right;
+	position: relative;
+	margin-right: 20px;
+}
+
+.dropdown li a {
+	text-decoration: none;
+	color: #555555;
+	background-color: #E6E6E6;
+	padding: 10px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+
+/* sub menu with arrow below */
+
+.dropdown li .sub_menu {
+	display: none;
+	position: absolute;
+	top: 50px; 
+	right: 0px; 
+	border: 1px solid #CCCCCC;
+	padding: 10px;
+	width: 180px;
+	background-color: #F1F1F1;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+
+.dropdown li .sub_menu:before, .dropdown li .sub_menu:after {
+	content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-top: 0;
+}
+
+.dropdown li .sub_menu:before {
+	top: -16px;
+    right: 9%; /* adjust postion here*/
+
+    /* If 1px darken stroke slightly */
+    border-bottom-color: #CCCCCC; /* border color of the triangle */
+    border-width: 16px;
+}
+
+.dropdown li .sub_menu:after {
+	top: -15px;
+    right: 9.5%; /* adjust postion here*/
+    border-bottom-color: #F1F1F1; /* color of the triangle*/
+    border-width: 15px;
+}
+/* end sub menu with arrow */
+
+.dropdown li .sub_menu li {
+	float: none;
+	display: block;
+	margin-right: none;
+	margin-top: 5px;
+}
+
+.dropdown li .sub_menu li:first-child {
+	margin-top: 0px;
+}
+
+.dropdown li .sub_menu li a {
+	background: none;
+	padding: 0px;
+	border: none;
+	border-radius: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
