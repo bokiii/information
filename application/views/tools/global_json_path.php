@@ -1,2 +1,2 @@
 <input type="hidden" name="global_json_path" id="global_json_path" value="<?php echo base_url(); ?>index.php/global_actions/"/>
-<input type="hidden" name="current_url" id="current_url" value="<?php echo current_url(); ?>"/>
+<input type="hidden" name="current_url" id="current_url" value="<?php echo current_url(); ?><?php if(isset($id) && $id != NULL) { echo "?id=" . $id; } ?>"/>                                  

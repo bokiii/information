@@ -50,4 +50,10 @@ class Global_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function get_course_by_course_id($id) {
+		$this->db->where('id', $id);
+		$query = $this->db->get('courses');
+		return $query->result();
+	}
+	
 }

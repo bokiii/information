@@ -1,13 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Students extends CI_Controller {
-	
-	public	$height1 = "30px";
+class Schools extends CI_Controller {
+
+	public $height1 = "30px";
 	public	$height2 = "20px";
 	
-	public $table = "students";
-	public $add = "add_student";
-	public $delete = "delete_student";
+	public $table = "schools";
+	public $school_courses = "school_courses";
+	public $add = "add_school";
+	public $delete = "delete_school";
 	
 	public $search;
 	public $search_status;
@@ -19,7 +20,6 @@ class Students extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
-		$this->search_status = false;
 	}
 	
 	function index() {
@@ -27,9 +27,9 @@ class Students extends CI_Controller {
 		// call prompt below
 		
 		$this->prompt();
-		
-		// search table 
-		
+	
+		// search table
+	
 		$data['search_table'] = $this->table;
 		
 		// important set the height for the keyword input
@@ -50,16 +50,8 @@ class Students extends CI_Controller {
 			<form action='{$popup_form_action}' method='post' id='popup_form'>
 				<table>
 					<tr>
-						<td><label for='first_name'>First Name:</label></td>
-						<td><input type='text' name='first_name' id'first_name' /></td>
-						<td><label for='last_name'>Last Name:</label></td>
-						<td><input type='text' name='last_name' id='last_name' /></td>
-					</tr>
-					<tr>
-						<td><label for='middle_name'>Middle Name:</label></td>
-						<td><input type='text' name='middle_name' id='middle_name' /></td>
-						<td><label for='address'>Address:</label></td>
-						<td><input type='text' name='address' id='address' /></td>
+						<td><label for='school'>School:</label></td>
+						<td><input type='text' name='school' id'school' /></td>
 					</tr>
 					<tr>
 						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
@@ -79,10 +71,7 @@ class Students extends CI_Controller {
 				<table>
 					<tr>
 						<th><input type='checkbox' class='main_check'  /></th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Middle Name</th>
-						<th>Address</th>
+						<th>School</th>
 						<th>&nbsp;</th>
 					</tr>
 		";
@@ -93,21 +82,15 @@ class Students extends CI_Controller {
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;
-					$first_name = $row->first_name;
-					$last_name = $row->last_name;
-					$middle_name = $row->middle_name;
-					$address = $row->address;
+					$school = $row->school;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
+					$manage_link = base_url() . "index.php/manage/". $this->school_courses ."?id={$id}";
 					
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
-							<td><a href='{$update_link}'>{$first_name}</a></td>
-							<td>{$last_name}</td>
-							<td>{$middle_name}</td>
-							<td>{$address}</td>
+							<td><a href='{$update_link}'>{$school}</a></td>
 							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
@@ -124,21 +107,15 @@ class Students extends CI_Controller {
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;
-					$first_name = $row->first_name;
-					$last_name = $row->last_name;
-					$middle_name = $row->middle_name;
-					$address = $row->address;
+					$school = $row->school;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
+					$manage_link = base_url() . "index.php/manage/". $this->school_courses ."?id={$id}";
 				
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
-							<td><a href='{$update_link}'>{$first_name}</a></td>
-							<td>{$last_name}</td>
-							<td>{$middle_name}</td>
-							<td>{$address}</td>
+							<td><a href='{$update_link}'>{$school}</a></td>
 							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
@@ -172,7 +149,7 @@ class Students extends CI_Controller {
 		$this->load->view('template/content', $data);
 	}
 	
-	function add_student() {
+	function add_school() {
 		
 		// call validation
 		
@@ -181,32 +158,30 @@ class Students extends CI_Controller {
 		if($this->form_validation->run() == TRUE) {
 			
 			$data = array(
-				"first_name" => $this->input->post('first_name'),
-				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"address" => $this->input->post('address')
+				"school" => $this->input->post('school')
 			);
 			
-			$add_student = $this->global_model->add($this->table, $data);
-			$this->prompt_status = true;
+			$add_school = $this->global_model->add($this->table, $data);
 			
+			$this->prompt_status = true;
 		} else {
 			$this->prompt_status = false;
 			$this->validation_errors = validation_errors();
+			
 		} 
 		
 		$this->index();
 	}
-
-	function delete_student() {
+	
+	function delete_school() {
 		
 		$id = $this->input->post('id');
-		$delete_student = $this->global_model->delete($this->table, $id);
+		$delete_school = $this->global_model->delete($this->table, $id);
 		
 		$this->index();
 	}
 	
-	function update_student() {
+	function update_school() {
 		
 		// call validation
 		
@@ -216,13 +191,10 @@ class Students extends CI_Controller {
 		
 			$data = array(
 				"id" => $this->input->post('id'),
-				"first_name" => $this->input->post('first_name'),
-				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"address" => $this->input->post('address')
+				"school" => $this->input->post('school')
 			);
 			
-			$update_student = $this->global_model->update($this->table, $data, $data['id']);
+			$update_school = $this->global_model->update($this->table, $data, $data['id']);
 			
 			$this->prompt_status = true;
 		} else {
@@ -231,6 +203,7 @@ class Students extends CI_Controller {
 		}
 		
 		$this->index();
+		
 	}
 	
 	private function prompt() {
@@ -246,41 +219,26 @@ class Students extends CI_Controller {
 	}
 	
 	private function validation($action) {
-		
 		$this->load->library('form_validation');
 		
 		if($action == "add") {
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
-			
-			$this->form_validation->set_rules('first_name', 'First name', 'required');
-			$this->form_validation->set_rules('last_name', 'Last name', 'required');
-			$this->form_validation->set_rules('middle_name', 'Middle name', 'required');
-			$this->form_validation->set_rules('address', 'Address', 'required');
+		
+			$this->form_validation->set_rules('school', 'School', 'required');
 		}
-		
-		
 		
 		if($action == "update") {
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
 			
-			$this->form_validation->set_rules('first_name', 'First name', 'required');
-			$this->form_validation->set_rules('last_name', 'Last name', 'required');
-			$this->form_validation->set_rules('middle_name', 'Middle name', 'required');
-			$this->form_validation->set_rules('address', 'Address', 'required');
+			$this->form_validation->set_rules('school', 'School', 'required');
 		}
 	}
 
-	
-} // end class
-
-
-
-
-
+}
 
 
 

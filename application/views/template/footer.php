@@ -4,9 +4,11 @@
 		</div>
 	
 	</div> <!-- end container -->
-
+	
+	<!-- load tools below -->
 	<?php
 		$this->load->view('tools/popup.php');
+		$this->load->view('tools/yes_or_no.php');
 	?>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery2.js"></script>

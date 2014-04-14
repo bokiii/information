@@ -1,3 +1,31 @@
+// global script function tools below 
+
+var scroll_to_top = function() {
+	$('body').animate({scrollTop: 0}, 'slow');
+};
+
+
+// general module below
+
+var generalModule = (function(){
+	
+	var $content_h1 = $("#content h1");
+	
+	var add_full_width_2 = function() {
+		$content_h1.addClass('full_width_2');
+	};
+	
+	return {
+		add_full_width_2:	add_full_width_2
+	}
+	
+})()
+
+// execute general module below
+
+generalModule.add_full_width_2();
+
+
 //header module below 
 
 var headerModule = (function() {
@@ -49,8 +77,8 @@ var popupModule = (function() {
 	
 	// below are the variables for centering the popup content 
 	var $popup_content = $("#popup_container #popup_content");
-	var windowWidth = document.documentElement.clientWidth;
-	var windowHeight = document.documentElement.clientHeight;
+	var windowWidth = window.innerWidth;
+	var windowHeight = window.innerHeight;
 	var popup_content_width = $popup_content.width();
 	var popup_content_height = $popup_content.height();
 	
@@ -59,9 +87,8 @@ var popupModule = (function() {
 	
 	var add_click = function() {
 		$add_button.click(function(){
+			scroll_to_top();
 			var module = $global_json_path + $(this).val();
-			console.log(module);
-			//window.location = module;
 			window.history.pushState("Module Location", "Module Location", module); 
 			$popup_container.fadeIn('fast');
 			return false;
@@ -77,10 +104,16 @@ var popupModule = (function() {
 		});
 	};
 	
-	var center_popup = function() {
+	/*var center_popup_option = function() {
 		$popup_content.css({
 			"top": windowHeight/2-popup_content_height/2,
 			"left": windowWidth/2-popup_content_width/2
+		});
+	}*/
+	
+	var center_popup = function() {
+		$popup_content.css({
+			"margin-top": windowHeight/2-popup_content_height/2
 		});
 	}
 	
@@ -144,6 +177,13 @@ var deleteModule = (function() {
 	
 	var $main_check = $("#delete_form .main_check");
 	var $sub_check = $("#delete_form .sub_check");
+	
+	var $delete_button = $("#delete_form #delete_button");
+	var $delete_form = $("#delete_form");
+	var $yes_or_no_container = $("#yes_or_no_container");
+	
+	var $yes = $("#yes_or_no_container #yes_or_no_content div #yes");
+	var $no = $("#yes_or_no_container #yes_or_no_content div #no");
 
 	var execute_checkbox = function() {
 		
@@ -163,15 +203,32 @@ var deleteModule = (function() {
 				$main_check.uncheck();
 			}
 			
-			console.log('click sub');
+		});
+		
+	};
+	
+	var delete_button_click = function() {
+		
+		$delete_button.click(function(){
+			scroll_to_top();
+			$yes_or_no_container.fadeIn('fast');
 			
+			$yes.click(function() {
+				$delete_form.trigger('submit');
+			});
 			
+			$no.click(function() {
+				$yes_or_no_container.fadeOut('fast');
+			});
+			
+			return false;
 		});
 		
 	};
 	
 	return {
-		execute_checkbox:	execute_checkbox
+		execute_checkbox:		execute_checkbox,
+		delete_button_click: 	delete_button_click
 	}
 	
 })()
@@ -179,6 +236,7 @@ var deleteModule = (function() {
 // execute deleteModule below 
 
 deleteModule.execute_checkbox();
+deleteModule.delete_button_click();
 
 // dropdown module below 
 
@@ -190,18 +248,30 @@ var dropdownModule = (function() {
 	var second_level_actions = function() {
 		
 		$first_level_li.mouseenter(function(){
+			$(this).siblings("li").children("ul").fadeOut("fast");
 			$(this).children("ul").slideDown("fast");
 		});
 		
 		$second_level_ul.mouseleave(function(){
 			$(this).fadeOut("fast");
 		});
-		
+	};
 	
+	var document_click = function() {
+		
+		$(document).click(function(e){
+			if($(e.target).is('.sub_menu, .sub_menu *:not(.sub_menu li a)')) {
+				return false;
+			} else {
+				$second_level_ul.fadeOut("fast");
+			}
+		});
+		
 	};
 	
 	return {
-		second_level_actions: second_level_actions
+		second_level_actions: 		second_level_actions,
+		document_click: 	 	 	document_click
 	}
 	
 })()
@@ -209,6 +279,69 @@ var dropdownModule = (function() {
 // execute dropdown module below 
 
 dropdownModule.second_level_actions();
+dropdownModule.document_click();
+
+// prompt module below
+
+var promptModule = (function() {
+	
+	var $prompt_container = $("#prompt_container");
+	var $prompt_content = $("#prompt_container #prompt_content");
+	var $prompt_close = $("#prompt_container #prompt_content a.close");
+	
+	var $yes_or_no_container = $("#yes_or_no_container");
+	var $yes_or_no_content = $("#yes_or_no_container #yes_or_no_content");
+	var $yes_or_no_close = $("#yes_or_no_container #yes_or_no_content a.close");
+	
+	// variables for centering the prompt
+	var windowHeight = window.innerHeight;
+	var prompt_content_height = $prompt_content.height();
+	
+	var yes_or_no_content_height = $yes_or_no_content.height();
+	
+	var close_prompt = function() {
+		$prompt_close.click(function(){
+			$prompt_container.fadeOut('fast');
+			return false;
+		});
+	};
+	
+	var center_prompt = function() {
+		$prompt_content.css({
+			"margin-top": windowHeight/2-prompt_content_height/2
+		});
+	};
+	
+	var close_yes_or_no = function() {
+		$yes_or_no_close.click(function(){
+			$yes_or_no_container.fadeOut('fast');
+			return false;
+		});
+	};
+	
+	var center_yes_or_no = function() {
+		$yes_or_no_content.css({
+			"margin-top": windowHeight/2-yes_or_no_content_height/2 - 50
+		}); 
+	};
+	
+	return {
+		close_prompt: 		close_prompt,
+		center_prompt: 		center_prompt,
+		close_yes_or_no:	close_yes_or_no,
+		center_yes_or_no:	center_yes_or_no
+	}
+	
+})()
+
+// execute prompt module below 
+
+promptModule.close_prompt();
+promptModule.center_prompt();
+promptModule.close_yes_or_no();
+promptModule.center_yes_or_no();
+
+
 
 
 

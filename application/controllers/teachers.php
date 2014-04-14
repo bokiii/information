@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Students extends CI_Controller {
+class Teachers extends CI_Controller {
+
+	private	$height1 = "30px";
+	private	$height2 = "20px";
 	
-	public	$height1 = "30px";
-	public	$height2 = "20px";
-	
-	public $table = "students";
-	public $add = "add_student";
-	public $delete = "delete_student";
+	private $table = "teachers";
+	private $add = "add_teacher";
+	private $delete = "delete_teacher";
 	
 	public $search;
 	public $search_status;
@@ -19,7 +19,6 @@ class Students extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
-		$this->search_status = false;
 	}
 	
 	function index() {
@@ -27,8 +26,6 @@ class Students extends CI_Controller {
 		// call prompt below
 		
 		$this->prompt();
-		
-		// search table 
 		
 		$data['search_table'] = $this->table;
 		
@@ -83,7 +80,6 @@ class Students extends CI_Controller {
 						<th>Last Name</th>
 						<th>Middle Name</th>
 						<th>Address</th>
-						<th>&nbsp;</th>
 					</tr>
 		";
 		
@@ -99,7 +95,6 @@ class Students extends CI_Controller {
 					$address = $row->address;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
 					
 					$data['content'] .= "
 						<tr>
@@ -108,7 +103,6 @@ class Students extends CI_Controller {
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
 							<td>{$address}</td>
-							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -130,7 +124,6 @@ class Students extends CI_Controller {
 					$address = $row->address;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
 				
 					$data['content'] .= "
 						<tr>
@@ -139,7 +132,6 @@ class Students extends CI_Controller {
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
 							<td>{$address}</td>
-							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -172,8 +164,8 @@ class Students extends CI_Controller {
 		$this->load->view('template/content', $data);
 	}
 	
-	function add_student() {
-		
+	function add_teacher() {
+	
 		// call validation
 		
 		$this->validation('add');
@@ -187,27 +179,29 @@ class Students extends CI_Controller {
 				"address" => $this->input->post('address')
 			);
 			
-			$add_student = $this->global_model->add($this->table, $data);
-			$this->prompt_status = true;
+			$add_teacher = $this->global_model->add($this->table, $data);
 			
+			$this->prompt_status = true;
 		} else {
 			$this->prompt_status = false;
 			$this->validation_errors = validation_errors();
+			
 		} 
 		
 		$this->index();
+	
 	}
 
-	function delete_student() {
+	function delete_teacher() {
 		
 		$id = $this->input->post('id');
-		$delete_student = $this->global_model->delete($this->table, $id);
+		$delete_teacher = $this->global_model->delete($this->table, $id);
 		
 		$this->index();
 	}
 	
-	function update_student() {
-		
+	function update_teacher() {
+	
 		// call validation
 		
 		$this->validation('update');
@@ -222,7 +216,7 @@ class Students extends CI_Controller {
 				"address" => $this->input->post('address')
 			);
 			
-			$update_student = $this->global_model->update($this->table, $data, $data['id']);
+			$update_teacher = $this->global_model->update($this->table, $data, $data['id']);
 			
 			$this->prompt_status = true;
 		} else {
@@ -246,7 +240,6 @@ class Students extends CI_Controller {
 	}
 	
 	private function validation($action) {
-		
 		$this->load->library('form_validation');
 		
 		if($action == "add") {
@@ -260,8 +253,6 @@ class Students extends CI_Controller {
 			$this->form_validation->set_rules('address', 'Address', 'required');
 		}
 		
-		
-		
 		if($action == "update") {
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
@@ -273,22 +264,10 @@ class Students extends CI_Controller {
 			$this->form_validation->set_rules('address', 'Address', 'required');
 		}
 	}
-
 	
-} // end class
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	
+}
 
 
 

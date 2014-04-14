@@ -36,6 +36,7 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	display: block;
+	text-transform: capitalize;
 }
 
 #popup_option #popup_content h1 a {
