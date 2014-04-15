@@ -257,3 +257,15 @@ class Terms extends CI_Controller {
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
