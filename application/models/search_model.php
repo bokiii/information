@@ -20,8 +20,20 @@ class Search_model extends CI_Model {
 		return $query->result();
 	}
 	
-	
-	
+	function search_by_id_and_main_id($table, $fields, $id, $main_id) {
+		
+		$this->db->where_in($fields[1], $id);
+		$this->db->where($fields[2], $main_id);
+		$query = $this->db->get($table);
+		return $query->result();
+		
+	}
+
 	
 	
 }
+
+
+
+
+

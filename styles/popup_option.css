@@ -12,30 +12,24 @@
 
 #popup_option #popup_content a.close {
 	position: absolute;
-	top: -1px;
-	right: -1px;
+	top: 0px;
+	right: 0px;
 	text-decoration: none;
 	color: #000000;
 	font-weight: bold;
 	font-size: 25px;
 	padding: 10px;
 	background-color: #4585F4;
-	-webkit-border-bottom-left-radius: 4px;
-	-moz-border-radius-bottomleft: 4px;
-	border-bottom-left-radius: 4px;
 }
 
 #popup_option #popup_content h1 {
 	font-size: 20px;
 	text-align: center;
-	margin: 25px auto 0px auto;
+	margin: 0px auto 0px auto;
 	background-color: #4584F2;
-	padding: 10px;
-	width: 120px;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
+	padding: 14px;
 	display: block;
+	color: #FFF;
 	text-transform: capitalize;
 }
 

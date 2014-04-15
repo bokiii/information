@@ -2,14 +2,19 @@
 
 class Schools extends CI_Controller {
 
+	// variables for search height
 	public $height1 = "30px";
 	public	$height2 = "20px";
 	
+	// variables for schools table
 	public $table = "schools";
-	public $school_courses = "school_courses";
 	public $add = "add_school";
 	public $delete = "delete_school";
 	
+	// variables for school courses
+	public $school_courses = "school_courses";
+	
+	// variables for search 
 	public $search;
 	public $search_status;
 	public $keyword;
@@ -85,7 +90,7 @@ class Schools extends CI_Controller {
 					$school = $row->school;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->school_courses ."?id={$id}";
+					$manage_link = base_url() . "index.php/". $this->school_courses ."?id={$id}";
 					
 					$data['content'] .= "
 						<tr>
@@ -110,7 +115,7 @@ class Schools extends CI_Controller {
 					$school = $row->school;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->school_courses ."?id={$id}";
+					$manage_link = base_url() . "index.php/". $this->school_courses ."?id={$id}";
 				
 					$data['content'] .= "
 						<tr>
@@ -176,6 +181,7 @@ class Schools extends CI_Controller {
 	function delete_school() {
 		
 		$id = $this->input->post('id');
+		
 		$delete_school = $this->global_model->delete($this->table, $id);
 		
 		$this->index();

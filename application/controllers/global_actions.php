@@ -5,7 +5,10 @@ class Global_actions extends CI_Controller {
 	private	$height1 = "30px";
 	private	$height2 = "20px";
 	
-	
+	// variables for includes
+	private $school;
+	private $course;
+
 	function __construct() {
 		parent::__construct();
 	} 
@@ -488,6 +491,97 @@ class Global_actions extends CI_Controller {
 		}
 		
 	
+		$data['main_content'] = "tools/popup_option";
+		$this->load->view('template/content', $data);
+	}
+	
+	function school_courses() {
+		
+		// load necessary models
+		$this->load->model('courses_model');
+		$this->load->model('school_courses_model');
+		
+		// include necessary objects
+		include_once (dirname(__FILE__) . "/schools.php");
+		include_once (dirname(__FILE__) . "/courses.php");
+		
+		// assign includes to a variable 
+		$this->school = new Schools();
+		$this->course = new Courses();
+		
+		if(!$this->input->get('id')) {
+			show_404();
+		}
+		
+		$school_id = $this->input->get('id');
+		
+		//set the main table
+		$table = "school_courses";
+		$update = "update_school_course";
+		$add = "add_school_course";
+		
+		// set the search table
+		$data['search_table'] = "school_courses";
+		
+		// important set the height for the keyword input
+		$data['keyword_height'] = $this->height2;
+		
+		// module url 
+		$module_url = base_url() . "index.php/". $table ."?id=" . $school_id;
+		
+		// get school data 
+		$get_school = $this->global_model->get_by_id($this->school->table, $school_id);
+		
+		foreach($get_school as $row_school) { 
+			$school = $row_school->school;
+		}
+		
+		// get data for courses
+		
+		$get_courses = $this->global_model->get($this->course->table);
+		
+		$course_data = array();
+		
+		foreach($get_courses as $row_course) {
+			$course_data[] = array(
+				"id" => $row_course->id,
+				"course" => $row_course->course
+			);
+		}
+		
+		
+		$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
+		
+		$data['popup'] = "
+			<a class='close' href='". $module_url ."'>&#215;</a>
+			<h1><a href='". $module_url ."'>". $school ."</a></h1>
+			<form action='" . $popup_form_action ." ' method='post' id='popup_option_form'>
+				<table>
+					<tr>
+						<td><label for='course_id'>Course:</label></td>
+						<td>
+							<select name='course_id'>
+		";
+							for($i = 0; $i < count($course_data); $i++) {
+								
+								$data['popup'] .= "
+									<option value='{$course_data[$i]['id']}'>". $course_data[$i]['course'] ."</option>
+								";
+							
+							}
+		
+		$data['popup'] .= "
+							</select>
+						</td>
+						<input type='hidden' name='school_id' value='{$school_id}' />
+					</tr>
+					<tr>
+						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
+					</tr>
+				</table>
+			</form>
+		";
+		
 		$data['main_content'] = "tools/popup_option";
 		$this->load->view('template/content', $data);
 	}
