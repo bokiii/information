@@ -4,18 +4,17 @@ html {
 
 .full_width_2 { 
 	position: relative;
-	background: #4584F2;
+	background: #51A5E4;
 }
 
 .full_width_2:before, .full_width_2:after {
 	content: "";
-	background: #4584F2;
+	background: #51A5E4;
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	width: 9999px;
 	height: 100%;
-	border-bottom: 1px solid #E5E5E5;
 }
 
 .full_width_2:before {
@@ -29,15 +28,15 @@ html {
 }
 
 .full_width_2:nth-of-type(1), .full_width_2:nth-of-type(1):before, .full_width_2:nth-of-type(1):after { 
-	background: #4584F2;
+	background: #51A5E4;
 }
 
 .full_width_2:nth-of-type(2), .full_width_2:nth-of-type(2):before, .full_width_2:nth-of-type(2):after { 
-	background: #4584F2;
+	background: #51A5E4;
 }
 
 .full_width_2:nth-of-type(3), .full_width_2:nth-of-type(3):before, .full_width_2:nth-of-type(3):after { 
-	background: #4584F2;
+	background: #51A5E4;
 }
 
 .left-only:after {

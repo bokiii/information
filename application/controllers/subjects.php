@@ -9,6 +9,12 @@ class Subjects extends CI_Controller {
 	public $add = "add_subject";
 	public $delete = "delete_subject";
 	
+	// variable for subject teachers
+	public $subject_teachers = "subject_teachers";
+	public $courses = "courses";
+	public $course_subjects = "course_subjects";
+	
+	// below are for search variables 
 	public $search;
 	public $search_status;
 	public $keyword;
@@ -19,6 +25,9 @@ class Subjects extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		$this->load->model('course_subjects_model');
+		$this->load->model('courses_model');
+		$this->load->model('school_courses_model');
 	}
 	
 	function index() {
@@ -79,6 +88,8 @@ class Subjects extends CI_Controller {
 						<th>Course No.</th>
 						<th>Descriptive Title</th>
 						<th>Credit</th>
+						<th>Courses</th>
+						<th>Teachers</th>
 					</tr>
 		";
 		
@@ -93,6 +104,44 @@ class Subjects extends CI_Controller {
 					$credit = $row->credit;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/". $this->subject_teachers ."?id={$id}";
+					
+					// get data for manage link 
+					
+					$get_course_id_id_by_subject_id = $this->course_subjects_model->get_course_id_id_by_subject_id($id);
+					
+					if($get_course_id_id_by_subject_id != NULL) {
+						
+						$course_id_data = array();
+						
+						foreach($get_course_id_id_by_subject_id as $row_a) {
+							//$course_id = $row_a->course_id;
+							array_unshift($course_id_data, $row_a->course_id);
+						} 
+						
+						$course_data = array();
+						
+						foreach($course_id_data as $course_id) {
+							
+							$get_course_by_course_id = $this->courses_model->get_course_by_course_id($course_id);
+							
+							foreach($get_course_by_course_id as $row_b) {
+								//$course = $row_b->course;
+								array_unshift($course_data, $row_b->course);
+							}
+						}
+						
+						$course_count = count($course_data);
+					
+						$course = $course_data[0];
+						
+						for($i = 1; $i < count($course_data); $i++) {
+							$course .= "<br />" . $course_data[$i];
+						}
+						
+					} else {
+						$course = "<a class='link_add' id='{$id}' href='#'>Update Course</a>";
+					}
 					
 					$data['content'] .= "
 						<tr>
@@ -100,6 +149,8 @@ class Subjects extends CI_Controller {
 							<td><a href='{$update_link}'>{$course_no}</a></td>
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
+							<td>{$course}</td>
+							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -120,6 +171,44 @@ class Subjects extends CI_Controller {
 					$credit = $row->credit;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/". $this->subject_teachers ."?id={$id}";
+				
+					// get data for manage link 
+					
+					$get_course_id_id_by_subject_id = $this->course_subjects_model->get_course_id_id_by_subject_id($id);
+					
+					if($get_course_id_id_by_subject_id != NULL) {
+						
+						$course_id_data = array();
+						
+						foreach($get_course_id_id_by_subject_id as $row_a) {
+							//$course_id = $row_a->course_id;
+							array_unshift($course_id_data, $row_a->course_id);
+						} 
+						
+						$course_data = array();
+						
+						foreach($course_id_data as $course_id) {
+							
+							$get_course_by_course_id = $this->courses_model->get_course_by_course_id($course_id);
+							
+							foreach($get_course_by_course_id as $row_b) {
+								//$course = $row_b->course;
+								array_unshift($course_data, $row_b->course);
+							}
+						}
+						
+						$course_count = count($course_data);
+					
+						$course = $course_data[0];
+						
+						for($i = 1; $i < count($course_data); $i++) {
+							$course .= "<br />" . $course_data[$i];
+						}
+						
+					} else {
+						$course = "<a class='link_add' id='{$id}' href='#'>Update Course</a>";
+					}
 				
 					$data['content'] .= "
 						<tr>
@@ -127,6 +216,8 @@ class Subjects extends CI_Controller {
 							<td><a href='{$update_link}'>{$course_no}</a></td>
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
+							<td>{$course}</td>
+							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -140,8 +231,8 @@ class Subjects extends CI_Controller {
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>
@@ -152,6 +243,32 @@ class Subjects extends CI_Controller {
 				</div>
 			</form>
 		";
+		
+		// below is for the link add tool
+		
+		$get_courses = $this->global_model->get($this->courses);
+		
+		if($get_courses != NULL) {
+			
+			$link_add_data = array();
+			$link_add_id = array();
+			
+			foreach($get_courses as $row_l) {
+				
+				$get_school_id_by_course_id = $this->school_courses_model->get_school_id_by_course_id($row_l->id);
+				
+				if($get_school_id_by_course_id != NULL) {
+					array_unshift($link_add_data, $row_l->course);
+					array_unshift($link_add_id, $row_l->id);
+				}
+			}
+			
+			$data['link_add_module'] = $this->courses;
+			$data['link_add_id'] = $link_add_id;
+			$data['link_add_data'] = $link_add_data;
+			$data['check_box'] = true;
+		}
+		
 		
 		// load view below 
 		
@@ -256,6 +373,33 @@ class Subjects extends CI_Controller {
 		}
 	}
 	
+	public function link_add() {
+		
+		$subject_id = $this->input->post('sub_id');
+		$course_id = $this->input->post('main_id');
+		
+		if(!$this->input->post('sub_id') || !$this->input->post('main_id')) {
+			
+			$this->prompt_status = false;
+			$this->validation_errors = "<p>Course is required</p>";
+			
+		} else {
+			foreach($course_id as $row) {
+				
+				$data = array(
+					"subject_id" => $subject_id,
+					"course_id" => $row
+				);
+				
+				$add_course_subject = $this->global_model->add($this->course_subjects, $data);
+			}
+			
+			$this->prompt_status = true;
+		}
+	
+		redirect($this->table);
+		
+	}
 	
 }
 

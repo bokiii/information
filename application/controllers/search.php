@@ -9,8 +9,8 @@ class Search extends CI_Controller {
 	public $school;
 	public $term;
 	public $school_course;
-	
-	public $global_tool;
+	private $course_subject;
+	private $subject_teacher;
 	
 	function __construct() {
 		parent::__construct();
@@ -23,6 +23,8 @@ class Search extends CI_Controller {
 		include_once (dirname(__FILE__) . "/schools.php");
 		include_once (dirname(__FILE__) . "/terms.php");
 		include_once (dirname(__FILE__) . "/school_courses.php");
+		include_once (dirname(__FILE__) . "/course_subjects.php");
+		include_once (dirname(__FILE__) . "/subject_teachers.php");
 		
 		$this->student = new Students();
 		$this->teacher = new Teachers();
@@ -31,6 +33,8 @@ class Search extends CI_Controller {
 		$this->school = new Schools();
 		$this->term = new Terms();
 		$this->school_course = new School_courses();
+		$this->course_subject = new Course_subjects();
+		$this->subject_teacher = new Subject_teachers();
 		
 	}
 	
@@ -63,17 +67,50 @@ class Search extends CI_Controller {
 					
 					// below are for manage modules 
 					
-					if($table == "school_courses" ) {
+					if($table == "school_courses") {
 						$this->school_course->search_status = true;
 						$this->school_course->search = $manage_search;
 						$this->school_course->keyword = $keyword;
 						$this->school_course->index($search_manage_id);
 					}
+					
+					if($table == "course_subjects") {
+						$this->course_subject->search_status = true;
+						$this->course_subject->search = $manage_search;
+						$this->course_subject->keyword = $keyword;
+						$this->course_subject->index($search_manage_id);
+					}
+					
+					if($table == "subject_teachers") {
+						$this->subject_teacher->search_status = true;
+						$this->subject_teacher->search = $manage_search;
+						$this->subject_teacher->keyword = $keyword;
+						$this->subject_teacher->index($search_manage_id);
+					}
+					
 				} else {
-					$this->school_course->search_status = true;
-					$this->school_course->search = NULL;
-					$this->school_course->keyword = $keyword;
-					$this->school_course->index($search_manage_id);
+					
+					if($table == "school_courses") {
+						$this->school_course->search_status = true;
+						$this->school_course->search = NULL;
+						$this->school_course->keyword = $keyword;
+						$this->school_course->index($search_manage_id);
+					}
+					
+					if($table == "course_subjects") {
+						$this->course_subject->search_status = true;
+						$this->course_subject->search = NULL;
+						$this->course_subject->keyword = $keyword;
+						$this->course_subject->index($search_manage_id);
+					}
+					
+					if($table == "subject_teachers") {
+						$this->subject_teacher->search_status = true;
+						$this->subject_teacher->search = NULL;
+						$this->subject_teacher->keyword = $keyword;
+						$this->subject_teacher->index($search_manage_id);
+					}
+					
 				}
 				
 			} else {

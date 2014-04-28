@@ -1,7 +1,7 @@
 #popup_option #popup_content {
 	position: relative;
 	width: 800px;
-	height: 400px;
+	min-height: 200px;
 	margin: 40px auto 0px auto;
 	background-color: #F1F1F1;
 	border-radius: 4px;
@@ -26,7 +26,7 @@
 	font-size: 20px;
 	text-align: center;
 	margin: 0px auto 0px auto;
-	background-color: #4584F2;
+	background-color: #51A5E4;
 	padding: 14px;
 	display: block;
 	color: #FFF;
@@ -54,8 +54,15 @@
 #popup_option #popup_content  form table td input[type='text'] {
 	padding: 3px;
 	border: 1px solid #D7D7D7;
-	width: 250px;
+	width: 270px;
 	height: 23px;
+}
+
+#popup_option #popup_content  form table td select {
+	padding: 3px;
+	border: 1px solid #D7D7D7;
+	width: 250px;
+	height: 32px;
 }
 
 #popup_option #popup_content  form table td .popup_actions {

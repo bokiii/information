@@ -1,16 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Courses_model extends CI_Model {
+class Subjects_model extends CI_Model {
 	
 	function __construct() {
 		parent::__construct();
 		$this->load->database();
 	}
 	
-	function get_course_by_course_id($id) {
+	function get_subject_by_subject_id($id) {
 		$this->db->where('id', $id);
-		$query = $this->db->get('courses');
+		$query = $this->db->get('subjects');
 		return $query->result();
-	}
+	} 
+	
 	
 }

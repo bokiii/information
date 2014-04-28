@@ -8,6 +8,8 @@ class Global_actions extends CI_Controller {
 	// variables for includes
 	private $school;
 	private $course;
+	private $subject;
+	private $teacher;
 
 	function __construct() {
 		parent::__construct();
@@ -43,7 +45,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -72,7 +74,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -132,7 +134,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -161,7 +163,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -219,7 +221,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -246,7 +248,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -300,7 +302,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -321,7 +323,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -369,7 +371,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -390,7 +392,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -441,7 +443,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<input type="hidden" name="id" value="'. $id .'"  />
@@ -468,7 +470,7 @@ class Global_actions extends CI_Controller {
 			$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 
 			$data['popup'] = '
-				<a class="close" href="'. $module_url .'">&#215;</a>
+				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
 				<form action="' . $popup_form_action .' " method="post" id="popup_option_form">
 					<table>
@@ -553,15 +555,18 @@ class Global_actions extends CI_Controller {
 		$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
 		
 		$data['popup'] = "
-			<a class='close' href='". $module_url ."'>&#215;</a>
+			<a class='close' href='". $module_url ."'>&larr;</a>
 			<h1><a href='". $module_url ."'>". $school ."</a></h1>
 			<form action='" . $popup_form_action ." ' method='post' id='popup_option_form'>
 				<table>
 					<tr>
 						<td><label for='course_id'>Course:</label></td>
 						<td>
-							<select name='course_id'>
+							<select name='course_id' id='course_id'>
 		";
+							$data['popup'] .= "
+								<option value>Select course </option>
+							";
 							for($i = 0; $i < count($course_data); $i++) {
 								
 								$data['popup'] .= "
@@ -582,6 +587,202 @@ class Global_actions extends CI_Controller {
 			</form>
 		";
 		
+		$data['main_content'] = "tools/popup_option";
+		$this->load->view('template/content', $data);
+	}
+	
+	function course_subjects() {
+		
+		// load necessary models
+		$this->load->model('subjects_model');
+		$this->load->model('course_subjects_model');
+		
+		// include necessary objects
+		include_once (dirname(__FILE__) . "/subjects.php");
+		include_once (dirname(__FILE__) . "/courses.php");
+		
+		// assign includes to a variable 
+		$this->course = new Courses();
+		$this->subject = new Subjects();
+		
+		if(!$this->input->get('id')) {
+			show_404();
+		}
+		
+		$course_id = $this->input->get('id');
+		
+		//set the main table
+		$table = "course_subjects";
+		$update = "update_course_subject";
+		$add = "add_course_subject";
+		
+		// set the search table
+		$data['search_table'] = "course_subjects";
+		
+		// important set the height for the keyword input
+		$data['keyword_height'] = $this->height2;
+		
+		// module url 
+		$module_url = base_url() . "index.php/". $table ."?id=" . $course_id;
+		
+		// get course data 
+		
+		$get_course = $this->global_model->get_by_id($this->course->table, $course_id);
+		
+		foreach($get_course as $row_course) { 
+			$course = $row_course->course;
+		}
+		
+		// get data for subjects
+		
+		$get_subjects = $this->global_model->get($this->subject->table);
+		
+		$subject_data = array();
+		
+		foreach($get_subjects as $row_subject) {
+			$subject_data[] = array(
+				"id" => $row_subject->id,
+				"course_no" => $row_subject->course_no,
+				"subject" => $row_subject->descriptive_title
+			);
+		}
+		
+		$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
+		
+		$data['popup'] = "
+			<a class='close' href='". $module_url ."'>&larr;</a>
+			<h1><a href='". $module_url ."'>". $course ."</a></h1>
+			<form action='" . $popup_form_action ." ' method='post' id='popup_option_form'>
+				<table>
+					<tr>
+						<td><label for='subject_id'>Subject:</label></td>
+						<td>
+							<select name='subject_id' id='subject_id'>
+		";
+							$data['popup'] .= "
+								<option value>Select Subject</option>
+							";
+							for($i = 0; $i < count($subject_data); $i++) {
+								
+								$data['popup'] .= "
+									<option value='{$subject_data[$i]['id']}'>". $subject_data[$i]['course_no'] . " " . $subject_data[$i]['subject'] ."</option>
+								";
+							
+							}
+		
+		$data['popup'] .= "
+							</select>
+						</td>
+						<input type='hidden' name='course_id' value='{$course_id}' />
+					</tr>
+					<tr>
+						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
+					</tr>
+				</table>
+			</form>
+		";
+		
+	
+		$data['main_content'] = "tools/popup_option";
+		$this->load->view('template/content', $data);
+	}
+	
+	function subject_teachers() {
+		
+		// load necessary models
+		$this->load->model('teachers_model');
+		$this->load->model('subject_teachers_model');
+		
+		// include necessary objects
+		include_once (dirname(__FILE__) . "/teachers.php");
+		include_once (dirname(__FILE__) . "/subjects.php");
+		
+		// assign includes to a variable 
+		$this->subject = new Subjects();
+		$this->teacher = new Teachers();
+		
+		if(!$this->input->get('id')) {
+			show_404();
+		}
+		
+		$subject_id = $this->input->get('id');
+		
+		//set the main table
+		$table = "subject_teachers";
+		$update = "update_subject_teacher";
+		$add = "add_subject_teacher";
+		
+		// set the search table
+		$data['search_table'] = "subject_teachers";
+		
+		// important set the height for the keyword input
+		$data['keyword_height'] = $this->height2;
+		
+		// module url 
+		$module_url = base_url() . "index.php/". $table ."?id=" . $subject_id;
+		
+		// get subject data 
+		
+		$get_subject = $this->global_model->get_by_id($this->subject->table, $subject_id);
+		
+		foreach($get_subject as $row_subject) { 
+			$course_no = $row_subject->course_no;
+			$descriptive_title = $row_subject->descriptive_title;
+		}
+		
+		// get data for teachers
+		
+		$get_teachers = $this->global_model->get($this->teacher->table);
+		
+		$teacher_data = array();
+		
+		foreach($get_teachers as $row_teacher) {
+			$teacher_data[] = array(
+				"id" => $row_teacher->id,
+				"first_name" => $row_teacher->first_name,
+				"last_name" => $row_teacher->last_name,
+				"middle_name" => $row_teacher->middle_name
+			);
+		}
+		
+		// content below 
+		
+		$popup_form_action = base_url() . "index.php/". $table ."/". $add ."";
+		
+		$data['popup'] = "
+			<a class='close' href='". $module_url ."'>&larr;</a>
+			<h1><a href='". $module_url ."'>". $course_no . " " . $descriptive_title ."</a></h1>
+			<form action='" . $popup_form_action ." ' method='post' id='popup_option_form'>
+				<table>
+					<tr>
+						<td><label for='teacher_id'>Teacher:</label></td>
+						<td>
+							<select name='teacher_id' id='teacher_id'>
+		";
+							$data['popup'] .= "
+								<option value>Select Teacher</option>
+							";
+							for($i = 0; $i < count($teacher_data); $i++) {
+								
+								$data['popup'] .= "
+									<option value='{$teacher_data[$i]['id']}'>". $teacher_data[$i]['first_name'] . " " . $teacher_data[$i]['middle_name'] . " " . $teacher_data[$i]['last_name'] ."</option>         
+								";
+							
+							}
+		
+		$data['popup'] .= "
+							</select>
+						</td>
+						<input type='hidden' name='subject_id' value='{$subject_id}' />
+					</tr>
+					<tr>
+						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
+					</tr>
+				</table>
+			</form>
+		";
+		
+	
 		$data['main_content'] = "tools/popup_option";
 		$this->load->view('template/content', $data);
 	}

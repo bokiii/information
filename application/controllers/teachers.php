@@ -2,12 +2,12 @@
 
 class Teachers extends CI_Controller {
 
-	private	$height1 = "30px";
-	private	$height2 = "20px";
+	public	$height1 = "30px";
+	public	$height2 = "20px";
 	
-	private $table = "teachers";
-	private $add = "add_teacher";
-	private $delete = "delete_teacher";
+	public $table = "teachers";
+	public $add = "add_teacher";
+	public $delete = "delete_teacher";
 	
 	public $search;
 	public $search_status;
@@ -145,8 +145,8 @@ class Teachers extends CI_Controller {
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>

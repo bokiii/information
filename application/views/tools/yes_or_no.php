@@ -5,8 +5,8 @@
 		<a class='close' href='#'>&#215;</a>
 		<h1>Are you sure?</h1>
 		<div>
-			<button id="yes">Yes</button>
-			<button id="no">No</button>
+			<button id='yes'>Yes</button>
+			<button id='no'>No</button>
 		</div>
 	</div>
 </div>

@@ -19,7 +19,6 @@ class Students extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
-		$this->search_status = false;
 	}
 	
 	function index() {
@@ -115,7 +114,7 @@ class Students extends CI_Controller {
 			} else {
 				$data['content'] .= "
 					<tr>
-						<td style='text-align: center;' colspan='5'>No results found.</td>
+						<td style='text-align: center;' colspan='7'>No results found.</td>
 					</tr>
 				";
 			}
@@ -146,15 +145,15 @@ class Students extends CI_Controller {
 			} else {
 				$data['content'] .= "
 					<tr>
-						<td style='text-align: center;' colspan='5'>No ". $this->table ." added in the database</td>
+						<td style='text-align: center;' colspan='7'>No ". $this->table ." added in the database</td>
 					</tr>
 				";
 			}
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>

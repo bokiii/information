@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/style.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_2.css" />
+	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_3.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/dropdown.css" />
 </head>
 <body>
@@ -36,12 +37,16 @@
 				</li>
 				<li class="main"><a href="#">Maintenance</a>
 					<ul class="sub_menu">
-						<li><a href="<?php echo base_url(); ?>index.php/students">Students</a></li>
 						<li><a href="<?php echo base_url(); ?>index.php/teachers">Teachers</a></li>
+						<li><a href="<?php echo base_url(); ?>index.php/terms">Terms</a></li>
+					</ul>
+				</li>
+				<li class="main"><a href="#">Modules</a>
+					<ul class="sub_menu">
+						<li><a href="<?php echo base_url(); ?>index.php/students">Students</a></li>
 						<li><a href="<?php echo base_url(); ?>index.php/subjects">Subjects</a></li>
 						<li><a href="<?php echo base_url(); ?>index.php/courses">Courses</a></li>
 						<li><a href="<?php echo base_url(); ?>index.php/schools">Schools</a></li>
-						<li><a href="<?php echo base_url(); ?>index.php/terms">Terms</a></li>
 					</ul>
 				</li>
 			</ul>

@@ -1,3 +1,25 @@
+// jquery ui module below 
+
+var jqueryUi = (function() {
+	
+	var $popup_content = $("#popup_container #popup_content");
+	var $link_add_content = $("#link_add_container #link_add_content");
+	
+	var drag_popup_content = function() {	
+		$popup_content.draggable();
+		$link_add_content.draggable();
+	};
+	
+	return {
+		drag_popup_content: drag_popup_content
+	}
+	
+})()
+
+// execute jquery ui module below 
+
+jqueryUi.drag_popup_content();
+
 // global script function tools below 
 
 var scroll_to_top = function() {
@@ -10,20 +32,22 @@ var scroll_to_top = function() {
 var generalModule = (function(){
 	
 	var $content_h1 = $("#content h1");
+	var $content_delete_form = $("#content #delete_form");
 	
-	var add_full_width_2 = function() {
+	var add_full_width = function() {
 		$content_h1.addClass('full_width_2');
+		$content_delete_form.addClass('full_width_3');
 	};
 	
 	return {
-		add_full_width_2:	add_full_width_2
+		add_full_width:	add_full_width
 	}
 	
 })()
 
 // execute general module below
 
-generalModule.add_full_width_2();
+generalModule.add_full_width();
 
 
 //header module below 
@@ -91,6 +115,12 @@ var popupModule = (function() {
 			var module = $global_json_path + $(this).val();
 			window.history.pushState("Module Location", "Module Location", module); 
 			$popup_container.fadeIn('fast');
+			
+			// center the popup
+			$popup_content.css({
+				"margin-top": windowHeight/2-$popup_content.height()/2
+			});
+			
 			return false;
 		}); 
 	};
@@ -129,7 +159,7 @@ var popupModule = (function() {
 
 popupModule.close_click();
 popupModule.add_click();
-popupModule.center_popup();
+//popupModule.center_popup();
 
 // login module below 
 
@@ -213,11 +243,19 @@ var deleteModule = (function() {
 			scroll_to_top();
 			$yes_or_no_container.fadeIn('fast');
 			
-			$yes.click(function() {
+			/*$yes.click(function() {
+				$delete_form.trigger('submit');
+			});*/
+			
+			$(document).on('click', '#yes_or_no_container #yes_or_no_content div #yes', function(){
 				$delete_form.trigger('submit');
 			});
 			
-			$no.click(function() {
+			/*$no.click(function() {
+				$yes_or_no_container.fadeOut('fast');
+			});*/
+			
+			$(document).on('click', '#yes_or_no_container #yes_or_no_content div #no', function(){
 				$yes_or_no_container.fadeOut('fast');
 			});
 			
@@ -285,19 +323,23 @@ dropdownModule.document_click();
 
 var promptModule = (function() {
 	
+	// prompt below 
 	var $prompt_container = $("#prompt_container");
 	var $prompt_content = $("#prompt_container #prompt_content");
 	var $prompt_close = $("#prompt_container #prompt_content a.close");
 	
+	// yes or no below 
 	var $yes_or_no_container = $("#yes_or_no_container");
 	var $yes_or_no_content = $("#yes_or_no_container #yes_or_no_content");
-	var $yes_or_no_close = $("#yes_or_no_container #yes_or_no_content a.close");
+	var $yes_or_no_close = $('#yes_or_no_container #yes_or_no_content a.close');
 	
-	// variables for centering the prompt
+	// variables for centering
 	var windowHeight = window.innerHeight;
+	
 	var prompt_content_height = $prompt_content.height();
 	
 	var yes_or_no_content_height = $yes_or_no_content.height();
+	
 	
 	var close_prompt = function() {
 		$prompt_close.click(function(){
@@ -313,8 +355,12 @@ var promptModule = (function() {
 	};
 	
 	var close_yes_or_no = function() {
-		$yes_or_no_close.click(function(){
-			$yes_or_no_container.fadeOut('fast');
+		$(document).on('click', '#yes_or_no_container #yes_or_no_content a.close', function(){
+			
+			$yes_or_no_container.fadeOut('fast', function(){
+				$(this).children().html("<a class='close' href='#'>&#215;</a><h1>Are you sure?</h1><div><button id='yes'>Yes</button><button id='no'>No</button></div>");
+			});
+		
 			return false;
 		});
 	};
@@ -324,6 +370,8 @@ var promptModule = (function() {
 			"margin-top": windowHeight/2-yes_or_no_content_height/2 - 50
 		}); 
 	};
+	
+	
 	
 	return {
 		close_prompt: 		close_prompt,
@@ -340,6 +388,92 @@ promptModule.close_prompt();
 promptModule.center_prompt();
 promptModule.close_yes_or_no();
 promptModule.center_yes_or_no();
+
+// link add module below 
+
+var linkAddModule = (function() {
+
+	var windowHeight = window.innerHeight;
+
+	var $link_add = $("a.link_add");
+	
+	var $link_add_container = $("#link_add_container");
+	var $link_add_content = $("#link_add_container #link_add_content");
+	var $link_add_close = $("#link_add_container #link_add_content a.close");
+	var $link_add_form = $("#link_add_container #link_add_content div form");
+	
+	var link_add_click = function() {
+		$link_add.click(function(event){
+			//alert(event.target.id);
+			scroll_to_top();
+			$link_add_container.fadeIn('fast', function(){
+				// center the popup
+				$link_add_content.css({
+					"margin-top": windowHeight/2-$link_add_content.height()/2
+				});
+			});
+			
+			$link_add_form.append("<input type='hidden' name='sub_id' value='" + event.target.id + "' />");               
+			return false;
+		});
+	};
+	
+	var link_add_close = function() {
+		$link_add_close.click(function(){
+			$link_add_container.fadeOut('fast');
+			return false;
+		});
+	};
+	
+	return {
+		link_add_click: 	link_add_click,
+		link_add_close:		link_add_close
+	}
+	
+})()
+
+
+// execute link add module below 
+
+linkAddModule.link_add_click();
+linkAddModule.link_add_close();
+ 
+// manage module below 
+
+var manageModule = (function() {
+	
+	var $manage_link = $("#delete_form .manage_link");
+	var $yes_or_no_container = $("#yes_or_no_container");
+	
+	var manage_link_click = function() {
+		$manage_link.click(function(){
+		
+			var has_link_add = $(this).parent().prev().children().hasClass('link_add');
+			
+			if(has_link_add) {
+				scroll_to_top();
+				$yes_or_no_container.children().html("<a class='close' href='#'>&#215;</a><h1>Reminder</h1><div><p>Update necessary updates first.</p></div>");
+				$yes_or_no_container.fadeIn('fast');
+				
+				return false;
+				
+			} else {
+				return true;
+			}
+			
+		});
+	};
+	
+	return {
+		manage_link_click: manage_link_click
+	}
+	
+})()
+
+// execute manage module below 
+
+manageModule.manage_link_click();
+
 
 
 

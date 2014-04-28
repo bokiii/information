@@ -77,7 +77,7 @@ class Schools extends CI_Controller {
 					<tr>
 						<th><input type='checkbox' class='main_check'  /></th>
 						<th>School</th>
-						<th>&nbsp;</th>
+						<th>Courses</th>
 					</tr>
 		";
 		
@@ -135,8 +135,8 @@ class Schools extends CI_Controller {
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>
@@ -232,7 +232,7 @@ class Schools extends CI_Controller {
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
 		
-			$this->form_validation->set_rules('school', 'School', 'required');
+			$this->form_validation->set_rules('school', 'School', 'required|is_unique[schools.school]');
 		}
 		
 		if($action == "update") {

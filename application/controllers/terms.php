@@ -140,8 +140,8 @@ class Terms extends CI_Controller {
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>

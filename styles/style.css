@@ -24,6 +24,7 @@ input:focus, textarea:focus, select:focus {
 
 body {
 	color: #333;
+	background-color: #F1F1F1;
 }
 
 #container {
@@ -65,7 +66,7 @@ body {
 #content h1 {
 	text-align: center;
 	margin: 0px auto 0px auto;
-	background-color: #4584F2;
+	background-color: #51A5E4;
 	padding: 14px;
 	display: block;
 	text-transform: capitalize;
@@ -81,6 +82,12 @@ body {
 	border-radius: 15px;
 }
 
+#content #delete_form {
+	background-color: #fff;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
 #content #delete_form table {
 	width: 100%;
 }
@@ -89,9 +96,12 @@ body {
 	border-collapse: collapse;
 }
 
-#content #delete_form  table th, #content table td {
+#content #delete_form  table th, #content tr {
 	border-top: 1px solid #D7D7D7;
 	border-bottom: 1px solid #D7D7D7;
+}
+
+#content #delete_form  table th, #content table td {
 	padding: 20px 10px 20px 10px;
 	text-align: left;
 }

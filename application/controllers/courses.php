@@ -2,13 +2,21 @@
 
 class Courses extends CI_Controller {
 
+	// variables for search height
 	public	$height1 = "30px";
 	public	$height2 = "20px";
 	
+	// variables for courses table 
 	public $table = "courses";
 	public $add = "add_course";
 	public $delete = "delete_course";
 	
+	// variables for external tables 
+	public $course_subjects = "course_subjects";
+	public $schools = "schools";
+	public $school_courses = "school_courses";
+	
+	// variables for search
 	public $search;
 	public $search_status;
 	public $keyword;
@@ -19,6 +27,8 @@ class Courses extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		$this->load->model('school_courses_model');
+		$this->load->model('schools_model');
 	}
 
 	function index() {
@@ -71,6 +81,8 @@ class Courses extends CI_Controller {
 					<tr>
 						<th><input type='checkbox' class='main_check'  /></th>
 						<th>Course</th>
+						<th>School</th>
+						<th>Subjects</th>
 					</tr>
 		";
 		
@@ -83,11 +95,34 @@ class Courses extends CI_Controller {
 					$course = $row->course;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/". $this->course_subjects ."?id={$id}";
+					
+					// get data for manage link 
+					
+					$get_school_id_by_course_id = $this->school_courses_model->get_school_id_by_course_id($id);
+					
+					if($get_school_id_by_course_id != NULL) {
+						
+						foreach($get_school_id_by_course_id as $row_a) {
+							$school_id = $row_a->school_id;
+						}
+						
+						$get_school_by_school_id = $this->schools_model->get_school_by_school_id($school_id);
+						
+						foreach($get_school_by_school_id as $row_b) {
+							$school = $row_b->school;
+						}
+						
+					} else {
+						$school = "<a class='link_add' id='{$id}' href='#'>Update School</a>";
+					}
 					
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$course}</a></td>
+							<td>{$school}</td>
+							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -106,11 +141,33 @@ class Courses extends CI_Controller {
 					$course = $row->course;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/". $this->course_subjects ."?id={$id}";
+				
+					// get data for manage link 
+					$get_school_id_by_course_id = $this->school_courses_model->get_school_id_by_course_id($id);
+					
+					if($get_school_id_by_course_id != NULL) {
+						
+						foreach($get_school_id_by_course_id as $row_a) {
+							$school_id = $row_a->school_id;
+						}
+						
+						$get_school_by_school_id = $this->schools_model->get_school_by_school_id($school_id);
+						
+						foreach($get_school_by_school_id as $row_b) {
+							$school = $row_b->school;
+						}
+						
+					} else {
+						$school = "<a class='link_add' id='{$id}' href='#'>Update School</a>";
+					}
 				
 					$data['content'] .= "
 						<tr>
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$course}</a></td>
+							<td>{$school}</td>
+							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -124,8 +181,8 @@ class Courses extends CI_Controller {
 		}
 		
 		// global json_path below
-		
-		$global_json_path = $this->load->view('tools/global_json_path');
+		$path['current_url'] = base_url() . "index.php/" . $this->table;
+		$global_json_path = $this->load->view('tools/global_json_path', $path);
 		
 		$data['content'] .= "
 				</table>
@@ -136,6 +193,25 @@ class Courses extends CI_Controller {
 				</div>
 			</form>
 		";
+		
+		
+		// below is for the link add tool
+	
+		$get_schools = $this->global_model->get($this->schools);
+		
+		if($get_schools != NULL) {
+			
+			$link_add_data = array();
+			$link_add_id = array();
+			foreach($get_schools as $row_l) {
+				array_unshift($link_add_data, $row_l->school);
+				array_unshift($link_add_id, $row_l->id);
+			}
+			
+			$data['link_add_module'] = $this->schools;
+			$data['link_add_id'] = $link_add_id;
+			$data['link_add_data'] = $link_add_data;
+		}
 		
 		// load view below 
 		
@@ -220,7 +296,7 @@ class Courses extends CI_Controller {
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
 			
-			$this->form_validation->set_rules('course', 'Course.', 'required');
+			$this->form_validation->set_rules('course', 'Course.', 'required|is_unique[courses.course]');
 			
 		}
 		
@@ -233,6 +309,58 @@ class Courses extends CI_Controller {
 		}
 	}
 	
+	public function link_add() {
+	
+		$course_id = $this->input->post('sub_id');
+		$school_id = $this->input->post('main_id');
+		
+		if(!$this->input->post('sub_id') || !$this->input->post('main_id')) {
+			
+			$this->prompt_status = false;
+			$this->validation_errors = "<p>School is required</p>";
+			
+		} else {
+			
+			$count_school_course_by_course_id = $this->school_courses_model->count_school_course_by_course_id($course_id);
+			$count_school_course_by_course_id_and_school_id = $this->school_courses_model->count_school_course_by_course_id_and_school_id($course_id, $school_id);
+			
+			if($count_school_course_by_course_id != 0 && $count_school_course_by_course_id_and_school_id == 0) {
+				
+				$this->prompt_status = false;
+				
+				$get_school_id_by_course_id = $this->school_courses_model->get_school_id_by_course_id($course_id);
+				
+				foreach($get_school_id_by_course_id as $row_a) { 
+					$course_school_id = $row_a->school_id;
+				}
+				
+				$get_school_by_school_id = $this->schools_model->get_school_by_school_id($course_school_id);
+				
+				foreach($get_school_by_school_id as $row_b) {
+					$course_school = $row_b->school;
+				}
+				
+				$this->validation_errors = "<p>Already added <br /> in <br /> (". $course_school .")</p>";
+				
+			} elseif ($count_school_course_by_course_id != 0 && $count_school_course_by_course_id_and_school_id != 0) {
+				
+				$this->prompt_status = false;
+				$this->validation_errors = "<p>Course already exists.</p>";
+				
+			} else {
+				$data = array(
+					"course_id" => $this->input->post('sub_id'),
+					"school_id" => $this->input->post('main_id')
+				);
+		
+				$add_school_course = $this->global_model->add($this->school_courses, $data);
+				
+				$this->prompt_status = true;
+			}
+		}
+	
+		$this->index();
+	}
 	
 }
 
