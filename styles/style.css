@@ -129,6 +129,22 @@ body {
 	cursor: pointer;
 }
 
+/* below is the design for the next and previous actions */
+
+#content #next_prev_actions button {
+	padding: 10px;
+	border: none;
+	background-color: #4585F4;
+	margin-left: 2px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	cursor: pointer;
+}
+
+
+/* end */
+
 #footer {
 	margin-top: 20px;
 	padding: 70px 10px 70px 10px;

@@ -39,7 +39,6 @@ class Global_actions extends CI_Controller {
 				$first_name = $row->first_name;
 				$last_name = $row->last_name;
 				$middle_name = $row->middle_name;
-				$address = $row->address;
 			}
 			
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
@@ -59,8 +58,6 @@ class Global_actions extends CI_Controller {
 						<tr>
 							<td><label for="middle_name">Middle Name:</label></td>
 							<td><input type="text" name="middle_name" id="middle_name" value="'. $middle_name .'" /></td>
-							<td><label for="address">Address:</label></td>
-							<td><input type="text" name="address" id="address"  value="'. $address .'" /></td>
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Update"/><input class="popup_actions clear" type="reset" value="Reset" /></td>
@@ -87,8 +84,6 @@ class Global_actions extends CI_Controller {
 						<tr>
 							<td><label for="middle_name">Middle Name:</label></td>
 							<td><input type="text" name="middle_name" id="middle_name" /></td>
-							<td><label for="address">Address:</label></td>
-							<td><input type="text" name="address" id="address" /></td>
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Add"/><input class="popup_actions clear" type="reset" value="Clear" /></td>

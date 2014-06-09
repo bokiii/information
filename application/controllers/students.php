@@ -19,6 +19,10 @@ class Students extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		$this->load->model('school_courses_model');
+		$this->load->model('courses_model');
+		$this->load->model('course_subjects_model');
+		$this->load->model('subjects_model');
 	}
 	
 	function index() {
@@ -41,29 +45,174 @@ class Students extends CI_Controller {
 		
 		// popup below 
 		
+		// set below the method action
 		$popup_form_action = base_url() . "index.php/". $this->table ."/". $this->add . " ";
+		
+		// get terms below 
+		
+		$get_terms = $this->global_model->get('terms');
+		
+		$terms_data = array();
+		
+		if($get_terms != NULL) {
+			foreach($get_terms as $row_terms) {
+				$terms_data[] = array(
+					"id" => $row_terms->id,
+					"term" => $row_terms->term,
+					"semester" => $row_terms->semester,
+					"school_year" => $row_terms->school_year
+				); 
+			}
+		}
 		
 		$data['popup'] = "
 			<a class='close' href='#'>&#215;</a>
 			<h1>". $this->table ."</h1>
-			<form action='{$popup_form_action}' method='post' id='popup_form'>
-				<table>
+			<form class='has_slide student_slideshow_form' action='{$popup_form_action}' method='post' id='popup_form'>
+				
+				<table id='starting_div' class='slide_div'>
 					<tr>
-						<td><label for='first_name'>First Name:</label></td>
-						<td><input type='text' name='first_name' id'first_name' /></td>
-						<td><label for='last_name'>Last Name:</label></td>
-						<td><input type='text' name='last_name' id='last_name' /></td>
+						<td><label for='term_id'>Terms</label></td>
+						<td>
+							<select name='term_id' id='term_id'>
+								<option value>Select Term</option>
+						
+		";
+							for($i = 0; $i < count($terms_data); $i++) {
+								$data['popup'] .= "
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']}, {$terms_data[$i]['semester']} semester, {$terms_data[$i]['school_year']}</option>
+								";
+							}
+		$data['popup'] .= "
+							</select>
+						</td>
+					</tr>
+				
+				</table>
+			
+		";
+		
+		$data['popup'] .= "
+			<table id='first_div' class='slide_div'>
+				<tr>
+					<td><label for='first_name'>First Name:</label></td>
+					<td><input type='text' name='first_name' id='first_name' /></td>
+					<td><label for='last_name'>Last Name:</label></td>
+					<td><input type='text' name='last_name' id='last_name' /></td>
+				</tr>
+				<tr>
+					<td><label for='middle_name'>Middle Name:</label></td>
+					<td><input type='text' name='middle_name' id='middle_name' /></td>
+				</tr>
+			</table>
+		";
+		
+		$data['popup'] .= "
+				
+				<table id='second_div' class='slide_div'>
+					<tr>
+						<td><label for='age'>Age:</label></td>
+						<td><input type='text' name='age' id'age' /></td>
+						<td><label for='gender'>Gender:</label></td>
+						<td><input type='text' name='gender' id='gender' /></td>
 					</tr>
 					<tr>
-						<td><label for='middle_name'>Middle Name:</label></td>
-						<td><input type='text' name='middle_name' id='middle_name' /></td>
-						<td><label for='address'>Address:</label></td>
-						<td><input type='text' name='address' id='address' /></td>
+						<td><label for='birth_date'>Birthdate:</label></td>
+						<td><input type='text' name='birth_date' id='birth_date' /></td>
+						<td><label for='civil_status'>Civil Status:</label></td>
+						<td><input type='text' name='civil_status' id='civil_status' /></td>
 					</tr>
 					<tr>
-						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
+						<td><label for='religion'>Religion:</label></td>
+						<td><input type='text' name='religion' id='religion' /></td>
 					</tr>
 				</table>
+		";
+		
+		
+		// for third div get school and its courses data
+		$get_schools = $this->global_model->get('schools');
+		
+		$schools_data = array();
+		
+		if($get_schools != NULL) {
+			foreach($get_schools as $row) {
+				$schools_data[] = array(
+					"id" => $row->id,
+					"school" => $row->school
+				);
+			}
+		}
+		
+		$course_source = base_url() . "index.php/". $this->table ."/get_courses";
+	
+		$data['popup'] .= "
+				<table id='third_div' class='slide_div'>
+					<input type='hidden' name='course_source' id='course_source' value='{$course_source}' />
+					<tr>
+						<td><label for='school_id'>School:</label></td>
+						<td>
+							<select name='school_id' id='school_id'>
+								<option value>Select School</option>
+		";
+		
+						for($i = 0; $i < count($schools_data); $i++ ) {
+							$data['popup'] .= "
+								<option value='{$schools_data[$i]['id']}'>{$schools_data[$i]['school']}</option>
+							";
+						}
+			
+		$data['popup'] .= "
+							</select>
+						</td>
+					</tr>
+				</table>
+		";		
+		
+		// the fourth div will be the container of the selected school courses
+		$data['popup'] .= "
+			<table id='fourth_div' class='slide_div'>
+				<tr>
+					<td><label for='course_id'>Course</label></td>
+					<td>Please go back and select school first.</td>
+				</tr>
+			</table>
+		";
+		
+		// the fifth div will be the container of the selected course subjects 
+		$data['popup'] .= "
+			<div id='fifth_div' class='slide_div'>
+				<div>
+					<h2>Subjects</h2>
+					<p class='center'>Please go back and select course first.</p>
+				</div>
+			</div>
+		";
+		
+		// the end div will be the container of the enroll now  
+		$data['popup'] .= "
+			<div id='end_div' class='slide_div'>
+				<div>
+					<p>Be sure that you already filled up the necessary details for the students.</p>
+					<p><input type='submit' id='enroll_now' value='Enroll Now' /></p>
+				</div>
+			</div>
+		";
+	
+		// below are for actions
+		$data['popup'] .= "
+				
+				<table class='final_actions'>
+					<tr>
+						<td class='center' colspan='4'><input class='clear' type='reset' value='Clear' /></td>
+					</tr>
+				</table>
+				
+				<div class='switch_actions'>
+					<button class='left' id='prev'>&larr; Previous</button>
+					<button class='right' id='next'>Next &rarr;</button>
+					<div class='clear'></div>
+				</div>
 			</form>
 		";
 		
@@ -81,8 +230,6 @@ class Students extends CI_Controller {
 						<th>First Name</th>
 						<th>Last Name</th>
 						<th>Middle Name</th>
-						<th>Address</th>
-						<th>&nbsp;</th>
 					</tr>
 		";
 		
@@ -95,10 +242,8 @@ class Students extends CI_Controller {
 					$first_name = $row->first_name;
 					$last_name = $row->last_name;
 					$middle_name = $row->middle_name;
-					$address = $row->address;
-				
+					
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
 					
 					$data['content'] .= "
 						<tr>
@@ -106,8 +251,6 @@ class Students extends CI_Controller {
 							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
-							<td>{$address}</td>
-							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -126,10 +269,8 @@ class Students extends CI_Controller {
 					$first_name = $row->first_name;
 					$last_name = $row->last_name;
 					$middle_name = $row->middle_name;
-					$address = $row->address;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
-					$manage_link = base_url() . "index.php/manage/". $this->table ."?id={$id}";
 				
 					$data['content'] .= "
 						<tr>
@@ -137,8 +278,6 @@ class Students extends CI_Controller {
 							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
-							<td>{$address}</td>
-							<td><a class='manage' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -158,8 +297,7 @@ class Students extends CI_Controller {
 		$data['content'] .= "
 				</table>
 				<div id='actions'>
-					{$global_json_path}
-					<button id='add_button' value='". $this->table ."'>Add</button>
+					<button id='add_button' value='has_switch_actions'>Add</button>
 					<button id='delete_button'>Delete</button>
 				</div>
 			</form>
@@ -173,7 +311,27 @@ class Students extends CI_Controller {
 	
 	function add_student() {
 		
-		// call validation
+		$data = array(
+			"term_id" => $this->input->post('term_id'),
+			"first_name" => $this->input->post('first_name'),
+			"last_name" => $this->input->post('last_name'),
+			"middle_name" => $this->input->post('middle_name'),
+			"age" => $this->input->post('age'),
+			"gender" => $this->input->post('gender'),
+			"birth_date" => $this->input->post('birth_date'),
+			"civil_status" => $this->input->post('civil_status'),
+			"religion" => $this->input->post('religion'),
+			"school_id" => $this->input->post('school_id'),
+			"course_id" => $this->input->post('course_id'),
+			"subject" => $this->input->post('subject')
+		);
+		
+		echo "<pre>";
+			print_r($this->input->post());
+		echo "</pre>";
+		
+		
+		/*// call validation
 		
 		$this->validation('add');
 		
@@ -182,8 +340,7 @@ class Students extends CI_Controller {
 			$data = array(
 				"first_name" => $this->input->post('first_name'),
 				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"address" => $this->input->post('address')
+				"middle_name" => $this->input->post('middle_name')
 			);
 			
 			$add_student = $this->global_model->add($this->table, $data);
@@ -194,7 +351,7 @@ class Students extends CI_Controller {
 			$this->validation_errors = validation_errors();
 		} 
 		
-		$this->index();
+		$this->index();*/
 	}
 
 	function delete_student() {
@@ -217,8 +374,7 @@ class Students extends CI_Controller {
 				"id" => $this->input->post('id'),
 				"first_name" => $this->input->post('first_name'),
 				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"address" => $this->input->post('address')
+				"middle_name" => $this->input->post('middle_name')
 			);
 			
 			$update_student = $this->global_model->update($this->table, $data, $data['id']);
@@ -256,10 +412,7 @@ class Students extends CI_Controller {
 			$this->form_validation->set_rules('first_name', 'First name', 'required');
 			$this->form_validation->set_rules('last_name', 'Last name', 'required');
 			$this->form_validation->set_rules('middle_name', 'Middle name', 'required');
-			$this->form_validation->set_rules('address', 'Address', 'required');
 		}
-		
-		
 		
 		if($action == "update") {
 			$this->form_validation->set_message('required', '%s is required');
@@ -269,10 +422,115 @@ class Students extends CI_Controller {
 			$this->form_validation->set_rules('first_name', 'First name', 'required');
 			$this->form_validation->set_rules('last_name', 'Last name', 'required');
 			$this->form_validation->set_rules('middle_name', 'Middle name', 'required');
-			$this->form_validation->set_rules('address', 'Address', 'required');
 		}
 	}
 
+	function get_courses() {
+	
+		$id = $this->input->get('id');
+		
+		if(isset($id) && $id != NULL) {
+		
+			$subject_source = base_url() . "index.php/". $this->table ."/get_subjects";
+			
+			$data['courses'] = "
+				<tr>
+					<input type='hidden' name='subject_source' id='subject_source' value='{$subject_source}' />
+					<td><label for='course_id'>Course</label></td>
+					<td>
+						<select name='course_id' id='course_id'>
+							<option value>Select Course</option>
+			";
+			
+			$get_school_courses_by_school_id = $this->school_courses_model->get_school_courses_by_school_id($id);
+			
+			foreach($get_school_courses_by_school_id as $row) {
+			
+				$course_id = $row->course_id;
+				$get_course_by_course_id = $this->courses_model->get_course_by_course_id($course_id);
+				
+				foreach($get_course_by_course_id as $row_a) {
+					
+					$data['courses'] .= "
+						<option value='{$course_id}'>". $row_a->course ."</option>
+					";
+			
+				}
+			}
+			
+			$data['courses'] .= "
+						</select>
+					</td>
+				</tr>
+			";
+		} else {
+			
+			$data['courses'] = "
+				<tr>
+					<td><label for='course_id'>Course</label></td>
+					<td>Please go back and select school first.</td>
+				</tr>
+			";
+		}
+		
+		echo json_encode($data);
+		
+	}
+	
+	function get_subjects() {
+		
+		$id = $this->input->get('id');
+		
+		if(isset($id) && $id != NULL) {
+			
+			$data['subjects'] = "<h2>Subject</h2>";
+			
+			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
+			
+			if($get_course_subjects_by_course_id != NULL) {
+				
+				foreach($get_course_subjects_by_course_id as $row) {
+					$subject_id = $row->subject_id;
+					
+					$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
+					
+					foreach($get_subject_by_subject_id as $row_a) {
+						
+						$course_no = $row_a->course_no;
+						$descriptive_title = $row_a->descriptive_title;
+						
+						$data['subjects'] .= "
+							<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+						";
+						
+					}
+				}
+				
+			} else {
+				$data['subjects'] = "
+					<div>
+						<h2>Subjects</h2>
+						<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
+					</div>
+				";
+			}
+			
+		
+		} else {
+		
+			$data['subjects'] = "
+				<div>
+					<h2>Subjects</h2>
+					<p class='center'>Please go back and select course first.</p>
+				</div>
+			";
+			
+		}
+		
+		echo json_encode($data);
+		
+	}
+	
 	
 } // end class
 
