@@ -394,18 +394,18 @@ var studentSlideShowModule = (function() {
 	
 		$student_slideshow_form.on('submit', function(){
 			alert("trying to enroll the student");
-			console.log($term_id);
-			console.log($first_name);
-			console.log($last_name);
-			console.log($middle_name);
-			console.log($age);
-			console.log($gender);
-			console.log($birth_date);
-			console.log($civil_status);
-			console.log($religion);
-			console.log($school_id);
-			console.log($course_id_select);
-			console.log($subjects);
+			console.log("term_id = " + $term_id.val());
+			console.log("first_name = " + $first_name.val());
+			console.log("last_name = " + $last_name.val());
+			console.log("middle_name = " + $middle_name.val());
+			console.log("age = " + $age.val());
+			console.log("gender = " + $gender.val());
+			console.log("birth_date = " + $birth_date.val());
+			console.log("civil status = " + $civil_status.val());
+			console.log("religion = " + $religion.val());
+			console.log("school_id = " + $school_id.val());
+			console.log("course_id = " + $course_id_select.val());
+			console.log("subjects = " + $subjects.val());
 			return false;
 		});
 	};

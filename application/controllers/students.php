@@ -112,7 +112,7 @@ class Students extends CI_Controller {
 				<table id='second_div' class='slide_div'>
 					<tr>
 						<td><label for='age'>Age:</label></td>
-						<td><input type='text' name='age' id'age' /></td>
+						<td><input type='text' name='age' id='age' /></td>
 						<td><label for='gender'>Gender:</label></td>
 						<td><input type='text' name='gender' id='gender' /></td>
 					</tr>
