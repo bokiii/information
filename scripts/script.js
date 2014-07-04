@@ -48,7 +48,6 @@ var generalModule = (function(){
 
 generalModule.add_full_width();
 
-
 //header module below 
 
 var headerModule = (function() {
@@ -393,7 +392,7 @@ var studentSlideShowModule = (function() {
 	var student_slideshow_submit = function() {
 	
 		$student_slideshow_form.on('submit', function(){
-			alert("trying to enroll the student");
+			/*alert("trying to enroll the student");
 			console.log("term_id = " + $term_id.val());
 			console.log("first_name = " + $first_name.val());
 			console.log("last_name = " + $last_name.val());
@@ -406,7 +405,7 @@ var studentSlideShowModule = (function() {
 			console.log("school_id = " + $school_id.val());
 			console.log("course_id = " + $course_id_select.val());
 			console.log("subjects = " + $subjects.val());
-			return false;
+			return false;*/
 		});
 	};
 	
@@ -423,8 +422,6 @@ var studentSlideShowModule = (function() {
 studentSlideShowModule.get_courses_by_school_id();
 studentSlideShowModule.get_subjects_by_course_id();
 studentSlideShowModule.student_slideshow_submit();
-
-
 
 // login module below 
 

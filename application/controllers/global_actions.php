@@ -436,7 +436,75 @@ class Global_actions extends CI_Controller {
 			}
 			
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
-
+			
+			// below are conditions for term
+			switch($term) {
+				case "first":
+					$term_option = '
+						<option value="'. $term .'">First Year</option>
+						<option value="second">Second Year</option>
+						<option value="third">Third Year</option>
+						<option value="fourth">Fourth Year</option>
+					';
+					break;
+				case "second":
+					$term_option = '
+						<option value="'. $term .'">Second Year</option>
+						<option value="first">First Year</option>
+						<option value="third">Third Year</option>
+						<option value="fourth">Fourth Year</option>
+					';
+					break;
+				case "third":
+					$term_option = '
+						<option value="'. $term .'">Third Year</option>
+						<option value="first">First Year</option>
+						<option value="second">Second Year</option>
+						<option value="fourth">Fourth Year</option>
+					';
+					break;
+				case "fourth": 
+					$term_option = '
+						<option value="'. $term .'">Fourth Year</option>
+						<option value="first">First Year</option>
+						<option value="second">Second Year</option>
+						<option value="third">Third Year</option>
+					';
+					break;
+				default:
+					$term_option = '
+						<option value>Select Year</option>
+						<option value="first">First Year</option>
+						<option value="second">Second Year</option>
+						<option value="third">Third Year</option>
+						<option value="fourth">Fourth Year</option>
+					';
+			}
+			
+			// below are condition for semester
+			
+			switch($semester) {
+				case "first":
+					$semester_option = '
+						<option value="'. $semester .'">First Semester</option>
+						<option value="second">Second Semester</option>
+					';
+					break;
+				case "second":
+					$semester_option = '
+						<option value="'. $semester .'">Second Semester</option>
+						<option value="first">First Semester</option>
+					';
+					break;
+				default:
+					$semester_option = '
+						<option value>Select Semester</option>
+						<option value="first">First Semester</option>
+						<option value="second">Second Semester</option>
+					';
+				
+			}
+			
 			$data['popup'] = '
 				<a class="close" href="'. $module_url .'">&larr;</a>
 				<h1><a href="'. $module_url .'">'. $table .'</a></h1>
@@ -445,9 +513,17 @@ class Global_actions extends CI_Controller {
 					<table>
 						<tr>
 							<td><label for="term">Term:</label></td>
-							<td><input type="text" name="term" id="term" value="'. $term .'" /></td>
+							<td>
+								<select name="term" id="term">
+									'. $term_option .'
+								</select>
+							</td>
 							<td><label for="semester">Semester:</label></td>
-							<td><input type="text" name="semester" id="semester" value="'. $semester .'" /></td>
+							<td>
+								<select name="semester" id="semester">
+									'. $semester_option .'
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="school_year">School Year:</label></td>
@@ -471,9 +547,22 @@ class Global_actions extends CI_Controller {
 					<table>
 						<tr>
 							<td><label for="term">Term:</label></td>
-							<td><input type="text" name="term" id="term" /></td>
+							<td>
+								<select name="term" id="term">
+									<option value="first">First Year</option>
+									<option value="second">Second Year</option>
+									<option value="third">Third Year</option>
+									<option value="fourth">Fourth Year</option>
+								</select>
+							</td>
 							<td><label for="semester">Semester:</label></td>
-							<td><input type="text" name="semester" id="semester" /></td>
+							<td>
+								<select name="semester" id="semester">
+									<option value>Select Semester</option>
+									<option value="first">First Semester</option>
+									<option value="second">Second Semester</option>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="school_year">School Year:</label></td>

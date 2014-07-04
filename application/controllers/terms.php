@@ -16,9 +16,19 @@ class Terms extends CI_Controller {
 	// below are the variables for prompt 
 	public $prompt_status;
 	public $validation_errors;
+
 	
 	function __construct() {
 		parent::__construct();
+		$this->load->model('terms_model');
+	}
+	
+	private function get_validation_errors() {
+		return $this->validation_errors;
+	}
+	
+	private function set_validation_errors($error_value) {
+		$this->validation_errors = $error_value;
 	}
 	
 	function index() {
@@ -50,9 +60,24 @@ class Terms extends CI_Controller {
 				<table>
 					<tr>
 						<td><label for='term'>Term:</label></td>
-						<td><input type='text' name='term' id'term' /></td>
+						<td>
+							<select name='term' id='term'>
+								<option value>Select Year</option>
+								<option value='first'>First Year</option>
+								<option value='second'>Second Year</option>
+								<option value='third'>Third Year</option>
+								<option value='fourth'>Fourth Year</option>
+							</select>
+						</td>
+						
 						<td><label for='semester'>Semester:</label></td>
-						<td><input type='text' name='semester' id='semester' /></td>
+						<td>
+							<select name='semester' id='semester'>
+								<option value>Select Semester</option>
+								<option value='first'>First Semester</option>
+								<option value='second'>Second Semester</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><label for='school_year'>School Year:</label></td>
@@ -161,26 +186,27 @@ class Terms extends CI_Controller {
 	
 	function add_term() {
 		
+		// set array posted data to variable
+		$posted_term_data = $this->input->post();
+			
 		// call validation
+		$add_validate = $this->add_validation($posted_term_data);
 		
-		$this->validation('add');
-		
-		if($this->form_validation->run() == TRUE) {
+		if($add_validate) {
 			
 			$data = array(
 				"term" => $this->input->post('term'),
 				"semester" => $this->input->post('semester'),
-				"school_year" => $this->input->post('school_year')
+				"school_year" => trim($this->input->post('school_year'))
 			);
 			
 			$add_term = $this->global_model->add($this->table, $data);
 			
 			$this->prompt_status = true;
+			
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
-			
-		} 
+		}
 		
 		$this->index();
 	}
@@ -195,12 +221,13 @@ class Terms extends CI_Controller {
 
 	function update_term() {
 		
-		// call validation
+		// set array posted data to variable
 		
-		$this->validation('update');
+		$posted_term_data = $this->input->post();
 		
-		if($this->form_validation->run() == TRUE) {
+		$update_validate = $this->update_validation($posted_term_data);
 		
+		if($update_validate) {
 			$data = array(
 				"id" => $this->input->post('id'),
 				"term" => $this->input->post('term'),
@@ -212,11 +239,14 @@ class Terms extends CI_Controller {
 			
 			$this->prompt_status = true;
 		} else {
+			
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
+			$this->validation_errors = $this->get_validation_errors();
 		}
 		
 		$this->index();
+		
+		
 	}
 
 	private function prompt() {
@@ -225,37 +255,78 @@ class Terms extends CI_Controller {
 			$promp_data['class'] = "success";
 			$this->load->view('tools/prompt', $promp_data);
 		} else if($this->prompt_status === false) {
-			$promp_data['message'] = $this->validation_errors;
+			$promp_data['message'] = $this->get_validation_errors();
 			$promp_data['class'] = "error";
 			$this->load->view('tools/prompt', $promp_data);
 		}
 	}
 	
-	private function validation($action) {
-		$this->load->library('form_validation');
+	private function add_validation($data) {
+	
+		$term = $data['term'];
+		$semester = $data['semester'];
+		$school_year = $data['school_year'];
 		
-		if($action == "add") {
-			$this->form_validation->set_message('required', '%s is required');
-			$this->form_validation->set_message('is_unique', '%s already exists.');
-			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
+		$empty_error = false;
+		$exist_error = false;
+		
+		$errors = "";
+		
+		if($term == NULL || $semester == NULL || $school_year == "") {
+			$errors .= "<p>One of the fields is empty.</p>";
+			$empty_error = true;
+		} else {
 			
-			$this->form_validation->set_rules('term', 'Term', 'required');
-			$this->form_validation->set_rules('semester', 'Semester', 'required');
-			$this->form_validation->set_rules('school_year', 'School year', 'required');
+			// check the term in database 
+			$term_exists = $this->terms_model->term_exists($term);
+			$semester_exists = $this->terms_model->semester_exists($semester);
+			$school_year_exists = $this->terms_model->school_year_exists($school_year);
+			
+			if($term_exists && $semester_exists && $school_year_exists) {
+				$all_fields_exists = true;
+				$errors .= "<p>Term added already exists</p>";
+				$exist_error = true;
+			}
+			
 		}
 		
-		if($action == "update") {
-			$this->form_validation->set_message('required', '%s is required');
-			$this->form_validation->set_message('is_unique', '%s already exists.');
-			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
-			
-			$this->form_validation->set_rules('term', 'Term', 'required');
-			$this->form_validation->set_rules('semester', 'Semester', 'required');
-			$this->form_validation->set_rules('school_year', 'School year', 'required');
+		// check empty error and exist error for the return
+		
+		if($empty_error || $exist_error) {	
+			$this->set_validation_errors($errors);
+			return false;
+		} else {
+			return true;
 		}
+		
+	} // end add vaidation
+	
+	private function update_validation($data) {
+	
+		$term = $data['term'];
+		$semester = $data['semester'];
+		$school_year = $data['school_year'];
+		
+		$empty_error = false;
+		
+		$errors = "";
+		
+		if($term == NULL || $semester == NULL || $school_year == "") {
+			$errors .= "<p>One of the fields is empty.</p>";
+			$empty_error = true;
+		} 
+		
+		if($empty_error) {
+			$this->set_validation_errors($errors);
+			return false;
+		} else {
+			return true;
+		}
+		
+	
 	}
 	
-	
+
 }
 
 

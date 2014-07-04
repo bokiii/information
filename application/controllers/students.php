@@ -23,6 +23,8 @@ class Students extends CI_Controller {
 		$this->load->model('courses_model');
 		$this->load->model('course_subjects_model');
 		$this->load->model('subjects_model');
+		$this->load->model('students_model');
+		$this->load->model('schools_model');
 	}
 	
 	function index() {
@@ -326,10 +328,105 @@ class Students extends CI_Controller {
 			"subject" => $this->input->post('subject')
 		);
 		
-		echo "<pre>";
-			print_r($this->input->post());
-		echo "</pre>";
 		
+		// set student data
+		$student_data = array(
+			"first_name" => trim($this->input->post('first_name')),
+			"last_name" => trim($this->input->post('last_name')),
+			"middle_name" => trim($this->input->post('middle_name'))
+		);
+		
+		// insert student data 
+		$add_student = $this->students_model->add_student($student_data);
+		
+		//get student id
+		$get_student_id = $this->students_model->get_student_id_by_first_name_last_name_middle_name($student_data['first_name'], $student_data['last_name'], $student_data['middle_name']);
+		
+		foreach($get_student_id as $row_id) {
+			$student_id = $row_id->id;
+		}
+		
+		// set student others data
+		$student_others_data = array(
+			"age" => trim($this->input->post('age')),
+			"gender" => trim($this->input->post('gender')),
+			"birth_date" => trim($this->input->post('birth_date')),
+			"civil_status" => trim($this->input->post('civil_status')),
+			"religion" => trim($this->input->post('religion')),
+			"student_id" => $student_id
+		);
+		
+		// insert student others data 
+		$add_student_others = $this->students_model->add_student_others($student_others_data);
+		
+		// get school by school id 
+		$get_school_by_school_id = $this->schools_model->get_school_by_school_id($this->input->post('school_id'));
+		foreach($get_school_by_school_id as $row_school) {
+			$school = $row_school->school;
+		}
+		
+		// set school student data
+		$student_school_data = array(
+			"school" => trim($school),
+			"student_id" => $student_id
+		);
+		
+		// insert student school data
+		$add_student_school = $this->students_model->add_student_school($student_school_data);
+		
+		// get course by course_id
+		$get_course_by_course_id = $this->courses_model->get_course_by_course_id($this->input->post('course_id'));
+		foreach($get_course_by_course_id as $row_course) {
+			$course = $row_course->course;
+		} 
+		
+		// get student school id
+		$get_student_school_id_by_school_and_student_id = $this->students_model->get_student_school_id_by_school_and_student_id($school, $student_id);
+		foreach($get_student_school_id_by_school_and_student_id as $row_student_school) {
+			$student_school_id = $row_student_school->id;
+		}
+		
+		// set student course data
+		$student_course_data = array(
+			"course" => $course,
+			"school_id" => $student_school_id,
+			"student_id" => $student_id
+		);
+		
+		// insert student course data
+		$add_student_course = $this->students_model->add_student_course($student_course_data);
+		
+		// for subjects
+		$set_subject_id = $this->input->post('subject');
+		
+		for($i = 0; $i < count($set_subject_id); $i++) {
+			// get subject by subject id
+			$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
+			foreach($get_subject_by_subject_id as $row_subject_id) {
+				$subject = $row_subject_id->descriptive_title;
+			}
+			
+			// get course id by students course course
+			$get_student_course_id_by_course = $this->students_model->get_student_course_id_by_course($course);
+			foreach($get_student_course_id_by_course as $row_student_course) {
+				$course_id = $row_student_course->id;
+			}
+			
+			// set student subjects data
+			$student_subject_data = array(
+				"subject" => $subject,
+				"course_id" => $course_id,
+				"student_id" => $student_id,
+				"term_id" => $this->input->post('term_id')
+			); 
+			
+			// insert student subject
+			
+			$add_student_subject = $this->students_model->add_student_subject($student_subject_data);
+			
+		} // end for loop
+		
+		redirect('students');
 		
 		/*// call validation
 		
@@ -531,7 +628,11 @@ class Students extends CI_Controller {
 		
 	}
 	
+	function empty_students_related_table() {
+		$this->students_model->empty_table();
+	}
 	
+
 } // end class
 
 

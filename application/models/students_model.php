@@ -2,12 +2,114 @@
 
 class Students_model extends CI_Model {
 	
+	private $students_table = "students";
+	private $students_others_table = "students_others";
+	private $students_school_table = "students_school";
+	private $students_course_table = "students_course";
+	private $students_subject_table = "students_subject";
+	private $students_grade_table = "students_grade";
+	
 	function __construct() {
 		parent::__construct();
 		$this->load->database();
 	}
 	
+	function add_student($data) {
+		$query = $this->db->insert($this->students_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	function add_student_others($data) {
+		$query = $this->db->insert($this->students_others_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function add_student_school($data) {
+		$query = $this->db->insert($this->students_school_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function add_student_course($data) {
+		$query = $this->db->insert($this->students_course_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function add_student_subject($data) {
+		$query = $this->db->insert($this->students_subject_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function add_student_grade($data) {
+		$query = $this->db->insert($this->students_grade_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function get_student_id_by_first_name_last_name_middle_name($first_name, $last_name, $middle_name) {
+		$this->db->select('id');
+		$this->db->where('first_name', $first_name);
+		$this->db->where('last_name', $last_name);
+		$this->db->where('middle_name', $middle_name);
+		$query = $this->db->get($this->students_table);
+		
+		return $query->result();
+	}
+	
+	function get_student_school_id_by_school_and_student_id($school, $student_id) {
+		$this->db->select('id');
+		$this->db->where('school', $school);
+		$this->db->where('student_id', $student_id);
+		$query = $this->db->get($this->students_school_table);
+		return $query->result();
+	}
+	
+	function get_student_course_id_by_course($course) {
+		$this->db->select('id');
+		$this->db->where('course', $course);
+		$query = $this->db->get($this->students_course_table);
+		return $query->result();
+	}
+	
+	function empty_table() {
+		
+		$this->db->empty_table('students');
+		$this->db->empty_table('students_others');
+		$this->db->empty_table('students_school');
+		$this->db->empty_table('students_course');
+		$this->db->empty_table('students_subject');
+		
+		echo "emptying executed..";
+	}
 	
 	
 }
+
+
+
+
+
+
+
