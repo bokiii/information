@@ -82,7 +82,7 @@ class Students extends CI_Controller {
 		";
 							for($i = 0; $i < count($terms_data); $i++) {
 								$data['popup'] .= "
-									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']}, {$terms_data[$i]['semester']} semester, {$terms_data[$i]['school_year']}</option>
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
 								";
 							}
 		$data['popup'] .= "
@@ -114,15 +114,48 @@ class Students extends CI_Controller {
 				<table id='second_div' class='slide_div'>
 					<tr>
 						<td><label for='age'>Age:</label></td>
-						<td><input type='text' name='age' id='age' /></td>
+						<td>
+							<select name='age' id='age'>
+								<option>15</option>
+								<option>16</option>
+								<option>17</option>
+								<option>18</option>
+								<option>19</option>
+								<option>20</option>
+								<option>21</option>
+								<option>22</option>
+								<option>23</option>
+								<option>24</option>
+								<option>25</option>
+								<option>26</option>
+								<option>27</option>
+								<option>28</option>
+								<option>29</option>
+								<option>30</option>
+								<option>31</option>
+								<option>32</option>
+								<option>33</option>	
+							</select>
+						</td>
 						<td><label for='gender'>Gender:</label></td>
-						<td><input type='text' name='gender' id='gender' /></td>
+						<td>
+							<select name='gender' id='gender'>
+								<option>Male</option>
+								<option>Female</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><label for='birth_date'>Birthdate:</label></td>
 						<td><input type='text' name='birth_date' id='birth_date' /></td>
 						<td><label for='civil_status'>Civil Status:</label></td>
-						<td><input type='text' name='civil_status' id='civil_status' /></td>
+						<td>
+							<select name='civil_status' id='civil_status'>
+								<option>Single</option>
+								<option>Married</option>
+								<option>Widowed</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><label for='religion'>Religion:</label></td>

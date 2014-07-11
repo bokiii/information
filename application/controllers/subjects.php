@@ -23,11 +23,44 @@ class Subjects extends CI_Controller {
 	public $prompt_status;
 	public $validation_errors;
 	
+	// below is the update id for the update
+	
+	private $update_id;
+	
+	// variable below if there is a single data to validate via update argument
+	
+	private $data_validate;
+	
 	function __construct() {
 		parent::__construct();
 		$this->load->model('course_subjects_model');
 		$this->load->model('courses_model');
 		$this->load->model('school_courses_model');
+		$this->load->model('subjects_model');
+	}
+	
+	private function get_data_validate() {
+		return $this->data_validate;
+	}
+	
+	private function set_data_validate($data) {
+		$this->data_validate = $data;
+	}
+	
+	private function get_update_id() {
+		return $this->update_id;
+	}
+	
+	private function set_update_id($id) {
+		$this->update_id = $id;
+	}
+	
+	private function get_validation_errors() {
+		return $this->validation_errors;
+	}
+	
+	private function set_validation_errors($errors) {
+		$this->validation_errors = $errors;
 	}
 	
 	function index() {
@@ -295,7 +328,8 @@ class Subjects extends CI_Controller {
 			$this->prompt_status = true;
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
 			
 		} 
 		
@@ -314,26 +348,116 @@ class Subjects extends CI_Controller {
 	
 	function update_subject() {
 		
+		// get id
+		
+		$id = $this->input->post('id');
+		
+		$this->set_update_id($id);
+		
 		// call validation
 		
 		$this->validation('update');
 		
 		if($this->form_validation->run() == TRUE) {
 		
-			$data = array(
-				"id" => $this->input->post('id'),
-				"course_no" => $this->input->post('course_no'),
-				"descriptive_title" => $this->input->post('descriptive_title'),
-				"credit" => $this->input->post('credit')
-			);
+			$course_no = $this->input->post('course_no');
+			$descriptive_title = $this->input->post('descriptive_title');
 			
-			$update_subject = $this->global_model->update($this->table, $data, $data['id']);
+			$course_no_and_descriptive_title_exist = $this->subjects_model->course_no_and_descriptive_title_exist_in_id($this->get_update_id(), $course_no, $descriptive_title);       
+			$course_no_exist = $this->subjects_model->course_no_exist_in_id($this->get_update_id(), $course_no);
+			$descriptive_title_exist = $this->subjects_model->descriptive_title_exist_in_id($this->get_update_id(), $descriptive_title);
 			
-			$this->prompt_status = true;
+			if($course_no_and_descriptive_title_exist) {
+				
+				$data = array(
+					"id" => $this->input->post('id'),
+					"course_no" => $this->input->post('course_no'),
+					"descriptive_title" => $this->input->post('descriptive_title'),
+					"credit" => $this->input->post('credit')
+				);
+				
+				$update_subject = $this->global_model->update($this->table, $data, $data['id']);
+			
+				$this->prompt_status = true;
+					
+			} elseif($course_no_exist) {
+				// update via descriptive title 
+					
+				// set specific variables 
+				$descriptive_title = $this->input->post('descriptive_title');
+				$credit = $this->input->post('credit');
+				
+				// set validation via single data via update argument
+				$this->set_data_validate("descriptive_title");
+				
+				// call validation via update argument
+				$this->validation('update');
+				
+				if($this->form_validation->run() == TRUE) {
+				
+					$update_via_descriptive_title = $this->subjects_model->update_via_descriptive_title($this->get_update_id(), $descriptive_title, $credit);
+				
+					$this->prompt_status = true;
+					
+				} else {
+					$this->prompt_status = false;
+					$this->set_validation_errors(validation_errors());
+				}
+				
+			} elseif($descriptive_title_exist) {
+					
+				// update via course_no
+				
+				$course_no = $this->input->post('course_no');
+				$credit = $this->input->post('credit');
+				
+				// set validation via single data via update argument
+				$this->set_data_validate("course_no");
+				
+				// call validation via update argument
+				$this->validation('update');
+				
+				if($this->form_validation->run() == TRUE) {
+				
+					$update_via_course_no = $this->subjects_model->update_via_course_no($this->get_update_id(), $course_no, $credit);
+				
+					$this->prompt_status = true;
+					
+				} else {
+					$this->prompt_status = false;
+					$this->set_validation_errors(validation_errors());
+				}
+				
+			} else {
+			
+				$this->validation('add');
+		
+				if($this->form_validation->run() == TRUE) {
+					
+					$data = array(
+						"course_no" => $this->input->post('course_no'),
+						"descriptive_title" => $this->input->post('descriptive_title'),
+						"credit" => $this->input->post('credit')
+					);
+					
+					$update_subject = $this->global_model->update($this->table, $data, $this->get_update_id());
+					
+					$this->prompt_status = true;
+				
+				} else {
+					$this->prompt_status = false;
+					//$this->validation_errors = validation_errors();
+					$this->set_validation_errors(validation_errors());
+				} 
+				
+			} // end sub else 
+			
+			
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
-		}
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
+		} // end main else 
 		
 		$this->index();
 	
@@ -345,7 +469,8 @@ class Subjects extends CI_Controller {
 			$promp_data['class'] = "success";
 			$this->load->view('tools/prompt', $promp_data);
 		} else if($this->prompt_status === false) {
-			$promp_data['message'] = $this->validation_errors;
+			//$promp_data['message'] = $this->validation_errors;
+			$promp_data['message'] = $this->get_validation_errors();
 			$promp_data['class'] = "error";
 			$this->load->view('tools/prompt', $promp_data);
 		}
@@ -353,24 +478,45 @@ class Subjects extends CI_Controller {
 	
 	private function validation($action) {
 		$this->load->library('form_validation');
-		
+	
 		if($action == "add") {
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
 			$this->form_validation->set_rules('course_no', 'Course no.', 'required|is_unique[subjects.course_no]');
-			$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required');
+			$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required|is_unique[subjects.descriptive_title]');
 			$this->form_validation->set_rules('credit', 'Credit', 'required|is_natural');
 		}
 		
 		if($action == "update") {
-			$this->form_validation->set_message('required', '%s is required');
-			$this->form_validation->set_message('is_unique', '%s already exists.');
-			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
-			$this->form_validation->set_rules('course_no', 'Course no.', 'required');
-			$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required');
-			$this->form_validation->set_rules('credit', 'Credit', 'required|is_natural');
+			
+			if($this->get_data_validate() != NULL) {
+				
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_message('is_unique', '%s already exists.');
+				$this->form_validation->set_message('is_natural', '%s is not a valid number.');
+				
+				if($this->get_data_validate() == "descriptive_title") {
+					$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required|is_unique[subjects.descriptive_title]');
+				}
+				
+				if($this->get_data_validate() == "course_no") {
+					$this->form_validation->set_rules('course_no', 'Course No', 'required|is_unique[subjects.course_no]');
+				}
+			
+			
+			} else {
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_message('is_unique', '%s already exists.');
+				$this->form_validation->set_message('is_natural', '%s is not a valid number.');
+				$this->form_validation->set_rules('course_no', 'Course no.', 'required');
+				$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required');
+				$this->form_validation->set_rules('credit', 'Credit', 'required|is_natural');
+			}
+
 		}
+		
+		
 	}
 	
 	public function link_add() {

@@ -38,8 +38,17 @@ var generalModule = (function(){
 		$content_delete_form.addClass('full_width_3');
 	};
 	
+	// turn off auto completes below in all of the forms
+	
+	var autocomple_form_off = function(){
+		$(document).ready(function(){
+			$(this).find('form').attr("autocomplete", "off");
+		});
+	};
+	
 	return {
-		add_full_width:	add_full_width
+		add_full_width:			add_full_width,
+		autocomple_form_off: 	autocomple_form_off
 	}
 	
 })()
@@ -47,6 +56,7 @@ var generalModule = (function(){
 // execute general module below
 
 generalModule.add_full_width();
+generalModule.autocomple_form_off();
 
 //header module below 
 
@@ -735,6 +745,13 @@ var manageModule = (function() {
 // execute manage module below 
 
 manageModule.manage_link_click();
+
+
+var studentPopupModule = (function() {
+	
+	
+	
+})()
 
 
 

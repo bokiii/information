@@ -13,4 +13,23 @@ class Courses_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function course_exists_in_id($id, $course) {
+		$this->db->where('id', $id);
+		$this->db->where('course', $course);
+		
+		$count = $this->db->count_all_results('courses');
+		
+		if($count > 0) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
+
+
+
+
+

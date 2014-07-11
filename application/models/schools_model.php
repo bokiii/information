@@ -13,5 +13,18 @@ class Schools_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function school_exist_in_id($id, $school) {
+		$this->db->where('id', $id);
+		$this->db->where('school', $school);
+		
+		$count = $this->db->count_all_results('schools');
+		
+		if($count > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 }

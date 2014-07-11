@@ -23,8 +23,29 @@ class Schools extends CI_Controller {
 	public $prompt_status;
 	public $validation_errors;
 	
+	// below is the update id for the update
+	
+	private $update_id;
+	
 	function __construct() {
 		parent::__construct();
+		$this->load->model('schools_model');
+	}
+	
+	private function get_update_id() {
+		return $this->update_id;
+	}
+	
+	private function set_update_id($id) {
+		$this->update_id = $id;
+	}
+	
+	private function get_validation_errors() {
+		return $this->validation_errors;
+	}
+	
+	private function set_validation_errors($errors) {
+		$this->validation_errors = $errors;
 	}
 	
 	function index() {
@@ -171,7 +192,8 @@ class Schools extends CI_Controller {
 			$this->prompt_status = true;
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
 			
 		} 
 		
@@ -189,24 +211,64 @@ class Schools extends CI_Controller {
 	
 	function update_school() {
 		
+		// get id
+		
+		$id = $this->input->post('id');
+		
+		$this->set_update_id($id);
+		
 		// call validation
 		
 		$this->validation('update');
 		
 		if($this->form_validation->run() == TRUE) {
 		
-			$data = array(
-				"id" => $this->input->post('id'),
-				"school" => $this->input->post('school')
-			);
+			// set variables 
+			$school = $this->input->post('school');
+			$school_exists = $this->schools_model->school_exist_in_id($this->get_update_id(), $school);
 			
-			$update_school = $this->global_model->update($this->table, $data, $data['id']);
+			if($school_exists) {
+				
+				$data = array(
+					"id" => $this->input->post('id'),
+					"school" => $this->input->post('school')
+				);
+				
+				$update_school = $this->global_model->update($this->table, $data, $data['id']);
+				
+				$this->prompt_status = true;
+			} else {
+				
+				$this->validation('add');
+		
+				if($this->form_validation->run() == TRUE) {
+					
+					$data = array(
+						"school" => $this->input->post('school')
+					);
+					
+					$update_school = $this->global_model->update($this->table, $data, $this->get_update_id());
+					
+					$this->prompt_status = true;
+				
+				} else {
+					$this->prompt_status = false;
+					//$this->validation_errors = validation_errors();
+					$this->set_validation_errors(validation_errors());
+					
+				} 
+				
+			} // end sub else 
 			
-			$this->prompt_status = true;
+			
 		} else {
+		
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
-		}
+			
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
+			
+		} // end main else 
 		
 		$this->index();
 		
@@ -218,7 +280,8 @@ class Schools extends CI_Controller {
 			$promp_data['class'] = "success";
 			$this->load->view('tools/prompt', $promp_data);
 		} else if($this->prompt_status === false) {
-			$promp_data['message'] = $this->validation_errors;
+			//$promp_data['message'] = $this->validation_errors;
+			$promp_data['message'] = $this->get_validation_errors();
 			$promp_data['class'] = "error";
 			$this->load->view('tools/prompt', $promp_data);
 		}

@@ -25,12 +25,33 @@ class Courses extends CI_Controller {
 	public $prompt_status;
 	public $validation_errors;
 	
+	// below is the update id for the update
+	
+	private $update_id;
+	
 	function __construct() {
 		parent::__construct();
 		$this->load->model('school_courses_model');
 		$this->load->model('schools_model');
+		$this->load->model('courses_model');
 	}
 
+	private function get_update_id() {
+		return $this->update_id;
+	}
+	
+	private function set_update_id($id) {
+		$this->update_id = $id;
+	}
+	
+	private function get_validation_errors() {
+		return $this->validation_errors;
+	}
+	
+	private function set_validation_errors($errors) {
+		$this->validation_errors = $errors;
+	}
+	
 	function index() {
 	
 		// call prompt below
@@ -236,7 +257,8 @@ class Courses extends CI_Controller {
 			$this->prompt_status = true;
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
 			
 		} 
 		
@@ -254,23 +276,62 @@ class Courses extends CI_Controller {
 	
 	function update_course() {
 	
+		// get id
+		
+		$id = $this->input->post('id');
+		
+		$this->set_update_id($id);
+		
 		// call validation
 		
 		$this->validation('update');
 		
 		if($this->form_validation->run() == TRUE) {
 		
-			$data = array(
-				"id" => $this->input->post('id'),
-				"course" => $this->input->post('course')
-			);
+			// check term_exists_in_id and set variable for course
 			
-			$update_course = $this->global_model->update($this->table, $data, $data['id']);
+			$course = $this->input->post('course');
+			$course_exist = $this->courses_model->course_exists_in_id($this->get_update_id(), $course);
 			
-			$this->prompt_status = true;
+			if($course_exist) {
+			
+				$data = array(
+					"id" => $this->input->post('id'),
+					"course" => $this->input->post('course')
+				);
+				
+				$update_course = $this->global_model->update($this->table, $data, $data['id']);
+			
+				$this->prompt_status = true;
+			
+			} else {
+				
+				$this->validation('add');
+		
+				if($this->form_validation->run() == TRUE) {
+					
+					$data = array(
+						"course" => $this->input->post('course')
+					);
+					
+					$update_course = $this->global_model->update($this->table, $data, $this->get_update_id());
+					
+					$this->prompt_status = true;
+				
+				} else {
+					$this->prompt_status = false;
+					//$this->validation_errors = validation_errors();
+					$this->set_validation_errors(validation_errors());
+					
+				} 
+			
+			}
+			
+			
 		} else {
 			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
+			//$this->validation_errors = validation_errors();
+			$this->set_validation_errors(validation_errors());
 		}
 		
 		$this->index();
@@ -282,13 +343,14 @@ class Courses extends CI_Controller {
 			$promp_data['class'] = "success";
 			$this->load->view('tools/prompt', $promp_data);
 		} else if($this->prompt_status === false) {
-			$promp_data['message'] = $this->validation_errors;
+			$promp_data['message'] = $this->get_validation_errors();
 			$promp_data['class'] = "error";
 			$this->load->view('tools/prompt', $promp_data);
 		}
 	}
 	
 	private function validation($action) {
+		
 		$this->load->library('form_validation');
 		
 		if($action == "add") {
@@ -301,11 +363,14 @@ class Courses extends CI_Controller {
 		}
 		
 		if($action == "update") {
+			
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
 			
 			$this->form_validation->set_rules('course', 'Course.', 'required');
+		
+		
 		}
 	}
 	
