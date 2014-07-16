@@ -60,8 +60,8 @@ class Students extends CI_Controller {
 			foreach($get_terms as $row_terms) {
 				$terms_data[] = array(
 					"id" => $row_terms->id,
-					"term" => $row_terms->term,
-					"semester" => $row_terms->semester,
+					"term" => ucwords($row_terms->term),
+					"semester" => ucwords($row_terms->semester),
 					"school_year" => $row_terms->school_year
 				); 
 			}
@@ -116,25 +116,25 @@ class Students extends CI_Controller {
 						<td><label for='age'>Age:</label></td>
 						<td>
 							<select name='age' id='age'>
-								<option>15</option>
-								<option>16</option>
-								<option>17</option>
-								<option>18</option>
-								<option>19</option>
-								<option>20</option>
-								<option>21</option>
-								<option>22</option>
-								<option>23</option>
-								<option>24</option>
-								<option>25</option>
-								<option>26</option>
-								<option>27</option>
-								<option>28</option>
-								<option>29</option>
-								<option>30</option>
-								<option>31</option>
-								<option>32</option>
-								<option>33</option>	
+								<option value='15'>15</option>
+								<option value='16'>16</option>
+								<option value='17'>17</option>
+								<option value='18'>18</option>
+								<option value='19'>19</option>
+								<option value='20'>20</option>
+								<option value='21'>21</option>
+								<option value='22'>22</option>
+								<option value='23'>23</option>
+								<option value='24'>24</option>
+								<option value='25'>25</option>
+								<option value='26'>26</option>
+								<option value='27'>27</option>
+								<option value='28'>28</option>
+								<option value='29'>29</option>
+								<option value='30'>30</option>
+								<option value='31'>31</option>
+								<option value='32'>32</option>
+								<option value='33'>33</option>	
 							</select>
 						</td>
 						<td><label for='gender'>Gender:</label></td>
@@ -265,6 +265,7 @@ class Students extends CI_Controller {
 						<th>First Name</th>
 						<th>Last Name</th>
 						<th>Middle Name</th>
+						<th>Manage</th>
 					</tr>
 		";
 		
@@ -279,6 +280,7 @@ class Students extends CI_Controller {
 					$middle_name = $row->middle_name;
 					
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/" . $this->table . "/manage_students?id={$id}";
 					
 					$data['content'] .= "
 						<tr>
@@ -286,6 +288,8 @@ class Students extends CI_Controller {
 							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
+							<td><a href='{$manage_link}'>Manage</a></td>
+							
 						</tr>
 					";
 				}
@@ -306,6 +310,7 @@ class Students extends CI_Controller {
 					$middle_name = $row->middle_name;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
+					$manage_link = base_url() . "index.php/" . $this->table . "/manage_students?id={$id}";
 				
 					$data['content'] .= "
 						<tr>
@@ -313,6 +318,7 @@ class Students extends CI_Controller {
 							<td><a href='{$update_link}'>{$first_name}</a></td>
 							<td>{$last_name}</td>
 							<td>{$middle_name}</td>
+							<td><a href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
 				}
@@ -380,10 +386,14 @@ class Students extends CI_Controller {
 		}
 		
 		// set student others data
+		
+		$birth_date = trim($this->input->post('birth_date'));
+		$set_birth_date = str_replace("/", "-", $birth_date);
+		
 		$student_others_data = array(
 			"age" => trim($this->input->post('age')),
 			"gender" => trim($this->input->post('gender')),
-			"birth_date" => trim($this->input->post('birth_date')),
+			"birth_date" => $set_birth_date,
 			"civil_status" => trim($this->input->post('civil_status')),
 			"religion" => trim($this->input->post('religion')),
 			"student_id" => $student_id
@@ -663,6 +673,10 @@ class Students extends CI_Controller {
 	
 	function empty_students_related_table() {
 		$this->students_model->empty_table();
+	}
+	
+	function manage_students() {
+		echo $this->input->get('id');
 	}
 	
 

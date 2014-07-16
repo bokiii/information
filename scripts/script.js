@@ -5,6 +5,7 @@ var jqueryUi = (function() {
 	var $popup_content = $("#popup_container #popup_content");
 	var $link_add_content = $("#link_add_container #link_add_content");
 	
+	
 	var drag_popup_content = function() {	
 		$popup_content.draggable();
 		$link_add_content.draggable();
@@ -19,6 +20,7 @@ var jqueryUi = (function() {
 // execute jquery ui module below 
 
 jqueryUi.drag_popup_content();
+
 
 // global script function tools below 
 
@@ -143,6 +145,34 @@ var popupModule = (function() {
 	var add_click = function() {
 		
 		$add_button.click(function(){
+			
+			// set date picker 
+			
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+
+			if(dd<10) {
+				dd='0'+dd
+			} 
+
+			if(mm<10) {
+				mm='0'+mm
+			} 
+
+			date_today = yyyy+'-'+mm+'-'+dd;
+	
+			var $birth_date = $("#popup_container #popup_content .student_slideshow_form #birth_date");
+			
+			$birth_date.val(date_today);
+			
+			$birth_date.datepicker({
+				changeMonth: true,
+				changeYear: true,
+				dateFormat:	"yy-mm-dd"
+			});
+			
 			scroll_to_top();
 			
 			if($(this).val() != "has_switch_actions") {
@@ -184,6 +214,8 @@ var popupModule = (function() {
 				$popup_content.css({
 					"margin-top": windowHeight/2-$popup_content.height()/2
 				});
+				
+				
 			});
 		
 			return false;
@@ -745,16 +777,6 @@ var manageModule = (function() {
 // execute manage module below 
 
 manageModule.manage_link_click();
-
-
-var studentPopupModule = (function() {
-	
-	
-	
-})()
-
-
-
 
 
 

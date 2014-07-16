@@ -83,6 +83,24 @@ class Subjects extends CI_Controller {
 		
 		// popup below 
 		
+		// get terms below 
+		
+		$get_terms = $this->global_model->get('terms');
+		
+		$terms_data = array();
+		
+		if($get_terms != NULL) {
+			foreach($get_terms as $row_terms) {
+				$terms_data[] = array(
+					"id" => $row_terms->id,
+					"term" => ucwords($row_terms->term),
+					"semester" => ucwords($row_terms->semester),
+					"school_year" => $row_terms->school_year
+				); 
+			}
+		}
+		
+		
 		$popup_form_action = base_url() . "index.php/". $this->table ."/". $this->add . " ";
 		
 		$data['popup'] = "
@@ -99,6 +117,21 @@ class Subjects extends CI_Controller {
 					<tr>
 						<td><label for='credit'>Credit:</label></td>
 						<td><input type='text' name='credit' id='credit' /></td>
+						<td><label for='term_id'>Term:</label></td>
+						<td>
+							<select name='term_id' id='term_id'>
+								<option value>Select Term</option>
+		";
+		
+						for($i = 0; $i < count($terms_data); $i++) {
+							$data['popup'] .= "
+								<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+							";
+						}
+		
+		$data['popup'] .= "
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
@@ -320,7 +353,8 @@ class Subjects extends CI_Controller {
 			$data = array(
 				"course_no" => $this->input->post('course_no'),
 				"descriptive_title" => $this->input->post('descriptive_title'),
-				"credit" => $this->input->post('credit')
+				"credit" => $this->input->post('credit'),
+				"term_id" => $this->input->post('term_id')
 			);
 			
 			$add_subject = $this->global_model->add($this->table, $data);
@@ -373,7 +407,8 @@ class Subjects extends CI_Controller {
 					"id" => $this->input->post('id'),
 					"course_no" => $this->input->post('course_no'),
 					"descriptive_title" => $this->input->post('descriptive_title'),
-					"credit" => $this->input->post('credit')
+					"credit" => $this->input->post('credit'),
+					"term_id" => $this->input->post('term_id')
 				);
 				
 				$update_subject = $this->global_model->update($this->table, $data, $data['id']);
@@ -437,7 +472,8 @@ class Subjects extends CI_Controller {
 					$data = array(
 						"course_no" => $this->input->post('course_no'),
 						"descriptive_title" => $this->input->post('descriptive_title'),
-						"credit" => $this->input->post('credit')
+						"credit" => $this->input->post('credit'),
+						"term_id" => $this->input->post('term_id')
 					);
 					
 					$update_subject = $this->global_model->update($this->table, $data, $this->get_update_id());
@@ -483,9 +519,12 @@ class Subjects extends CI_Controller {
 			$this->form_validation->set_message('required', '%s is required');
 			$this->form_validation->set_message('is_unique', '%s already exists.');
 			$this->form_validation->set_message('is_natural', '%s is not a valid number.');
+			
 			$this->form_validation->set_rules('course_no', 'Course no.', 'required|is_unique[subjects.course_no]');
 			$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required|is_unique[subjects.descriptive_title]');
 			$this->form_validation->set_rules('credit', 'Credit', 'required|is_natural');
+			$this->form_validation->set_rules('term_id', 'Term', 'required');
+			
 		}
 		
 		if($action == "update") {
@@ -509,9 +548,11 @@ class Subjects extends CI_Controller {
 				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_message('is_unique', '%s already exists.');
 				$this->form_validation->set_message('is_natural', '%s is not a valid number.');
+				
 				$this->form_validation->set_rules('course_no', 'Course no.', 'required');
 				$this->form_validation->set_rules('descriptive_title', 'Descriptive Title', 'required');
 				$this->form_validation->set_rules('credit', 'Credit', 'required|is_natural');
+				$this->form_validation->set_rules('term_id', 'Term', 'required');
 			}
 
 		}

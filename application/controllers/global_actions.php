@@ -201,6 +201,24 @@ class Global_actions extends CI_Controller {
 		
 		$module_url = base_url() . "index.php/". $table ."";
 		
+		// get terms below 
+		
+		$get_terms = $this->global_model->get('terms');
+		
+		$terms_data = array();
+		
+		if($get_terms != NULL) {
+			foreach($get_terms as $row_terms) {
+				$terms_data[] = array(
+					"id" => $row_terms->id,
+					"term" => ucwords($row_terms->term),
+					"semester" => ucwords($row_terms->semester),
+					"school_year" => $row_terms->school_year
+				); 
+			}
+		}
+		
+		
 		if($this->input->get('action') == "update" && $this->input->get('id')) {
 			
 			$id = $this->input->get('id');
@@ -211,8 +229,21 @@ class Global_actions extends CI_Controller {
 				$course_no = $row->course_no;
 				$descriptive_title = $row->descriptive_title;
 				$credit = $row->credit;
+				$term_id = $row->term_id;
 			}
 			
+			// get term by term_id individually for update
+			
+			$get_term_by_term_id = $this->global_model->get_by_id('terms', $term_id);
+			
+			if($get_term_by_term_id != NULL) {
+				foreach($get_term_by_term_id as $row_term_id) {
+					$term = ucwords($row_term_id->term);
+					$semester = ucwords($row_term_id->semester);
+					$school_year = $row_term_id->school_year;
+				}
+			}
+				
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
 
 			$data['popup'] = '
@@ -230,6 +261,20 @@ class Global_actions extends CI_Controller {
 						<tr>
 							<td><label for="credit">Credit:</label></td>
 							<td><input type="text" name="credit" id="credit"  value="'. $credit .'" /></td>
+							<td><label for="term_id">Term:</label></td>
+							<td>
+								<select name="term_id" id=term_id">
+									<option value="'. $term_id .'">'. $term .' year - '. $semester .' semester - '. $school_year .'</option>
+			';
+							for($i = 0; $i < count($terms_data); $i++) {
+								$data['popup'] .= "
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+								";
+							}
+						
+			$data['popup'] .= '		
+								</select>
+							</td> 
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Update"/><input class="popup_actions clear" type="reset" value="Reset" /></td>
@@ -256,6 +301,22 @@ class Global_actions extends CI_Controller {
 						<tr>
 							<td><label for="credit">Credit:</label></td>
 							<td><input type="text" name="credit" id="credit" /></td>
+							<td><label for="term_id">Term</label></td>
+							<td>
+								<select name="term_id" id="term_id">
+									<option value>Select Term</option>
+			';
+			
+							for($i = 0; $i < count($terms_data); $i++) {
+								$data['popup'] .= "
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+								";
+							}
+			
+			
+			$data['popup'] .= '
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Add"/><input class="popup_actions clear" type="reset" value="Clear" /></td>

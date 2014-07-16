@@ -3,11 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Student Information System</title>
+	<meta name="viewport" content="width=device-width, initial-scale = 1.0">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/style.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_2.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_3.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/dropdown.css" />
+	
+	<!--Link jquery ui css-->
+	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/redmond/jquery-ui.css">-->
+	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/redmond.css" />
+	
 </head>
 <body>
 	<div id="container">
