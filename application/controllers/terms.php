@@ -113,8 +113,8 @@ class Terms extends CI_Controller {
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;
-					$term = $row->term;
-					$semester = $row->semester;
+					$term = ucwords($row->term);
+					$semester = ucwords($row->semester);
 					$school_year = $row->school_year;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
@@ -140,8 +140,8 @@ class Terms extends CI_Controller {
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;
-					$term = $row->term;
-					$semester = $row->semester;
+					$term = ucwords($row->term);
+					$semester = ucwords($row->semester);
 					$school_year = $row->school_year;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";

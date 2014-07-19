@@ -155,6 +155,7 @@ class Subjects extends CI_Controller {
 						<th>Descriptive Title</th>
 						<th>Credit</th>
 						<th>Courses</th>
+						<th>Term</th>
 						<th>Teachers</th>
 					</tr>
 		";
@@ -168,9 +169,20 @@ class Subjects extends CI_Controller {
 					$course_no = $row->course_no;
 					$descriptive_title = $row->descriptive_title;
 					$credit = $row->credit;
+					$term_id = $row->term_id;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 					$manage_link = base_url() . "index.php/". $this->subject_teachers ."?id={$id}";
+					
+					// get terms data by term_id
+					
+					$get_term_by_term_id = $this->global_model->get_by_id('terms', $term_id);
+					
+					foreach($get_term_by_term_id as $row_term) {
+						$term = ucwords($row_term->term);
+						$semester = ucwords($row_term->semester);
+						$school_year = $row_term->school_year;
+					}
 					
 					// get data for manage link 
 					
@@ -216,6 +228,7 @@ class Subjects extends CI_Controller {
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
 							<td>{$course}</td>
+							<td>{$term} year - {$semester} semester - {$school_year}</td>
 							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
@@ -235,10 +248,21 @@ class Subjects extends CI_Controller {
 					$course_no = $row->course_no;
 					$descriptive_title = $row->descriptive_title;
 					$credit = $row->credit;
+					$term_id = $row->term_id;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 					$manage_link = base_url() . "index.php/". $this->subject_teachers ."?id={$id}";
 				
+					// get terms data by term_id
+					
+					$get_term_by_term_id = $this->global_model->get_by_id('terms', $term_id);
+					
+					foreach($get_term_by_term_id as $row_term) {
+						$term = ucwords($row_term->term);
+						$semester = ucwords($row_term->semester);
+						$school_year = $row_term->school_year;
+					}
+					
 					// get data for manage link 
 					
 					$get_course_id_id_by_subject_id = $this->course_subjects_model->get_course_id_id_by_subject_id($id);
@@ -283,6 +307,7 @@ class Subjects extends CI_Controller {
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
 							<td>{$course}</td>
+							<td>{$term} year - {$semester} semester - {$school_year}</td>
 							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
