@@ -116,6 +116,7 @@ class Students extends CI_Controller {
 						<td><label for='age'>Age:</label></td>
 						<td>
 							<select name='age' id='age'>
+								<option value>Select</option>
 								<option value='15'>15</option>
 								<option value='16'>16</option>
 								<option value='17'>17</option>
@@ -140,8 +141,9 @@ class Students extends CI_Controller {
 						<td><label for='gender'>Gender:</label></td>
 						<td>
 							<select name='gender' id='gender'>
-								<option>Male</option>
-								<option>Female</option>
+								<option value>Select</option>
+								<option value='male'>Male</option>
+								<option value='female'>Female</option>
 							</select>
 						</td>
 					</tr>
@@ -151,6 +153,7 @@ class Students extends CI_Controller {
 						<td><label for='civil_status'>Civil Status:</label></td>
 						<td>
 							<select name='civil_status' id='civil_status'>
+								<option value>Select</option>
 								<option>Single</option>
 								<option>Married</option>
 								<option>Widowed</option>
@@ -160,6 +163,8 @@ class Students extends CI_Controller {
 					<tr>
 						<td><label for='religion'>Religion:</label></td>
 						<td><input type='text' name='religion' id='religion' /></td>
+						<td><label for='address'>Address</label></td>
+						<td><input type='text' name='address' id='address' /></td>
 					</tr>
 				</table>
 		";
@@ -362,11 +367,11 @@ class Students extends CI_Controller {
 			"birth_date" => $this->input->post('birth_date'),
 			"civil_status" => $this->input->post('civil_status'),
 			"religion" => $this->input->post('religion'),
+			"address" => $this->input->post('address'),
 			"school_id" => $this->input->post('school_id'),
 			"course_id" => $this->input->post('course_id'),
 			"subject" => $this->input->post('subject')
 		);
-		
 		
 		// set student data
 		$student_data = array(
@@ -396,6 +401,7 @@ class Students extends CI_Controller {
 			"birth_date" => $set_birth_date,
 			"civil_status" => trim($this->input->post('civil_status')),
 			"religion" => trim($this->input->post('religion')),
+			"address" => trim($this->input->post('address')),
 			"student_id" => $student_id
 		);
 		
@@ -462,7 +468,7 @@ class Students extends CI_Controller {
 				"student_id" => $student_id,
 				"term_id" => $this->input->post('term_id')
 			); 
-			
+				
 			// insert student subject
 			
 			$add_student_subject = $this->students_model->add_student_subject($student_subject_data);
@@ -676,7 +682,29 @@ class Students extends CI_Controller {
 	}
 	
 	function manage_students() {
-		echo $this->input->get('id');
+		
+		// get students main data
+		$id = $this->input->get('id');
+	
+		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
+		
+		foreach($get_student_main_data_by_id as $row) {
+			echo "<pre>";
+				print_r($row);
+			echo "</pre>";
+		}
+		
+		// get students subject
+		
+		$get_student_subject_by_student_id = $this->students_model->get_student_subject_by_student_id($id);
+		
+		foreach($get_student_subject_by_student_id as $row_subject) {
+			echo "<pre>";
+				print_r($row_subject);
+			echo "</pre>";
+		}
+		
+	
 	}
 	
 

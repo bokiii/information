@@ -369,6 +369,7 @@ var studentSlideShowModule = (function() {
 	var $birth_date = $("#popup_container #popup_content .student_slideshow_form #birth_date");
 	var $civil_status = $("#popup_container #popup_content .student_slideshow_form #civil_status");
 	var $religion = $("#popup_container #popup_content .student_slideshow_form #religion");
+	var $address = $("#popup_container #popup_content .student_slideshow_form #address");
 	
 	var $school_id = $("#popup_container #popup_content .student_slideshow_form #school_id");
 	var $course_id_select;
@@ -444,10 +445,11 @@ var studentSlideShowModule = (function() {
 			console.log("birth_date = " + $birth_date.val());
 			console.log("civil status = " + $civil_status.val());
 			console.log("religion = " + $religion.val());
+			console.log("address = " + $address.val());
 			console.log("school_id = " + $school_id.val());
 			console.log("course_id = " + $course_id_select.val());
-			console.log("subjects = " + $subjects.val());
-			return false;*/
+			console.log("subjects = " + $subjects.val());*/
+			
 		});
 	};
 	

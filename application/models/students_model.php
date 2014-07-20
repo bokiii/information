@@ -104,7 +104,32 @@ class Students_model extends CI_Model {
 		echo "emptying executed..";
 	}
 	
+	// below are for all the functions of selecting the data for students after enrolled
 	
+	function get_student_main_data_by_id($id) {
+	
+		$this->db->select('*');
+		$this->db->from('students');
+		$this->db->join('students_others', "students_others.student_id = students.id", 'left');
+		$this->db->join('students_school', "students_school.student_id = students.id", 'left');
+		$this->db->join('students_course', "students_course.student_id = students.id", 'left');
+		
+		$this->db->where('students.id', $id);
+		$query = $this->db->get();
+		
+		return $query->result();
+	}
+	
+	function get_student_subject_by_student_id($student_id) {
+		$this->db->where('student_id', $student_id);
+		$query = $this->db->get('students_subject');
+		
+		return $query->result();
+	}
+	
+
+	
+
 }
 
 
