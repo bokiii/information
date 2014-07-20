@@ -683,26 +683,41 @@ class Students extends CI_Controller {
 	
 	function manage_students() {
 		
+		// search table 
+		
+		$data['search_table'] = $this->table;
+		
+		// important set the height for the keyword input
+		$data['keyword_height'] = $this->height2;
+		
+		
 		// get students main data
 		$id = $this->input->get('id');
 	
 		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
 		
-		foreach($get_student_main_data_by_id as $row) {
+		/*foreach($get_student_main_data_by_id as $row) {
 			echo "<pre>";
 				print_r($row);
 			echo "</pre>";
-		}
+		}*/
 		
 		// get students subject
 		
 		$get_student_subject_by_student_id = $this->students_model->get_student_subject_by_student_id($id);
 		
-		foreach($get_student_subject_by_student_id as $row_subject) {
+		/*foreach($get_student_subject_by_student_id as $row_subject) {
 			echo "<pre>";
 				print_r($row_subject);
 			echo "</pre>";
-		}
+		}*/
+		
+		$data['content'] ="
+			<p>Lets try to manage students</p>
+		";
+		
+		$data['main_content'] = "main_view";
+		$this->load->view('template/content', $data);
 		
 	
 	}

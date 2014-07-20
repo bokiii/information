@@ -37,10 +37,13 @@ body {
 	background-color: #F1F1F1;
 	border-bottom: 1px solid #E5E5E5;
 } 
+ 
+#header #logo {
+	width: 220px;
+}
 
 #header #logo h1 {
 	font-size: 20px;
-	margin-left: 10px;
 	margin-top: 5px;
 	font-weight: bold;
 	text-align: center;
@@ -49,17 +52,18 @@ body {
 #header form {
 	margin-top: 20px;
 	margin-left: 30px;
+	position: relative;
+	width: 359px;
 }
 
 #header form #keyword {
 	padding: 4px;
-	width: 310px;
+	width: 270px;
 	border: 1px solid #CCCCCC;
 }
 
 #header form #search_button {
 	border: none;
-	margin-top: -.5px;
 	cursor: pointer;
 }
 

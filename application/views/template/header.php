@@ -24,7 +24,7 @@
 				<div class="clear"></div>
 			</div>
 			<form action="<?php echo base_url(); ?>index.php/search" method="get" id="search_form" class="left">
-				<p class="left"><input style="height: <?php echo $keyword_height ?>" type="text" name="keyword" id="keyword" placeholder="Search" value="<?php if(isset($keyword)) { echo $keyword; } ?>" /></p>                 
+				<p class="left"><input style="height: <?php echo $keyword_height; ?>" type="text" name="keyword" id="keyword" placeholder="Search" value="<?php if(isset($keyword)) { echo $keyword; } ?>" /></p>                 
 				<input type="hidden" name="search" value="<?php if(isset($search_table) && $search_table != NULL) { echo $search_table; } ?>" />
 				<?php
 					if(isset($search_manage_table) && $search_manage_table != NULL) {
@@ -32,7 +32,7 @@
 						echo "<input type='hidden' name='search_manage_id' value='{$search_manage_id}' />";
 					}
 				?>
-				<img class="right" src="<?php echo base_url(); ?>images/search_button.png" id="search_button" alt="Search Button" />
+				<img class="left" src="<?php echo base_url(); ?>images/search_button.png" id="search_button" alt="Search Button" />
 				<div class="clear"></div>
 			</form>
 			<ul class="right dropdown">
