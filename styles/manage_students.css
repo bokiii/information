@@ -1,0 +1,222 @@
+/* Design for main data form below */
+
+#content #main_data_form {
+	background-color: #FFFFFF;
+	padding: 10px 10px 10px 10px;
+	position: relative;
+}
+
+#content #main_data_form img.edit {
+	position: absolute;
+	bottom: 10px;
+	left: 20px;
+	cursor: pointer;
+}
+
+#content #main_data_form h2 {
+	font-size: 30px;
+	color: #51A5E4;
+	text-align: center;
+	padding: 10px;
+	margin: 10px auto 30px auto;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	border-bottom: 1px solid #D7D7D7;
+	width: 300px;
+}
+
+#content #main_data_form table {
+	margin: 20px auto;
+	width: 100%;
+	border-collapse: collapse;
+}  
+
+#content #main_data_form tr {
+	border-top: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+}
+
+#content #main_data_form tr:last-child {
+	border: none;
+}
+
+#content #main_data_form table td {
+	padding: 20px 10px 20px 10px;
+}
+
+#content #main_data_form table td input {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #C3C3C3;
+}
+
+#content #main_data_form tr td:nth-child(odd) {
+	text-align: left;
+}
+
+#content #main_data_form tr td:nth-child(even) input {
+	padding: 5px;
+	width: 150px;
+	text-align: center;
+}
+
+#content #main_data_form input[type='submit'] {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+#content #main_data_form input[type='reset'] {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+#content #main_data_form button.cancel {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+/* academic data form below */
+
+#content #academic_data_form {
+	background-color: #FFFFFF;
+	padding: 25px 10px 10px 10px;
+	border-top: 1px solid #F1F1F1;
+	position: relative;
+}
+
+#content #academic_data_form img.edit {
+	position: absolute;
+	bottom: 0px;
+	left: 20px;
+	cursor: pointer;
+}
+
+#content #academic_data_form h2 {
+	font-size: 30px;
+	color: #51A5E4;
+	text-align: center;
+	padding: 10px;
+	margin: 0px auto 30px auto;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	border-bottom: 1px solid #D7D7D7;
+	width: 300px;
+}
+
+#content #academic_data_form div label {
+	display: block;
+	width: 350px;
+	color: #51A5E4;
+	text-align: center;
+	margin: 0px auto;
+	text-transform: uppercase;
+}
+
+#content #academic_data_form div p {
+	padding:10px;
+}
+
+#content #academic_data_form div p input {
+	width: 350px;
+	padding: 10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #C3C3C3;
+	text-align: center;
+}
+
+#content #academic_data_form table {
+	margin-top: 30px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#content #academic_data_form tr {
+	border-top: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+}
+
+#content #academic_data_form tr:last-child {
+	border: none;
+}
+
+#content #academic_data_form table th {
+	padding: 20px 10px 20px 10px;
+	text-align: left;
+	font-weight: bold;
+}
+
+#content #academic_data_form table th:nth-child(6) {
+	text-align: center;
+}
+
+#content #academic_data_form table td {
+	padding: 20px 10px 20px 10px;
+	text-align: left;
+}
+
+#content #academic_data_form table td:nth-child(6) {
+	text-align: right;
+}
+
+#content #academic_data_form table td:nth-child(6) input {
+	text-align: center;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #A9A9A9;
+	padding: 5px;
+}
+
+#content #academic_data_form input[type='submit'] {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+#content #academic_data_form input[type='reset'] {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+#content #academic_data_form button.cancel {
+	padding: 10px;
+	background-color: #4585F4;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border: none;
+}
+
+
+
+
+
+
+
+

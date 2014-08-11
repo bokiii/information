@@ -103,6 +103,14 @@ class Subjects_model extends CI_Model {
 		
 	}
 	
+	function get_subject_by_descriptive_title($descriptive_title) {
+		$this->db->where('descriptive_title', $descriptive_title);
+		$query = $this->db->get('subjects');
+		return $query->result();
+	}
+	
+	
+	
 	
 } // end main class
 

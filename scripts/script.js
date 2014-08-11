@@ -48,9 +48,30 @@ var generalModule = (function(){
 		});
 	};
 	
+	// add border to every submit button in a page 
+	
+	var add_border_button = function(){
+		$(document).ready(function(){
+			var submit_button = "input[type='submit']";
+			var buttons = "button";
+			
+			$(this).find(submit_button).css({
+				"border": "1px solid #D7D7D7",
+				"cursor": "pointer"
+			});
+			
+			$(this).find(buttons).css({
+				"border": "1px solid #D7D7D7",
+				"cursor": "pointer"
+			});
+			
+		});
+	};
+	
 	return {
 		add_full_width:			add_full_width,
-		autocomple_form_off: 	autocomple_form_off
+		autocomple_form_off: 	autocomple_form_off,
+		add_border_button: 		add_border_button
 	}
 	
 })()
@@ -59,6 +80,7 @@ var generalModule = (function(){
 
 generalModule.add_full_width();
 generalModule.autocomple_form_off();
+generalModule.add_border_button();
 
 //header module below 
 
@@ -779,6 +801,185 @@ var manageModule = (function() {
 // execute manage module below 
 
 manageModule.manage_link_click();
+
+// below is for manage students module
+
+var manageStudents = (function() {
+	
+	// below are variables for main_data_form 
+	var $main_data_form = $("#content #main_data_form");
+	var $main_data_form_submit_button = $("#content #main_data_form input[type='submit']");
+	var $main_data_form_reset_button = $("#content #main_data_form input[type='reset']");
+	var $main_data_form_cancel_button = $("#content #main_data_form button.cancel");
+	var $main_data_form_input = $("#content #main_data_form tr td:nth-child(even) input");
+	var $main_data_form_edit = $("#content #main_data_form img.edit");
+	
+	// below are for variables of academic_data_form
+	
+	var $academic_data_form = $("#content #academic_data_form");
+	var $academic_data_form_submit_button = $("#content #academic_data_form input[type='submit']");
+	var $academic_data_form_reset_button = $("#content #academic_data_form input[type='reset']");
+	var $academic_data_form_cancel_button = $("#content #academic_data_form button.cancel");
+	var $academic_data_form_input = $("#content #academic_data_form input");
+	var $academic_data_form_edit = $("#content #academic_data_form img.edit");
+	
+	// below is for the delete features 
+	
+	// extend check and uncheck function below 
+	
+	jQuery.fn.extend({
+		check: function() {
+			return this.each(function() { this.checked = true; });
+		},
+		uncheck: function() {
+			return this.each(function() { this.checked = false; });
+		}
+	});
+	
+	// below are the variables for the checkboxes
+	
+	var $main_check = $("#content #academic_data_form .main_check");
+	var $sub_check = $("#content #academic_data_form .subcheck");
+	
+	var execute_delete_checkbox = function() {
+		
+		$(document).on('click', '#content #academic_data_form .main_check', function(){
+			if($(this).is(":checked")) {
+				$sub_check.check();
+			} else {
+				$sub_check.uncheck();
+			}
+		});
+		
+		$(document).on('click', '#content #academic_data_form .subcheck', function(){
+			if($("#content #academic_data_form .subcheck:checked").length === $("#content #academic_data_form .subcheck").length) {
+				$main_check.check();
+			} else {
+				$main_check.uncheck();
+			}
+		});
+		
+	};
+	
+	
+
+	// functions below 
+	
+	var disable_submit_and_cancel_button = function(){
+		// below hide for the main data form
+		$main_data_form_submit_button.css("display", "none");
+		$main_data_form_cancel_button.css("display", "none");
+		$main_data_form_reset_button.css("display", "none");
+		
+		// below hide for the academic data form
+		$academic_data_form_submit_button.css("display", "none");
+		$academic_data_form_reset_button.css("display", "none");
+		$academic_data_form_cancel_button.css("display", "none");
+		
+		
+		
+	};
+	
+	// below are for functions of main data form
+	
+	var main_data_form_edit_click = function() {
+		$main_data_form_edit.click(function(){
+			$main_data_form_submit_button.show("fast");
+			$main_data_form_cancel_button.show("fast");
+			$main_data_form_input.removeAttr("disabled");
+			
+			$main_data_form_input.css({
+				"border": "1px solid #51A5E4",
+				"-webkit-border-radius": "2px",
+				"moz-border-radius": "2px",
+				"border-radius": "2px"
+			});
+			
+			$(this).hide("fast");
+		});
+	};
+	
+	var main_data_form_cancel_click = function() {
+		$main_data_form_cancel_button.click(function(){
+		
+			$main_data_form_reset_button.trigger('click');
+			
+			$main_data_form_submit_button.hide("fast");
+			$main_data_form_cancel_button.hide("fast");
+			$main_data_form_input.attr("disabled", "disabled");
+			
+			$main_data_form_input.css({
+				"border": "1px solid #A9A9A9",
+				"-webkit-border-radius": "0px",
+				"moz-border-radius": "0px",
+				"border-radius": "0px"
+			});
+			
+			$main_data_form_edit.show("fast");
+			
+			return false;
+		});
+	};
+	
+	// below are for functions of academic data form
+	
+	var academic_data_form_edit_click = function() {
+		
+		$academic_data_form_edit.click(function(){
+			$academic_data_form_submit_button.show('fast');
+			$academic_data_form_cancel_button.show('fast');
+			$academic_data_form_input.removeAttr('disabled');
+			
+			$academic_data_form_input.css({
+				"border": "1px solid #51A5E4"
+			});
+			
+			$(this).hide('fast');
+		});
+	
+	};
+	
+	var academic_data_form_cancel_click = function() {
+		$academic_data_form_cancel_button.click(function(){
+			$academic_data_form_reset_button.trigger('click');
+			
+			$academic_data_form_submit_button.hide('fast');
+			$academic_data_form_cancel_button.hide('fast');
+			
+			$academic_data_form_input.attr('disabled', 'disabled');
+			
+			$academic_data_form_input.css({
+				"border": "1px solid #C3C3C3"
+			});
+			
+			$academic_data_form_edit.show('fast');
+			
+			return false;
+			
+		});
+	};
+	
+			
+	return {
+		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
+		main_data_form_edit_click: 				main_data_form_edit_click,
+		main_data_form_cancel_click:			main_data_form_cancel_click,
+		academic_data_form_edit_click:			academic_data_form_edit_click,
+		academic_data_form_cancel_click:		academic_data_form_cancel_click,
+		execute_delete_checkbox:				execute_delete_checkbox
+	}
+	
+	
+})()
+
+// execute manage students module below 
+
+manageStudents.disable_submit_and_cancel_button();
+manageStudents.main_data_form_edit_click();
+manageStudents.main_data_form_cancel_click();
+manageStudents.academic_data_form_edit_click();
+manageStudents.academic_data_form_cancel_click();
+manageStudents.execute_delete_checkbox();
 
 
 

@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_2.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/full_width_3.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/dropdown.css" />
+	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/manage_students.css" />
 	
 	<!--Link jquery ui css-->
 	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/redmond/jquery-ui.css">-->

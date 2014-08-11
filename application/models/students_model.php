@@ -104,6 +104,17 @@ class Students_model extends CI_Model {
 		echo "emptying executed..";
 	}
 	
+	function get_subject_ids_by_student_id($student_id) {
+		
+		$this->db->select('id');
+		$this->db->where('student_id', $student_id);
+		$query = $this->db->get($this->students_subject_table);
+		
+		return $query->result();
+		
+	}
+	
+	
 	// below are for all the functions of selecting the data for students after enrolled
 	
 	function get_student_main_data_by_id($id) {
@@ -127,9 +138,69 @@ class Students_model extends CI_Model {
 		return $query->result();
 	}
 	
-
+	function get_student_subject_grade_by_student_subject_id($subject_id) {	
+		$this->db->select('grade');
+		$this->db->where('subject_id', $subject_id);
+		$query = $this->db->get($this->students_grade_table);
+		
+		return $query->result();
+	}
 	
-
+	// below are for updates in managing students 
+	
+	function update_student($id, $data) {
+		$this->db->where('id', $id);
+		$query = $this->db->update($this->students_table, $data);
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function update_students_others($id, $other_data) {
+		
+		$data = array(
+			"age" => $other_data['age'],
+			"gender" => $other_data['gender'],
+			"birth_date" => $other_data['birth_date'],
+			"civil_status" => $other_data['civil_status'],
+			"religion" => $other_data['religion'],
+			"address" => $other_data['address']
+		);
+		
+		$this->db->where('student_id', $id);
+		$query = $this->db->update($this->students_others_table, $data);
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	function update_student_grade_by_subject_id($grade, $subject_id) {
+		
+		$data = array(
+			'grade' => $grade,
+			'subject_id' => $subject_id
+			
+		);
+		
+		$this->db->where('subject_id', $subject_id);
+		
+		$query = $this->db->update($this->students_grade_table, $data);
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
 
 

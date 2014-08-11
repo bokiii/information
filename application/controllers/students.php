@@ -17,6 +17,8 @@ class Students extends CI_Controller {
 	public $prompt_status;
 	public $validation_errors;
 	
+	private $student_id;
+	
 	function __construct() {
 		parent::__construct();
 		$this->load->model('school_courses_model');
@@ -25,6 +27,15 @@ class Students extends CI_Controller {
 		$this->load->model('subjects_model');
 		$this->load->model('students_model');
 		$this->load->model('schools_model');
+		$this->load->model('terms_model');
+	}
+	
+	function get_student_id() {
+		return $this->student_id;
+	}
+	
+	private function set_student_id($id) {
+		$this->student_id = $id;
 	}
 	
 	function index() {
@@ -475,29 +486,26 @@ class Students extends CI_Controller {
 			
 		} // end for loop
 		
+		// get all subjects by students via student_id
+		
+		$student_subjects = $this->students_model->get_subject_ids_by_student_id($student_id);
+		
+		if($student_subjects != NULL) {
+			
+			foreach($student_subjects as $row_subject) {
+				$data = array(
+					'grade' => 0,
+					'subject_id' => $row_subject->id
+				); 
+				
+				$this->students_model->add_student_grade($data);
+			}
+		
+		}
+		
+	
 		redirect('students');
 		
-		/*// call validation
-		
-		$this->validation('add');
-		
-		if($this->form_validation->run() == TRUE) {
-			
-			$data = array(
-				"first_name" => $this->input->post('first_name'),
-				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name')
-			);
-			
-			$add_student = $this->global_model->add($this->table, $data);
-			$this->prompt_status = true;
-			
-		} else {
-			$this->prompt_status = false;
-			$this->validation_errors = validation_errors();
-		} 
-		
-		$this->index();*/
 	}
 
 	function delete_student() {
@@ -690,39 +698,251 @@ class Students extends CI_Controller {
 		// important set the height for the keyword input
 		$data['keyword_height'] = $this->height2;
 		
-		
-		// get students main data
 		$id = $this->input->get('id');
+			
+		// get students main data by id
 	
 		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
 		
-		/*foreach($get_student_main_data_by_id as $row) {
-			echo "<pre>";
-				print_r($row);
-			echo "</pre>";
-		}*/
+		foreach($get_student_main_data_by_id as $row) {
+			$student_id = $row->id;
+			$first_name = $row->first_name;
+			$last_name = $row->last_name;
+			$middle_name = $row->middle_name;
+			$age = $row->age;
+			$gender = $row->gender;
+			$birth_date = $row->birth_date;
+			$civil_status = $row->civil_status;
+			$religion = $row->religion;
+			$address = $row->address;
+			$school = $row->school;
+			$course = $row->course;
+			$school_id = $row->school_id;
+		}
+		
+		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
+		$edit_image = base_url() . "images/modify.png";
+		
+		$data['content'] ="
+			<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
+				<h2>{$first_name} {$middle_name} {$last_name}</h2>
+				<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
+				<table>
+					<tr>
+						<td><label for='first_name'>Name:</label></td>
+						<td><input type='text' id='first_name' name='first_name' value='{$first_name}' disabled /> <input type='text' id='middle_name' name='middle_name' value='{$middle_name}' disabled /> <input type='text' id='last_name' name='last_name' value='{$last_name}' disabled /> </td>                                                   
+						<td><label for='birth_date'>Date of Birth: </label></td>
+						<td><input type='text' id='birth_date' name='birth_date' value='{$birth_date}' disabled/></td>
+					</tr>
+					<tr>
+						<td>Age:</td>
+						<td><input type='text' id='age' name='age' value='{$age}' disabled /></td>
+						<td>Gender:</td>
+						<td><input type='text' id='gender' name='gender' value='{$gender}' disabled /></td>
+					</tr>
+					<tr>
+						<td>Civil Status:</td>
+						<td><input type='text' id='civil_status' name='civil_status' value='{$civil_status}' disabled /></td>
+						<td>Religion:</td>
+						<td><input type='text' id='religion' name='religion' value='{$religion}' disabled /></td>
+					</tr>
+					<tr>
+						<td>Address:</td>
+						<td><input type='text' id='address' name='address' value='{$address}' disabled /></td>
+						<td><input type='hidden' name='id' value='{$student_id}' /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class='action'><input type='submit' value='Update'/></td>
+						<td><button class='cancel'>Cancel</button></td>
+						<td><input type='reset' value='Reset'/></td>
+						<td></td>
+					</tr>
+				</table>
+			</form>
+		";
 		
 		// get students subject
+		$data['subjects'] = array();
 		
 		$get_student_subject_by_student_id = $this->students_model->get_student_subject_by_student_id($id);
 		
-		/*foreach($get_student_subject_by_student_id as $row_subject) {
-			echo "<pre>";
-				print_r($row_subject);
-			echo "</pre>";
-		}*/
+		foreach($get_student_subject_by_student_id as $row_subject) {
+			
+			$data['subjects'][] = array(
+				"id" => $row_subject->id,
+				"subject" => $row_subject->subject,
+				"course_id" => $row_subject->course_id,
+				"student_id" => $row_subject->student_id,
+				"term_id" => $row_subject->term_id
+			);
+		}
 		
-		$data['content'] ="
-			<p>Lets try to manage students</p>
+		
+		$update_academic_data_action = base_url() . "index.php/". $this->table ."/update_student_academic_data";
+		
+		$data['content'] .= "
+			<form action='{$update_academic_data_action}' method='post' id='academic_data_form' class='full_width_3'>
+				<h2>Subjects</h2>
+				<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
+				
+				<div class='left'>
+					<label for='school'>School</label>
+					<p><input type='text' name='school' id='school' value='{$school}' disabled/></p>
+				</div>
+				
+				<div class='right'>
+					<label for='course'>Course</label>
+					<p><input type='text' name='course' id='course' value='{$course}' disabled/></p>
+				</div>
+				
+				<div class='clear'></div>
 		";
 		
+		$data['content'] .= "
+				<table>
+				<tr>
+					<th><input type='checkbox' class='main_check' disabled/></th>
+					<th>Term</th>
+					<th>Course No.</th>
+					<th>Descriptive Title</th>
+					<th>Credit</th>
+					<th>Grade</th>
+				</tr>
+		";
+		
+			for($i = 0; $i < count($data['subjects']); $i++) {
+				
+				$subject_id = $data['subjects'][$i]['id'];
+				$subject_subject = ucwords($data['subjects'][$i]['subject']);
+				$subject_course_id = $data['subjects'][$i]['course_id'];
+				$subject_student_id = $data['subjects'][$i]['student_id'];
+				$subject_term_id = $data['subjects'][$i]['term_id'];
+			
+				// get term by term id
+				$get_term_by_id = $this->terms_model->get_term_by_id($subject_term_id);
+				
+				//echo $subject_id . "<br />";
+				
+				
+				foreach($get_term_by_id as $row_term) {
+					$term = ucwords($row_term->term);
+					$semester = ucwords($row_term->semester);
+					$school_year = ucwords($row_term->school_year);
+				}
+				
+				//get subject by descriptive title
+				$get_subject_by_descriptive_title = $this->subjects_model->get_subject_by_descriptive_title($subject_subject);
+				
+				foreach($get_subject_by_descriptive_title as $row_subject) {
+					$subject_course_no = $row_subject->course_no;
+					$subject_descriptive_title = $row_subject->descriptive_title;
+					$subject_credit = $row_subject->credit;
+					$subject_term_id = $row_subject->term_id;
+				}
+				
+				// get student grade by subject_id 
+				
+				$get_subject_grade = $this->students_model->get_student_subject_grade_by_student_subject_id($subject_id);
+				
+				foreach($get_subject_grade as $row_grade) {
+					$subject_grade = $row_grade->grade;
+				}
+				
+				$data['content'] .= "
+					<input type='hidden' name='student_id' value='{$id}' />
+					<input type='hidden' name='subject_id_update[]' value='{$subject_id}' />
+					<tr>
+						<td><input type='checkbox' name='subject_id_delete[]' value='{$subject_id}' class='subcheck' disabled/></td>
+						<td>{$term} year - {$semester} semester - {$school_year}</td>
+						<td>{$subject_course_no}</td>
+						<td>{$subject_subject}</td>
+						<td>{$subject_credit}</td>
+						<td><input type='text' name='grade[]' id='grade' value='{$subject_grade}' disabled/></td>
+					</tr>
+				";
+			} // end for loop for every subjects
+		
+		$data['content'] .= "
+					<tr>
+						<td><input type='submit' name='action' value='Delete' /></td>
+						<td><input type='submit' name='action' value='Update' /></td>
+						<td><button class='cancel'>Cancel</button></td>
+						<td colspan='3'><input type='reset' value='Clear' /></td>
+					</tr>
+				</table>
+			</form>
+		";
+	
 		$data['main_content'] = "main_view";
 		$this->load->view('template/content', $data);
 		
+	}
+	
+	function update_student_main_data() {
+		
+		$id = $this->input->post('id');
+		
+		$student_data = array(
+			"first_name" => trim($this->input->post('first_name')),
+			"last_name" => trim($this->input->post('last_name')),
+			"middle_name" => trim($this->input->post('middle_name'))
+		);
+		
+		
+		$students_others_data = array(
+			"age" => trim($this->input->post('age')),
+			"gender" => trim($this->input->post('gender')),
+			"birth_date" => trim($this->input->post('birth_date')),
+			"civil_status" => trim($this->input->post('civil_status')),
+			"religion" => trim($this->input->post('religion')),
+			"address" => trim($this->input->post('address'))
+		);
+		
+		$update_student_data = $this->students_model->update_student($id, $student_data);
+		$update_students_others_date = $this->students_model->update_students_others($id, $students_others_data);
+		
+		redirect('students/manage_students?id=' . $id);
 	
 	}
 	
-
+	function update_student_academic_data() {
+		
+		$student_id = $this->input->post('student_id');
+		
+		$school = $this->input->post('school');
+		$course = $this->input->post('course');
+		
+		$subject_id_delete = $this->input->post('subject_id_delete'); // this one is an array
+		$subject_id_update = $this->input->post('subject_id_update'); // this one is an array
+		$grade = $this->input->post('grade'); // this one is an array
+		
+		$action = $this->input->post('action');
+		
+		if($action == "Update") {
+				
+			for($u = 0; $u < count($subject_id_update); $u++) {
+				
+				$grade_id_to_update =  $grade[$u];
+				$subject_id_to_update = $subject_id_update[$u];
+				
+				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_by_subject_id($grade_id_to_update, $subject_id_to_update);
+				
+			}
+	
+		}
+		
+		if($action == "Delete") {
+		
+			$delete_student_subject_id = $this->global_model->delete('students_subject', $subject_id_delete);
+			
+		}
+		
+		redirect('students/manage_students?id=' . $student_id);
+	
+	} 
+	
+	
 } // end class
 
 

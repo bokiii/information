@@ -42,6 +42,12 @@ class Terms_model extends CI_Model {
 		}
 	}
 	
+	function get_term_by_id($id) {
+		$this->db->where('id', $id);
+		$query = $this->db->get($this->table);
+		return $query->result();
+	}
+	
 	
 	
 }
