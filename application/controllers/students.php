@@ -700,84 +700,65 @@ class Students extends CI_Controller {
 		
 		$id = $this->input->get('id');
 
-		// get students main data by id
-	
-		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
-		
-		foreach($get_student_main_data_by_id as $row) {
-			$student_id = $row->id;
-			$first_name = $row->first_name;
-			$last_name = $row->last_name;
-			$middle_name = $row->middle_name;
-			$age = $row->age;
-			$gender = $row->gender;
-			$birth_date = $row->birth_date;
-			$civil_status = $row->civil_status;
-			$religion = $row->religion;
-			$address = $row->address;
-			$school = $row->school;
-			$course = $row->course;
-			$school_id = $row->school_id;
-		}
-		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
 		
 		$data['content'] ="
-			<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
-				<h2>{$first_name} {$middle_name} {$last_name}</h2>
-				<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
-				<table>
-					<tr>
-						<td><label for='first_name'>Name:</label></td>
-						<td><input type='text' id='first_name' name='first_name' value='{$first_name}' disabled /> <input type='text' id='middle_name' name='middle_name' value='{$middle_name}' disabled /> <input type='text' id='last_name' name='last_name' value='{$last_name}' disabled /> </td>                                                   
-						<td><label for='birth_date'>Date of Birth: </label></td>
-						<td><input type='text' id='birth_date' name='birth_date' value='{$birth_date}' disabled/></td>
-					</tr>
-					<tr>
-						<td>Age:</td>
-						<td><input type='text' id='age' name='age' value='{$age}' disabled /></td>
-						<td>Gender:</td>
-						<td><input type='text' id='gender' name='gender' value='{$gender}' disabled /></td>
-					</tr>
-					<tr>
-						<td>Civil Status:</td>
-						<td><input type='text' id='civil_status' name='civil_status' value='{$civil_status}' disabled /></td>
-						<td>Religion:</td>
-						<td><input type='text' id='religion' name='religion' value='{$religion}' disabled /></td>
-					</tr>
-					<tr>
-						<td>Address:</td>
-						<td><input type='text' id='address' name='address' value='{$address}' disabled /></td>
-						<td><input type='hidden' name='id' value='{$student_id}' /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td class='action'><input type='submit' value='Update'/></td>
-						<td><button class='cancel'>Cancel</button></td>
-						<td><input type='reset' value='Reset'/></td>
-						<td></td>
-					</tr>
-				</table>
-			</form>
+			<div ng-controller='StudentAcademicCtrl'>
+				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
+					<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
+					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
+					<table>
+						<tr>
+							<td><label for='first_name'>Name:</label></td>
+							<td><input type='text' id='first_name' name='first_name' value='{{mainData.first_name}}' disabled /> <input type='text' id='middle_name' name='middle_name' value='{{mainData.middle_name}}' disabled /> <input type='text' id='last_name' name='last_name' value='{{mainData.last_name}}' disabled /> </td>                                                   
+							<td><label for='birth_date'>Date of Birth: </label></td>
+							<td><input type='text' id='birth_date' name='birth_date' value='{{mainData.birth_date}}' disabled/></td>
+						</tr>
+						<tr>
+							<td>Age:</td>
+							<td><input type='text' id='age' name='age' value='{{mainData.age}}' disabled /></td>
+							<td>Gender:</td>
+							<td><input type='text' id='gender' name='gender' value='{{mainData.gender}}' disabled /></td>
+						</tr>
+						<tr>
+							<td>Civil Status:</td>
+							<td><input type='text' id='civil_status' name='civil_status' value='{{mainData.civil_status}}' disabled /></td>
+							<td>Religion:</td>
+							<td><input type='text' id='religion' name='religion' value='{{mainData.religion}}' disabled /></td>
+						</tr>
+						<tr>
+							<td>Address:</td>
+							<td><input type='text' id='address' name='address' value='{{mainData.address}}' disabled /></td>
+							<td><input type='hidden' name='id' value='{{mainData.student_id}}' /></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class='action'><input type='submit' value='Update'/></td>
+							<td><button class='cancel'>Cancel</button></td>
+							<td><input type='reset' value='Reset'/></td>
+							<td></td>
+						</tr>
+					</table>
+				</form>
 		";
 		
 		$update_academic_data_action = base_url() . "index.php/". $this->table ."/update_student_academic_data";
 		
 		$data['content'] .= "
-			<div ng-controller='StudentAcademicCtrl'>
+			
 				<form action='{$update_academic_data_action}' method='post' id='academic_data_form' class='full_width_3'>
 					<h2>Subjects</h2>
 					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
 					
 					<div class='left'>
 						<label for='school'>School</label>
-						<p><input type='text' name='school' id='school' value='{$school}' disabled/></p>
+						<p><input type='text' name='school' id='school' value='{{mainData.school}}' disabled/></p>
 					</div>
 					
 					<div class='right'>
 						<label for='course'>Course</label>
-						<p><input type='text' name='course' id='course' value='{$course}' disabled/></p>
+						<p><input type='text' name='course' id='course' value='{{mainData.course}}' disabled/></p>
 					</div>
 					
 					<div class='clear'></div>
@@ -821,7 +802,8 @@ class Students extends CI_Controller {
 		";
 	
 		$data['content'] .= "
-				<button ng-click='getSubjects()' id='student_angular_trigger'>Trigger Student Angular</button>
+				<button ng-click='getSubjects()' class='student_angular_trigger'>Trigger Student Angular</button>
+				<button ng-click='getMainData()' class='student_angular_trigger'>Trigger Student Angular</button>
 			</div>
 		";
 		
@@ -853,8 +835,9 @@ class Students extends CI_Controller {
 		$update_student_data = $this->students_model->update_student($id, $student_data);
 		$update_students_others_date = $this->students_model->update_students_others($id, $students_others_data);
 		
-		redirect('students/manage_students?id=' . $id);
-	
+		$data['status'] = true;
+		
+		echo json_encode($data);
 	}
 	
 	function update_student_academic_data() {
@@ -946,6 +929,34 @@ class Students extends CI_Controller {
 		echo json_encode($data);
 		
 	} // end main function
+	
+	function get_student_main_data_via_angular() {
+		
+		$id = $this->input->get('id');
+		
+		$data['id'] = $id;
+		
+		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
+		
+		foreach($get_student_main_data_by_id as $row) {
+			$data['student_id'] = $row->id;
+			$data['first_name'] = trim($row->first_name);
+			$data['last_name'] = trim($row->last_name);
+			$data['middle_name'] = trim($row->middle_name);
+			$data['age'] = trim($row->age);
+			$data['gender'] = trim($row->gender);
+			$data['birth_date'] = trim($row->birth_date);
+			$data['civil_status'] = trim($row->civil_status);
+			$data['religion'] = trim($row->religion);
+			$data['address'] = trim($row->address);
+			$data['school'] = trim($row->school);
+			$data['course'] = trim($row->course);
+			$data['school_id'] = $row->school_id;
+		}
+		
+		echo json_encode($data);
+		
+	}
 	
 } // end class
 

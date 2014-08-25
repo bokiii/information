@@ -903,6 +903,21 @@ var manageStudents = (function() {
 	
 	// below are for functions of main data form
 	
+	function main_data_cancel() {
+		$main_data_form_submit_button.hide("fast");
+		$main_data_form_cancel_button.hide("fast");
+		$main_data_form_input.attr("disabled", "disabled");
+		
+		$main_data_form_input.css({
+			"border": "1px solid #A9A9A9",
+			"-webkit-border-radius": "0px",
+			"moz-border-radius": "0px",
+			"border-radius": "0px"
+		});
+		
+		$main_data_form_edit.show("fast");
+	}
+	
 	var main_data_form_edit_click = function() {
 		$main_data_form_edit.click(function(){
 			$main_data_form_submit_button.show("fast");
@@ -922,24 +937,31 @@ var manageStudents = (function() {
 	
 	var main_data_form_cancel_click = function() {
 		$main_data_form_cancel_button.click(function(){
-		
 			$main_data_form_reset_button.trigger('click');
-			
-			$main_data_form_submit_button.hide("fast");
-			$main_data_form_cancel_button.hide("fast");
-			$main_data_form_input.attr("disabled", "disabled");
-			
-			$main_data_form_input.css({
-				"border": "1px solid #A9A9A9",
-				"-webkit-border-radius": "0px",
-				"moz-border-radius": "0px",
-				"border-radius": "0px"
-			});
-			
-			$main_data_form_edit.show("fast");
-			
+			main_data_cancel();
 			return false;
 		});
+	};
+	
+	var main_data_form_submit = function() {
+		
+		$("#main_data_form").ajaxForm({
+			dataType: 'json',
+			forceSync: true,
+			beforeSubmit: loading,
+			success: success_status
+		});
+		
+		function loading() {
+			$loading_container.fadeIn('fast');
+		}
+		
+		function success_status(data) {
+			$(".student_angular_trigger").trigger('click');
+			main_data_cancel();
+			$loading_container.fadeOut('fast');
+		}
+		
 	};
 	
 	// below are for functions of academic data form
@@ -968,17 +990,6 @@ var manageStudents = (function() {
 		$academic_data_form_cancel_button.click(function(){
 			
 			$academic_data_form_reset_button.trigger('click');
-			
-			/*$academic_data_form_submit_button.hide('fast');
-			$academic_data_form_cancel_button.hide('fast');
-			
-			$academic_data_form_input.attr('disabled', 'disabled');
-			
-			$academic_data_form_input.css({
-				"border": "1px solid #C3C3C3"
-			});
-			
-			$academic_data_form_edit.show('fast');*/
 			academic_cancel();
 			return false;
 			
@@ -999,7 +1010,7 @@ var manageStudents = (function() {
 		}
 		
 		function success_status(data) {
-			$("#student_angular_trigger").trigger('click');
+			$(".student_angular_trigger").trigger('click');
 			academic_cancel();
 			$loading_container.fadeOut('fast');
 		}
@@ -1010,6 +1021,7 @@ var manageStudents = (function() {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
 		main_data_form_edit_click: 				main_data_form_edit_click,
 		main_data_form_cancel_click:			main_data_form_cancel_click,
+		main_data_form_submit:					main_data_form_submit,
 		academic_data_form_edit_click:			academic_data_form_edit_click,
 		academic_data_form_cancel_click:		academic_data_form_cancel_click,
 		execute_delete_checkbox:				execute_delete_checkbox,
@@ -1023,6 +1035,7 @@ var manageStudents = (function() {
 manageStudents.disable_submit_and_cancel_button();
 manageStudents.main_data_form_edit_click();
 manageStudents.main_data_form_cancel_click();
+manageStudents.main_data_form_submit();
 
 manageStudents.academic_data_form_edit_click();
 manageStudents.academic_data_form_cancel_click();
