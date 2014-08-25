@@ -699,7 +699,7 @@ class Students extends CI_Controller {
 		$data['keyword_height'] = $this->height2;
 		
 		$id = $this->input->get('id');
-			
+
 		// get students main data by id
 	
 		$get_student_main_data_by_id = $this->students_model->get_student_main_data_by_id($id);
@@ -762,118 +762,69 @@ class Students extends CI_Controller {
 			</form>
 		";
 		
-		// get students subject
-		$data['subjects'] = array();
-		
-		$get_student_subject_by_student_id = $this->students_model->get_student_subject_by_student_id($id);
-		
-		foreach($get_student_subject_by_student_id as $row_subject) {
-			
-			$data['subjects'][] = array(
-				"id" => $row_subject->id,
-				"subject" => $row_subject->subject,
-				"course_id" => $row_subject->course_id,
-				"student_id" => $row_subject->student_id,
-				"term_id" => $row_subject->term_id
-			);
-		}
-		
-		
 		$update_academic_data_action = base_url() . "index.php/". $this->table ."/update_student_academic_data";
 		
 		$data['content'] .= "
-			<form action='{$update_academic_data_action}' method='post' id='academic_data_form' class='full_width_3'>
-				<h2>Subjects</h2>
-				<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
-				
-				<div class='left'>
-					<label for='school'>School</label>
-					<p><input type='text' name='school' id='school' value='{$school}' disabled/></p>
-				</div>
-				
-				<div class='right'>
-					<label for='course'>Course</label>
-					<p><input type='text' name='course' id='course' value='{$course}' disabled/></p>
-				</div>
-				
-				<div class='clear'></div>
+			<div ng-controller='StudentAcademicCtrl'>
+				<form action='{$update_academic_data_action}' method='post' id='academic_data_form' class='full_width_3'>
+					<h2>Subjects</h2>
+					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
+					
+					<div class='left'>
+						<label for='school'>School</label>
+						<p><input type='text' name='school' id='school' value='{$school}' disabled/></p>
+					</div>
+					
+					<div class='right'>
+						<label for='course'>Course</label>
+						<p><input type='text' name='course' id='course' value='{$course}' disabled/></p>
+					</div>
+					
+					<div class='clear'></div>
 		";
 		
 		$data['content'] .= "
-				<table>
-				<tr>
-					<th><input type='checkbox' class='main_check' disabled/></th>
-					<th>Term</th>
-					<th>Course No.</th>
-					<th>Descriptive Title</th>
-					<th>Credit</th>
-					<th>Grade</th>
+					<table>
+						<tr>
+							<th><input type='checkbox' class='main_check' disabled/></th>
+							<th>Term</th>
+							<th>Course No.</th>
+							<th>Descriptive Title</th>
+							<th>Credit</th>
+							<th>Grade</th>
+						</tr>
+		";
+		
+		$data['content'] .= "
+				<tr ng-repeat='subject in subjects'>
+					<td><input type='checkbox' name='subject_id_delete[]' value='{{subject.id}}' class='subcheck' disabled='disabled'/></td>
+					<td>{{subject.subject_semester}}</td>
+					<td>{{subject.course_no}}</td>
+					<td>{{subject.descriptive_title}}</td>
+					<td>{{subject.credit}}</td>
+					<td><input type='text' name='grade[]' class='grade' value='{{subject.subject_grade}}' disabled='disabled'/></td>
+					<input type='hidden' name='student_id' value='{{academicData.id}}' />
+					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
 		";
-		
-			for($i = 0; $i < count($data['subjects']); $i++) {
-				
-				$subject_id = $data['subjects'][$i]['id'];
-				$subject_subject = ucwords($data['subjects'][$i]['subject']);
-				$subject_course_id = $data['subjects'][$i]['course_id'];
-				$subject_student_id = $data['subjects'][$i]['student_id'];
-				$subject_term_id = $data['subjects'][$i]['term_id'];
-			
-				// get term by term id
-				$get_term_by_id = $this->terms_model->get_term_by_id($subject_term_id);
-				
-				//echo $subject_id . "<br />";
-				
-				
-				foreach($get_term_by_id as $row_term) {
-					$term = ucwords($row_term->term);
-					$semester = ucwords($row_term->semester);
-					$school_year = ucwords($row_term->school_year);
-				}
-				
-				//get subject by descriptive title
-				$get_subject_by_descriptive_title = $this->subjects_model->get_subject_by_descriptive_title($subject_subject);
-				
-				foreach($get_subject_by_descriptive_title as $row_subject) {
-					$subject_course_no = $row_subject->course_no;
-					$subject_descriptive_title = $row_subject->descriptive_title;
-					$subject_credit = $row_subject->credit;
-					$subject_term_id = $row_subject->term_id;
-				}
-				
-				// get student grade by subject_id 
-				
-				$get_subject_grade = $this->students_model->get_student_subject_grade_by_student_subject_id($subject_id);
-				
-				foreach($get_subject_grade as $row_grade) {
-					$subject_grade = $row_grade->grade;
-				}
-				
-				$data['content'] .= "
-					<input type='hidden' name='student_id' value='{$id}' />
-					<input type='hidden' name='subject_id_update[]' value='{$subject_id}' />
-					<tr>
-						<td><input type='checkbox' name='subject_id_delete[]' value='{$subject_id}' class='subcheck' disabled/></td>
-						<td>{$term} year - {$semester} semester - {$school_year}</td>
-						<td>{$subject_course_no}</td>
-						<td>{$subject_subject}</td>
-						<td>{$subject_credit}</td>
-						<td><input type='text' name='grade[]' id='grade' value='{$subject_grade}' disabled/></td>
-					</tr>
-				";
-			} // end for loop for every subjects
+
 		
 		$data['content'] .= "
-					<tr>
-						<td><input type='submit' name='action' value='Delete' /></td>
-						<td><input type='submit' name='action' value='Update' /></td>
-						<td><button class='cancel'>Cancel</button></td>
-						<td colspan='3'><input type='reset' value='Clear' /></td>
-					</tr>
-				</table>
-			</form>
+						<tr>
+							<td><input type='submit' id='academic_delete' name='action' value='Delete' /></td>
+							<td><input type='submit' id='academic_update' name='action' value='Update' /></td>
+							<td><a class='academic_cancel' href='#'>Cancel</a></td>
+							<td colspan='3'><input type='reset' value='Clear' /></td>
+						</tr>
+					</table>
+				</form>
 		";
 	
+		$data['content'] .= "
+				<button ng-click='getSubjects()' id='student_angular_trigger'>Trigger Student Angular</button>
+			</div>
+		";
+		
 		$data['main_content'] = "main_view";
 		$this->load->view('template/content', $data);
 		
@@ -920,28 +871,81 @@ class Students extends CI_Controller {
 		$action = $this->input->post('action');
 		
 		if($action == "Update") {
-				
+			
 			for($u = 0; $u < count($subject_id_update); $u++) {
-				
 				$grade_id_to_update =  $grade[$u];
 				$subject_id_to_update = $subject_id_update[$u];
 				
 				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_by_subject_id($grade_id_to_update, $subject_id_to_update);
-				
 			}
-	
+			
+			$data['update_status'] = true;
 		}
 		
 		if($action == "Delete") {
-		
 			$delete_student_subject_id = $this->global_model->delete('students_subject', $subject_id_delete);
+			$data['delete_status'] = true;
+		}
+		
+		
+		echo json_encode($data);
+		
+	} 
+	
+	function get_student_academic_data_via_angular() {
+		
+		$id = $this->input->get('id');
+		
+		$data['id'] = $id;
+		
+		$data['subjects'] = array();
+		
+		$get_student_subject_by_student_id = $this->students_model->get_student_subject_by_student_id($id);
+		
+		foreach($get_student_subject_by_student_id as $row_subject) {
+			
+			$subject_id = $row_subject->id;
+			$subject = trim($row_subject->subject);
+			$course_id = $row_subject->course_id;
+			$term_id = $row_subject->term_id;
+			
+			// get term by term id
+			$get_term_by_id = $this->terms_model->get_term_by_id($term_id);
+			
+			foreach($get_term_by_id as $row_term) {
+				$term = ucwords($row_term->term);
+				$semester = ucwords($row_term->semester);
+				$school_year = ucwords($row_term->school_year);
+			}
+			
+			//get subject by descriptive title
+			$get_subject_by_descriptive_title = $this->subjects_model->get_subject_by_descriptive_title($subject);
+			
+			foreach($get_subject_by_descriptive_title as $row_main_subject) {
+				$subject_course_no = $row_main_subject->course_no;
+				$subject_credit = $row_main_subject->credit;
+			}
+			
+			$get_subject_grade = $this->students_model->get_student_subject_grade_by_student_subject_id($subject_id);
+		
+			foreach($get_subject_grade as $row_grade) {
+				$subject_grade = $row_grade->grade;
+			}
+			
+			$data['subjects'][] = array(
+				"id" => $subject_id,
+				"subject_semester" => $term . " year - " . $semester . " semester - " . $school_year, 
+				"course_no" => $subject_course_no,
+				"descriptive_title" => $subject,
+				"credit" => $subject_credit,
+				"subject_grade" => $subject_grade
+			);
 			
 		}
 		
-		redirect('students/manage_students?id=' . $student_id);
-	
-	} 
-	
+		echo json_encode($data);
+		
+	} // end main function
 	
 } // end class
 

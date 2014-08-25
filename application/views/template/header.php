@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en-US">
+<html lang="en-US" ng-app="information">
 <head>
 	<meta charset="UTF-8">
 	<title>Student Information System</title>
@@ -59,4 +59,3 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
-		

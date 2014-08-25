@@ -1,3 +1,34 @@
+// general loading container variable below
+var $loading_container = $("#loading_container");
+
+// general loading module below 
+
+var loadingModule = (function() {
+	
+	// below are the variables for centering the popup content 
+
+	var $loading_content = $("#loading_container #loading_content");
+	var windowWidth = window.innerWidth;
+	var windowHeight = window.innerHeight;
+	var loading_content_width = $loading_content.width();
+	var loading_content_height = $loading_content.height();
+	
+	
+	var center_general_loading = function() {
+		$loading_content.css({
+			"margin-top": windowHeight/2-loading_content_height/2 - 40
+		});
+	};
+	
+	return {
+		center_general_loading: 	center_general_loading
+	}
+	
+})()
+
+// execute loading module below
+loadingModule.center_general_loading();
+
 // jquery ui module below 
 
 var jqueryUi = (function() {
@@ -331,13 +362,6 @@ var popupModule = (function() {
 			return false;
 		});
 	};
-	
-	/*var center_popup_option = function() {
-		$popup_content.css({
-			"top": windowHeight/2-popup_content_height/2,
-			"left": windowWidth/2-popup_content_width/2
-		});
-	}*/
 	
 	var center_popup = function() {
 		$popup_content.css({
@@ -818,9 +842,12 @@ var manageStudents = (function() {
 	
 	var $academic_data_form = $("#content #academic_data_form");
 	var $academic_data_form_submit_button = $("#content #academic_data_form input[type='submit']");
+
+	
 	var $academic_data_form_reset_button = $("#content #academic_data_form input[type='reset']");
-	var $academic_data_form_cancel_button = $("#content #academic_data_form button.cancel");
+	var $academic_data_form_cancel_button = $("#content #academic_data_form .academic_cancel");
 	var $academic_data_form_input = $("#content #academic_data_form input");
+	
 	var $academic_data_form_edit = $("#content #academic_data_form img.edit");
 	
 	// below is for the delete features 
@@ -845,9 +872,9 @@ var manageStudents = (function() {
 		
 		$(document).on('click', '#content #academic_data_form .main_check', function(){
 			if($(this).is(":checked")) {
-				$sub_check.check();
+				$(document).find("#content #academic_data_form .subcheck").check();
 			} else {
-				$sub_check.uncheck();
+				$(document).find("#content #academic_data_form .subcheck").uncheck();
 			}
 		});
 		
@@ -861,10 +888,6 @@ var manageStudents = (function() {
 		
 	};
 	
-	
-
-	// functions below 
-	
 	var disable_submit_and_cancel_button = function(){
 		// below hide for the main data form
 		$main_data_form_submit_button.css("display", "none");
@@ -875,8 +898,6 @@ var manageStudents = (function() {
 		$academic_data_form_submit_button.css("display", "none");
 		$academic_data_form_reset_button.css("display", "none");
 		$academic_data_form_cancel_button.css("display", "none");
-		
-		
 		
 	};
 	
@@ -923,27 +944,32 @@ var manageStudents = (function() {
 	
 	// below are for functions of academic data form
 	
+	function academic_cancel() {
+		$academic_data_form_submit_button.hide('fast');
+		$academic_data_form_cancel_button.hide('fast');
+		$(document).find("#content #academic_data_form input").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		$academic_data_form_edit.show('fast');
+	}
+	
 	var academic_data_form_edit_click = function() {
 		
 		$academic_data_form_edit.click(function(){
+		
 			$academic_data_form_submit_button.show('fast');
 			$academic_data_form_cancel_button.show('fast');
-			$academic_data_form_input.removeAttr('disabled');
-			
-			$academic_data_form_input.css({
-				"border": "1px solid #51A5E4"
-			});
-			
+			$(document).find("#content #academic_data_form input").removeAttr('disabled').css("border", "1px solid #51A5E4");
 			$(this).hide('fast');
+			
 		});
 	
 	};
 	
 	var academic_data_form_cancel_click = function() {
 		$academic_data_form_cancel_button.click(function(){
+			
 			$academic_data_form_reset_button.trigger('click');
 			
-			$academic_data_form_submit_button.hide('fast');
+			/*$academic_data_form_submit_button.hide('fast');
 			$academic_data_form_cancel_button.hide('fast');
 			
 			$academic_data_form_input.attr('disabled', 'disabled');
@@ -952,24 +978,44 @@ var manageStudents = (function() {
 				"border": "1px solid #C3C3C3"
 			});
 			
-			$academic_data_form_edit.show('fast');
-			
+			$academic_data_form_edit.show('fast');*/
+			academic_cancel();
 			return false;
 			
 		});
 	};
 	
-			
+	var academic_data_form_submit = function() {
+		
+		$("#academic_data_form").ajaxForm({
+			dataType: 'json',
+			forceSync: true,
+			beforeSubmit: loading,
+			success: success_status
+		});
+		
+		function loading() {
+			$loading_container.fadeIn('fast');
+		}
+		
+		function success_status(data) {
+			$("#student_angular_trigger").trigger('click');
+			academic_cancel();
+			$loading_container.fadeOut('fast');
+		}
+	
+	};		
+	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
 		main_data_form_edit_click: 				main_data_form_edit_click,
 		main_data_form_cancel_click:			main_data_form_cancel_click,
 		academic_data_form_edit_click:			academic_data_form_edit_click,
 		academic_data_form_cancel_click:		academic_data_form_cancel_click,
-		execute_delete_checkbox:				execute_delete_checkbox
+		execute_delete_checkbox:				execute_delete_checkbox,
+		academic_data_form_submit:				academic_data_form_submit
 	}
-	
-	
+
 })()
 
 // execute manage students module below 
@@ -977,9 +1023,12 @@ var manageStudents = (function() {
 manageStudents.disable_submit_and_cancel_button();
 manageStudents.main_data_form_edit_click();
 manageStudents.main_data_form_cancel_click();
+
 manageStudents.academic_data_form_edit_click();
 manageStudents.academic_data_form_cancel_click();
 manageStudents.execute_delete_checkbox();
+manageStudents.academic_data_form_submit();
+
 
 
 
