@@ -2,6 +2,7 @@
 
 class Courses extends CI_Controller {
 
+
 	// variables for search height
 	public	$height1 = "30px";
 	public	$height2 = "20px";
