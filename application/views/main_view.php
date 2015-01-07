@@ -2,4 +2,6 @@
 	<?php
 		echo $content;
 	?>
+	
+	
 </div>
