@@ -14,6 +14,11 @@ class Search extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		
+		if($this->session->userdata('allowed') != true) {
+			redirect("login");
+		}
+		
 		$this->load->model('search_model');
 	
 		include_once (dirname(__FILE__) . "/students.php");

@@ -33,6 +33,11 @@ class Subjects extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		
+		if($this->session->userdata('allowed') != true) {
+			redirect("login");
+		}
+		
 		$this->load->model('course_subjects_model');
 		$this->load->model('courses_model');
 		$this->load->model('school_courses_model');

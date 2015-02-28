@@ -38,8 +38,11 @@ var jqueryUi = (function() {
 	
 	
 	var drag_popup_content = function() {	
+		
+	
 		$popup_content.draggable();
 		$link_add_content.draggable();
+
 	};
 	
 	return {

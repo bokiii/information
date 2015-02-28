@@ -37,7 +37,8 @@ body {
 }
 
 #container #header img {
-	margin-left: 94px;
+	margin-left: 87px;
+	margin-bottom: 20px;
 }
 
 #container #header h1 {
@@ -79,6 +80,7 @@ body {
 	border: 1px solid #C0C0C0;
 }
 
+
 #container #content #login form input[type='submit'] {
 	margin-top: 20px;
 	padding: 10px;
@@ -91,6 +93,12 @@ body {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	cursor: pointer;
+}
+
+#container #content #login p {
+	margin-top: 15px;
+	color: red;
+	text-align: center;
 }
 
 

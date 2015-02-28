@@ -39,7 +39,7 @@
 			<ul class="right dropdown">
 				<li class="main"><a href="#">Account</a>
 					<ul class="sub_menu">
-						<li><a href="#">Logout</a></li>
+						<li><a href="<?php echo base_url(); ?>index.php/logout">Logout</a></li>
 					</ul>
 				</li>
 				<li class="main"><a href="#">Maintenance</a>
@@ -59,3 +59,7 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
+		
+		
+		
+		

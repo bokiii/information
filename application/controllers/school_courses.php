@@ -30,6 +30,10 @@ class School_courses extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
+		
+		if($this->session->userdata('allowed') != true) {
+			redirect("login");
+		}
 	
 		// load necessary models
 		$this->load->model('courses_model');
