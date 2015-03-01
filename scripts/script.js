@@ -1,3 +1,19 @@
+// declare variables for every inputs of the slideshow 
+var $term_id = $("#popup_container #popup_content .student_slideshow_form #term_id");
+var $first_name = $("#popup_container #popup_content .student_slideshow_form #first_name");
+var $last_name = $("#popup_container #popup_content .student_slideshow_form #last_name");
+var $middle_name = $("#popup_container #popup_content .student_slideshow_form #middle_name");
+var $age = $("#popup_container #popup_content .student_slideshow_form #age");
+var $gender = $("#popup_container #popup_content .student_slideshow_form #gender");
+var $birth_date = $("#popup_container #popup_content .student_slideshow_form #birth_date");
+var $civil_status = $("#popup_container #popup_content .student_slideshow_form #civil_status");
+var $religion = $("#popup_container #popup_content .student_slideshow_form #religion");
+var $address = $("#popup_container #popup_content .student_slideshow_form #address");
+var $school_id = $("#popup_container #popup_content .student_slideshow_form #school_id");
+var $course_id_select;
+var $subjects;
+	
+
 // general loading container variable below
 var $loading_container = $("#loading_container");
 
@@ -157,6 +173,7 @@ headerModule.search_input();
 headerModule.search_submit();
 
 // popup module below 
+// in this module slideshow of divs for enrolling students exists
 
 var popupModule = (function() {
 	
@@ -197,6 +214,8 @@ var popupModule = (function() {
 	// below are for variables having switch actions next and prev
 	
 	var $slideshow_clear = $("#popup_container #popup_content form .final_actions td #slideshow_clear");
+	var slide_number = 1;
+	var do_slide;
 	
 	var add_click = function() {
 		
@@ -280,31 +299,77 @@ var popupModule = (function() {
 		// below are the functions for clicking the next and prev button
 		$next.click(function(event){
 			
-			$current_div.animate({"left": "-=800px"}, "slow", function(){
-				
-				
-				$(this).removeClass('current_div');
-				
-				$has_slide.css({
-					"height": $(this).next().height() + 80
-				});
-				
-				$(this).next().animate({"left": "-=800px"}, "slow", function(){
+			switch (slide_number) {
+				case 1:
+					if($term_id.val() == "") {
+						alert("Select Term");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+					break;
+				case 2:
+					if($first_name.val() == "" || $last_name.val == "" || $middle_name.val() == "") {
+						alert("First name, Last name or Middle name must not be empty");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+					break;
+				case 3:
+					if($age.val() == "" || $gender.val == "" || $birth_date.val() == "" || $civil_status.val() == "" || $religion.val() == "" || $address.val() == "") {
+						alert("Age, Gender, Birthdate, Civil Status, Religion, Address  must not be empty");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
 					
-					var has_next = $(this).next().hasClass('slide_div');
-					var has_prev = $(this).prev().hasClass('slide_div');
-					$current_div = $(this);
-					check_next_and_prev(has_next, has_prev);
+					break;
+				case 4:
+					if($school_id.val() == "") {
+						alert("Select School");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+				
+					break;
+				case 5:
 					
+					if($course_id_select.val() == "") {
+						alert("Select Course");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
 					
-				}).addClass('current_div');
-			
-			});
+					execute_slide(do_slide);
+					break;
+				case 6:
+					var subjects_length = $(document).find(".subjects:checked").length;
+					if(subjects_length == 0) {
+						alert("Select Subject");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					
+					execute_slide(do_slide);
+					break;
+				default:
+					execute_slide(true);
+			}
 			
 			return false;
 		});
 		
 		$prev.click(function(event){
+			
+			slide_number -= 1;
 			
 			$current_div.animate({"left": "+=800px"}, "slow", function(){
 				
@@ -347,6 +412,34 @@ var popupModule = (function() {
 			
 		}
 		
+		function execute_slide(do_slide) {
+			if(do_slide == true) {
+			
+				slide_number += 1;
+				
+				$current_div.animate({"left": "-=800px"}, "slow", function(){
+				
+					$(this).removeClass('current_div');
+					
+					$has_slide.css({
+						"height": $(this).next().height() + 80
+					});
+					
+					$(this).next().animate({"left": "-=800px"}, "slow", function(){
+						
+						var has_next = $(this).next().hasClass('slide_div');
+						var has_prev = $(this).prev().hasClass('slide_div');
+						$current_div = $(this);
+						check_next_and_prev(has_next, has_prev);
+						
+						
+					}).addClass('current_div');
+				
+				});
+			
+			} 
+		}
+		
 		$slideshow_clear.click(function(){
 			alert("trying to click the clear");
 			return false;
@@ -356,7 +449,8 @@ var popupModule = (function() {
 	
 	var close_click = function() {
 		$popup_close.click(function(){
-	
+		
+			slide_number = 1;
 			// standard actions for close
 			$clear_button.trigger('click');
 			window.history.pushState("Standard Location", "Standard Location", $current_url); 
@@ -405,24 +499,6 @@ var studentSlideShowModule = (function() {
 	
 	// below is the variable for student slide show for submission
 	var $student_slideshow_form = $("#popup_container #popup_content .student_slideshow_form");
-	
-	// declare variables for every inputs of the slideshow 
-	var $term_id = $("#popup_container #popup_content .student_slideshow_form #term_id");
-	
-	var $first_name = $("#popup_container #popup_content .student_slideshow_form #first_name");
-	var $last_name = $("#popup_container #popup_content .student_slideshow_form #last_name");
-	var $middle_name = $("#popup_container #popup_content .student_slideshow_form #middle_name");
-	
-	var $age = $("#popup_container #popup_content .student_slideshow_form #age");
-	var $gender = $("#popup_container #popup_content .student_slideshow_form #gender");
-	var $birth_date = $("#popup_container #popup_content .student_slideshow_form #birth_date");
-	var $civil_status = $("#popup_container #popup_content .student_slideshow_form #civil_status");
-	var $religion = $("#popup_container #popup_content .student_slideshow_form #religion");
-	var $address = $("#popup_container #popup_content .student_slideshow_form #address");
-	
-	var $school_id = $("#popup_container #popup_content .student_slideshow_form #school_id");
-	var $course_id_select;
-	var $subjects;
 	
 	var get_courses_by_school_id = function() {
 	
@@ -481,31 +557,9 @@ var studentSlideShowModule = (function() {
 		
 	};
 	
-	var student_slideshow_submit = function() {
-	
-		$student_slideshow_form.on('submit', function(){
-			/*alert("trying to enroll the student");
-			console.log("term_id = " + $term_id.val());
-			console.log("first_name = " + $first_name.val());
-			console.log("last_name = " + $last_name.val());
-			console.log("middle_name = " + $middle_name.val());
-			console.log("age = " + $age.val());
-			console.log("gender = " + $gender.val());
-			console.log("birth_date = " + $birth_date.val());
-			console.log("civil status = " + $civil_status.val());
-			console.log("religion = " + $religion.val());
-			console.log("address = " + $address.val());
-			console.log("school_id = " + $school_id.val());
-			console.log("course_id = " + $course_id_select.val());
-			console.log("subjects = " + $subjects.val());*/
-			
-		});
-	};
-	
 	return {
 		get_courses_by_school_id:	 get_courses_by_school_id,
-		get_subjects_by_course_id:	 get_subjects_by_course_id,
-		student_slideshow_submit: 	 student_slideshow_submit
+		get_subjects_by_course_id:	 get_subjects_by_course_id
 	}
 	
 })()
@@ -514,7 +568,7 @@ var studentSlideShowModule = (function() {
 
 studentSlideShowModule.get_courses_by_school_id();
 studentSlideShowModule.get_subjects_by_course_id();
-studentSlideShowModule.student_slideshow_submit();
+
 
 // login module below 
 
