@@ -83,8 +83,7 @@ class Students extends CI_Controller {
 				$terms_data[] = array(
 					"id" => $row_terms->id,
 					"term" => ucwords($row_terms->term),
-					"semester" => ucwords($row_terms->semester),
-					"school_year" => $row_terms->school_year
+					"semester" => ucwords($row_terms->semester)
 				); 
 			}
 		}
@@ -104,7 +103,7 @@ class Students extends CI_Controller {
 		";
 							for($i = 0; $i < count($terms_data); $i++) {
 								$data['popup'] .= "
-									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester </option>
 								";
 							}
 		$data['popup'] .= "

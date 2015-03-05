@@ -26,6 +26,13 @@ class Terms extends CI_Controller {
 		}
 	
 		$this->load->model('terms_model');
+		
+	}
+	
+	function debug($data) {
+		echo "<pre>";
+			print_r($data);
+		echo "</pre>";
 	}
 	
 	private function get_validation_errors() {
@@ -67,7 +74,6 @@ class Terms extends CI_Controller {
 						<td><label for='term'>Term:</label></td>
 						<td>
 							<select name='term' id='term'>
-								<option value>Select Year</option>
 								<option value='first'>First Year</option>
 								<option value='second'>Second Year</option>
 								<option value='third'>Third Year</option>
@@ -78,16 +84,12 @@ class Terms extends CI_Controller {
 						<td><label for='semester'>Semester:</label></td>
 						<td>
 							<select name='semester' id='semester'>
-								<option value>Select Semester</option>
 								<option value='first'>First Semester</option>
 								<option value='second'>Second Semester</option>
 							</select>
 						</td>
 					</tr>
-					<tr>
-						<td><label for='school_year'>School Year:</label></td>
-						<td><input type='text' name='school_year' id='school_year' /></td>
-					</tr>
+					
 					<tr>
 						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
 					</tr>
@@ -108,7 +110,6 @@ class Terms extends CI_Controller {
 						<th><input type='checkbox' class='main_check'  /></th>
 						<th>Term</th>
 						<th>Semester</th>
-						<th>School Year</th>
 					</tr>
 		";
 		
@@ -120,7 +121,6 @@ class Terms extends CI_Controller {
 					$id = $row->id;
 					$term = ucwords($row->term);
 					$semester = ucwords($row->semester);
-					$school_year = $row->school_year;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 					
@@ -129,7 +129,6 @@ class Terms extends CI_Controller {
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$term}</a></td>
 							<td>{$semester}</td>
-							<td>{$school_year}</td>
 						</tr>
 					";
 				}
@@ -147,7 +146,6 @@ class Terms extends CI_Controller {
 					$id = $row->id;
 					$term = ucwords($row->term);
 					$semester = ucwords($row->semester);
-					$school_year = $row->school_year;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 				
@@ -156,7 +154,6 @@ class Terms extends CI_Controller {
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$term}</a></td>
 							<td>{$semester}</td>
-							<td>{$school_year}</td>
 						</tr>
 					";
 				}
@@ -193,7 +190,7 @@ class Terms extends CI_Controller {
 		
 		// set array posted data to variable
 		$posted_term_data = $this->input->post();
-			
+	
 		// call validation
 		$add_validate = $this->add_validation($posted_term_data);
 		
@@ -201,8 +198,7 @@ class Terms extends CI_Controller {
 			
 			$data = array(
 				"term" => $this->input->post('term'),
-				"semester" => $this->input->post('semester'),
-				"school_year" => trim($this->input->post('school_year'))
+				"semester" => $this->input->post('semester')
 			);
 			
 			$add_term = $this->global_model->add($this->table, $data);
@@ -219,7 +215,12 @@ class Terms extends CI_Controller {
 	function delete_term() {
 		
 		$id = $this->input->post('id');
+		
+		// delete term
 		$delete_term = $this->global_model->delete($this->table, $id);
+		
+		// delete subjects included with the term
+		$delete_subjects_by_term_id = $this->terms_model->delete_subjects_by_term_id($id);
 		
 		$this->index();
 	}
@@ -236,8 +237,7 @@ class Terms extends CI_Controller {
 			$data = array(
 				"id" => $this->input->post('id'),
 				"term" => $this->input->post('term'),
-				"semester" => $this->input->post('semester'),
-				"school_year" => $this->input->post('school_year')
+				"semester" => $this->input->post('semester')
 			);
 			
 			$update_term = $this->global_model->update($this->table, $data, $data['id']);
@@ -270,14 +270,13 @@ class Terms extends CI_Controller {
 	
 		$term = $data['term'];
 		$semester = $data['semester'];
-		$school_year = $data['school_year'];
 		
 		$empty_error = false;
 		$exist_error = false;
 		
 		$errors = "";
 		
-		if($term == NULL || $semester == NULL || $school_year == "") {
+		if($term == NULL || $semester == NULL) {
 			$errors .= "<p>One of the fields is empty.</p>";
 			$empty_error = true;
 		} else {
@@ -285,13 +284,16 @@ class Terms extends CI_Controller {
 			// check the term in database 
 			$term_exists = $this->terms_model->term_exists($term);
 			$semester_exists = $this->terms_model->semester_exists($semester);
-			$school_year_exists = $this->terms_model->school_year_exists($school_year);
 			
-			if($term_exists && $semester_exists && $school_year_exists) {
+			$term_and_semester_exists = $this->terms_model->term_and_semester_exists($term, $semester);
+			
+			if($term_and_semester_exists != NULL) {
 				$all_fields_exists = true;
 				$errors .= "<p>Term added already exists</p>";
 				$exist_error = true;
 			}
+			
+		
 			
 		}
 		
@@ -310,13 +312,12 @@ class Terms extends CI_Controller {
 	
 		$term = $data['term'];
 		$semester = $data['semester'];
-		$school_year = $data['school_year'];
 		
 		$empty_error = false;
 		
 		$errors = "";
 		
-		if($term == NULL || $semester == NULL || $school_year == "") {
+		if($term == NULL || $semester == NULL) {
 			$errors .= "<p>One of the fields is empty.</p>";
 			$empty_error = true;
 		} 
@@ -328,7 +329,6 @@ class Terms extends CI_Controller {
 			return true;
 		}
 		
-	
 	}
 	
 

@@ -99,8 +99,7 @@ class Subjects extends CI_Controller {
 				$terms_data[] = array(
 					"id" => $row_terms->id,
 					"term" => ucwords($row_terms->term),
-					"semester" => ucwords($row_terms->semester),
-					"school_year" => $row_terms->school_year
+					"semester" => ucwords($row_terms->semester)
 				); 
 			}
 		}
@@ -130,7 +129,7 @@ class Subjects extends CI_Controller {
 		
 						for($i = 0; $i < count($terms_data); $i++) {
 							$data['popup'] .= "
-								<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+								<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester</option>
 							";
 						}
 		
@@ -265,7 +264,6 @@ class Subjects extends CI_Controller {
 					foreach($get_term_by_term_id as $row_term) {
 						$term = ucwords($row_term->term);
 						$semester = ucwords($row_term->semester);
-						$school_year = $row_term->school_year;
 					}
 					
 					// get data for manage link 
@@ -312,7 +310,7 @@ class Subjects extends CI_Controller {
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
 							<td>{$course}</td>
-							<td>{$term} year - {$semester} semester - {$school_year}</td>
+							<td>{$term} year - {$semester} semester</td>
 							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
