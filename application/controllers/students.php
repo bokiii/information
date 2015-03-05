@@ -35,6 +35,12 @@ class Students extends CI_Controller {
 		$this->load->model('terms_model');
 	}
 	
+	function debug($data) {
+		echo "<pre>";
+			print_r($data);
+		echo "</pre>";
+	}
+	
 	function get_student_id() {
 		return $this->student_id;
 	}
@@ -508,7 +514,6 @@ class Students extends CI_Controller {
 		
 		}
 		
-	
 		redirect('students');
 		
 	}
@@ -687,7 +692,6 @@ class Students extends CI_Controller {
 		}
 		
 		echo json_encode($data);
-		
 	}
 	
 	function empty_students_related_table() {
@@ -704,7 +708,36 @@ class Students extends CI_Controller {
 		$data['keyword_height'] = $this->height2;
 		
 		$id = $this->input->get('id');
-
+	
+		$get_student_course = $this->students_model->get_student_course_by_student_id($id);
+		foreach($get_student_course as $row) {
+			$course = $row->course;
+		}
+		
+		$get_course_id = $this->courses_model->get_course_id_by_course($course);
+		
+		foreach($get_course_id as $row_course) {
+			$course_id = $row_course->id;
+		}
+		
+		$subject_source = base_url() . "index.php/". $this->table ."/get_student_subjects";
+		
+		$popup_form_action = base_url() . "index.php/". $this->table ."/add_subject";
+	
+		$data['popup'] = "
+			<a class='close' href='#'>&#215;</a>
+			<h1>". $this->table ."</h1>
+			<form action='{$popup_form_action}' method='post' id='subject_popup_form'>
+				<input type='hidden' name='subject_source' id='subject_source' value='{$subject_source}' />
+				<input type='hidden' name='course_id' id='course_id' value='{$course_id}' />
+				<div id='subjects_container'>
+					<h2>Subjects</h2>
+					<p class='no'>There are no subjects to select</p>
+				</div>
+			</form>
+		";
+		
+		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
 		
@@ -799,8 +832,9 @@ class Students extends CI_Controller {
 						<tr>
 							<td><input type='submit' id='academic_delete' name='action' value='Delete' /></td>
 							<td><input type='submit' id='academic_update' name='action' value='Update' /></td>
+							<td><input type='submit' id='add_subject' name='action' value='Add' /></td>
 							<td><a class='academic_cancel' href='#'>Cancel</a></td>
-							<td colspan='3'><input type='reset' value='Clear' /></td>
+							<td colspan='2'><input type='reset' value='Clear' /></td>
 						</tr>
 					</table>
 				</form>
@@ -809,7 +843,7 @@ class Students extends CI_Controller {
 		$data['content'] .= "
 				<button ng-click='getSubjects()' class='student_angular_trigger'>Trigger Student Angular</button>
 				<button ng-click='getMainData()' class='student_angular_trigger'>Trigger Student Angular</button>
-			</div>
+			</div> <!-- end ng-controller-->
 		";
 		
 		$data['main_content'] = "main_view";
@@ -875,9 +909,11 @@ class Students extends CI_Controller {
 			$data['delete_status'] = true;
 		}
 		
+		if($action == "Add") {
+			$data['add_status'] = true;
+		}
 		
 		echo json_encode($data);
-		
 	} 
 	
 	function get_student_academic_data_via_angular() {
@@ -963,7 +999,101 @@ class Students extends CI_Controller {
 		
 	}
 	
+	function add_subject() {
+		//$this->debug($this->input->post());
+		$set_subject_id = $this->input->post("subject");
+		
+		for($i = 0; $i < count($set_subject_id); $i++ ) {
+			
+			// get subject title 
+			$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
+			foreach($get_subject_by_subject_id as $row_subject_id) {
+				$subject_title = $row_subject_id->descriptive_title;
+			}
+			
+			// get subject course id 
+			$get_course_id = $this->course_subjects_model->get_course_id_id_by_subject_id($set_subject_id[$i]);
+			foreach($get_course_id as $row_course_id) {
+				$course_id = $row_course_id->course_id;
+			}
+			
+			
+		}
+		
+	
+	}
+	
+	function get_student_subjects() {
+		
+		$id = $this->input->get('id');
+		
+		if(isset($id) && $id != NULL) {
+			
+			$data['subjects'] = "<h2>Subject</h2>";
+			
+			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
+			
+			if($get_course_subjects_by_course_id != NULL) {
+				
+				foreach($get_course_subjects_by_course_id as $row) {
+					$subject_id = $row->subject_id;
+					
+					$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
+					
+					foreach($get_subject_by_subject_id as $row_a) {
+						
+						$course_no = $row_a->course_no;
+						$descriptive_title = $row_a->descriptive_title;
+						
+						$data['subjects'] .= "
+							<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+						";
+						
+					}
+				}
+				
+				// get subject term 
+				
+				
+				
+			} else {
+				$data['subjects'] = "
+					<div>
+						<h2>Subjects</h2>
+						<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
+					</div>
+				";
+			}
+			
+		} else {
+		
+			$data['subjects'] = "
+				<div>
+					<h2>Subjects</h2>
+					<p class='center'>Please go back and select course first.</p>
+				</div>
+			";
+			
+		}
+		
+		echo json_encode($data);
+	}
+	
+	
 } // end class
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

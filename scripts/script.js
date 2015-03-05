@@ -13,7 +13,7 @@ var $school_id = $("#popup_container #popup_content .student_slideshow_form #sch
 var $course_id_select;
 var $subjects;
 	
-
+	
 // general loading container variable below
 var $loading_container = $("#loading_container");
 
@@ -268,7 +268,6 @@ var popupModule = (function() {
 			$popup_container.fadeIn('fast', function(){
 				
 				// below are the statements if the module are having a slide or has_slide
-				
 				
 				// add current_div class 
 				$starting_div.addClass('current_div');
@@ -887,6 +886,15 @@ manageModule.manage_link_click();
 
 var manageStudents = (function() {
 	
+	// below are the variables for the adding subject popup
+	var $popup_container = $("#popup_container");
+	$add_subject = $("#add_subject");
+	var $popup_content = $("#popup_container #popup_content");
+	var windowHeight = window.innerHeight;
+	var $subject_source;
+	var $course_id;
+	
+	
 	// below are variables for main_data_form 
 	var $main_data_form = $("#content #main_data_form");
 	var $main_data_form_submit_button = $("#content #main_data_form input[type='submit']");
@@ -900,7 +908,6 @@ var manageStudents = (function() {
 	var $academic_data_form = $("#content #academic_data_form");
 	var $academic_data_form_submit_button = $("#content #academic_data_form input[type='submit']");
 
-	
 	var $academic_data_form_reset_button = $("#content #academic_data_form input[type='reset']");
 	var $academic_data_form_cancel_button = $("#content #academic_data_form .academic_cancel");
 	var $academic_data_form_input = $("#content #academic_data_form input");
@@ -1037,6 +1044,12 @@ var manageStudents = (function() {
 			$academic_data_form_submit_button.show('fast');
 			$academic_data_form_cancel_button.show('fast');
 			$(document).find("#content #academic_data_form input").removeAttr('disabled').css("border", "1px solid #51A5E4");
+			
+			// exception for enabling the school and course
+			$(document).find("#content #academic_data_form #school").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+			$(document).find("#content #academic_data_form #course").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+			
+			
 			$(this).hide('fast');
 			
 		});
@@ -1067,12 +1080,60 @@ var manageStudents = (function() {
 		}
 		
 		function success_status(data) {
-			$(".student_angular_trigger").trigger('click');
-			academic_cancel();
-			$loading_container.fadeOut('fast');
+			
+			if(data.update_status == true) {
+				$(".student_angular_trigger").trigger('click');
+				academic_cancel();
+				$loading_container.fadeOut('fast');
+			}
+		
+			if(data.delete_status == true) {
+				$(".student_angular_trigger").trigger('click');
+				academic_cancel();
+				$loading_container.fadeOut('fast');
+			}
+			
+			if(data.add_status) {
+				alert("Let's execute addition of subjects");
+				
+				
+				$loading_container.fadeOut('fast');
+			}
+		
 		}
 	
 	};		
+	
+	
+	var add_subject_click = function() {
+	
+		$add_subject.click(function(){
+			
+			$popup_container.fadeIn("fast", function(){
+				
+				$popup_content.css({
+					"margin-top": windowHeight/2-$popup_content.height()/2
+				});
+				
+				// now get all the subjects from the course
+				$subject_source = $(this).find("#subject_source").val();
+                $course_id = $(this).find("#course_id").val();
+				
+				$.get($subject_source + "?id=" + $course_id, function(data){
+					var datas = eval('msg=' + data);
+					console.log(datas);
+					//$popup_container.children("#subject_popup_form").html(datas);
+					
+					$(document).find("#subjects_container").html(datas.subjects);
+					$(document).find("#subjects_container").append("<input type='submit' value='Add Subject' />");
+				});
+			
+			});
+		
+			return false;
+		});
+	
+	};
 	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
@@ -1082,7 +1143,8 @@ var manageStudents = (function() {
 		academic_data_form_edit_click:			academic_data_form_edit_click,
 		academic_data_form_cancel_click:		academic_data_form_cancel_click,
 		execute_delete_checkbox:				execute_delete_checkbox,
-		academic_data_form_submit:				academic_data_form_submit
+		academic_data_form_submit:				academic_data_form_submit,
+		add_subject_click:						add_subject_click
 	}
 
 })()
@@ -1098,6 +1160,8 @@ manageStudents.academic_data_form_edit_click();
 manageStudents.academic_data_form_cancel_click();
 manageStudents.execute_delete_checkbox();
 manageStudents.academic_data_form_submit();
+
+manageStudents.add_subject_click();
 
 
 

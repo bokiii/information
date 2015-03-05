@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var controllers = angular.module('information.controllers', []);
 
@@ -29,6 +29,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 			$scope.subjects = data.subjects;
 		});
 	};
+	
 	
 	// below is for getting the main data
 	var studentMainDataUrl = fullUrl.replace("manage_students", "get_student_main_data_via_angular");

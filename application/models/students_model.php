@@ -93,6 +93,13 @@ class Students_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function get_student_course_by_student_id($student_id) {
+		$this->db->select('course');
+		$this->db->where('student_id', $student_id);
+		$query = $this->db->get($this->students_course_table);
+		return $query->result();
+	}
+	
 	function empty_table() {
 		
 		$this->db->empty_table('students');

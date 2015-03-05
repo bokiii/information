@@ -13,6 +13,12 @@ class Courses_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function get_course_id_by_course($course) {
+		$this->db->where('course', $course);
+		$query = $this->db->get('courses');
+		return $query->result();
+	}
+	
 	function course_exists_in_id($id, $course) {
 		$this->db->where('id', $id);
 		$this->db->where('course', $course);
