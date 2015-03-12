@@ -44,6 +44,12 @@ class Subjects extends CI_Controller {
 		$this->load->model('subjects_model');
 	}
 	
+	function debug($data) {
+		echo "<pre>";
+			print_r($data);
+		echo "</pre>";
+	}
+	
 	private function get_data_validate() {
 		return $this->data_validate;
 	}
@@ -103,7 +109,6 @@ class Subjects extends CI_Controller {
 				); 
 			}
 		}
-		
 		
 		$popup_form_action = base_url() . "index.php/". $this->table ."/". $this->add . " ";
 		
@@ -185,7 +190,6 @@ class Subjects extends CI_Controller {
 					foreach($get_term_by_term_id as $row_term) {
 						$term = ucwords($row_term->term);
 						$semester = ucwords($row_term->semester);
-						$school_year = $row_term->school_year;
 					}
 					
 					// get data for manage link 
@@ -232,7 +236,7 @@ class Subjects extends CI_Controller {
 							<td>{$descriptive_title}</td>
 							<td>{$credit}</td>
 							<td>{$course}</td>
-							<td>{$term} year - {$semester} semester - {$school_year}</td>
+							<td>{$term} year - {$semester} semester</td>
 							<td><a class='manage_link' href='{$manage_link}'>Manage</a></td>
 						</tr>
 					";
@@ -362,8 +366,7 @@ class Subjects extends CI_Controller {
 			$data['link_add_data'] = $link_add_data;
 			$data['check_box'] = true;
 		}
-		
-		
+	
 		// load view below 
 		
 		$data['main_content'] = "main_view";
@@ -599,11 +602,18 @@ class Subjects extends CI_Controller {
 			$this->validation_errors = "<p>Course is required</p>";
 			
 		} else {
+			
+			$get_subject_term_id = $this->subjects_model->get_subject_term_id_by_subject_id($subject_id);
+			
+			foreach($get_subject_term_id as $row_id) {
+				$term_id = $row_id->term_id;
+			}
+			
 			foreach($course_id as $row) {
-				
 				$data = array(
 					"subject_id" => $subject_id,
-					"course_id" => $row
+					"course_id" => $row,
+					"term_id" => $term_id
 				);
 				
 				$add_course_subject = $this->global_model->add($this->course_subjects, $data);
@@ -611,9 +621,8 @@ class Subjects extends CI_Controller {
 			
 			$this->prompt_status = true;
 		}
-	
-		redirect($this->table);
 		
+		redirect($this->table);
 	}
 	
 }

@@ -58,6 +58,12 @@
 	height: 23px;
 }
 
+#popup_option #popup_content  form table td #order {
+	width: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 #popup_option #popup_content  form table td select {
 	padding: 3px;
 	border: 1px solid #D7D7D7;

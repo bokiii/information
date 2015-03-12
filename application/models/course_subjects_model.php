@@ -31,6 +31,21 @@ class Course_subjects_model extends CI_Model {
 		return $count;
 	}
 
+	function get_course_subjects_by_term_id_and_course_id($term_id, $course_id) {
+		$this->db->where('term_id', $term_id);
+		$this->db->where('course_id', $course_id);
+		$query = $this->db->get('course_subjects');
+		return $query->result();
+	}
+	
+	function get_course_subjects_by_course_id_group_by_term_id($course_id) {
+		$this->db->where('course_id', $course_id);
+		$this->db->group_by('term_id');
+		$query = $this->db->get('course_subjects');
+		return $query->result();
+	}
+	
+	
 }
 
 

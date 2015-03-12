@@ -122,35 +122,55 @@
 	width: 100%;
 }
 
+
+
+
+
 #popup_container #popup_content form #fifth_div {
 	position: absolute;
 	bottom: 90px;
 	width: 100%;
 }
 
-#popup_container #popup_content form #end_div {
-	position: absolute;
-	bottom: 90px;
-	width: 100%;
+#popup_container #popup_content form #fifth_div div {
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	height: 300px;
+	overflow: auto;
+	padding: 10px 0px 10px 0px;
 }
 
-#popup_container #popup_content form #fifth_div div {
-	padding: 10px;
-}
 
 #popup_container #popup_content form #fifth_div div h2 {
 	text-align: center;
 	font-weight: bold;
 }
 
-#popup_container #popup_content form #fifth_div div  p {
-	display: inline-block;
+#popup_container #popup_content form #fifth_div div h3 {
+	text-align: center;
+}
+
+#popup_container #popup_content form #fifth_div div p {
+	display: block;
 	margin-top: 20px;
 }
 
-#popup_container #popup_content form #fifth_div div  p.center {
-	display: block;
+#popup_container #popup_content form #fifth_div div input[type='checkbox'] {
+	margin: 0px 10px 0px 20px;
+}
+
+#popup_container #popup_content form #fifth_div div .center {
 	text-align: center;
+}
+
+
+
+
+
+#popup_container #popup_content form #end_div {
+	position: absolute;
+	bottom: 90px;
+	width: 100%;
 }
 
 #popup_container #popup_content form #end_div p {

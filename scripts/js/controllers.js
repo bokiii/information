@@ -30,7 +30,6 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 		});
 	};
 	
-	
 	// below is for getting the main data
 	var studentMainDataUrl = fullUrl.replace("manage_students", "get_student_main_data_via_angular");
 	$scope.mainData;

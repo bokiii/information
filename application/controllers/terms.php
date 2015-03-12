@@ -110,6 +110,7 @@ class Terms extends CI_Controller {
 						<th><input type='checkbox' class='main_check'  /></th>
 						<th>Term</th>
 						<th>Semester</th>
+						<th class='order'>Order</th>
 					</tr>
 		";
 		
@@ -121,6 +122,7 @@ class Terms extends CI_Controller {
 					$id = $row->id;
 					$term = ucwords($row->term);
 					$semester = ucwords($row->semester);
+					$order = $row->order;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 					
@@ -129,6 +131,7 @@ class Terms extends CI_Controller {
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$term}</a></td>
 							<td>{$semester}</td>
+							<td class='order'>{$order}</td>
 						</tr>
 					";
 				}
@@ -140,12 +143,16 @@ class Terms extends CI_Controller {
 				";
 			}
 		} else {
-			$get_content_data = $this->global_model->get($this->table);
+			
+			//$get_content_data = $this->global_model->get($this->table);
+			$get_content_data = $this->terms_model->get_terms_with_order();
+			
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;
 					$term = ucwords($row->term);
 					$semester = ucwords($row->semester);
+					$order = $row->order;
 				
 					$update_link = base_url() . "index.php/global_actions/". $this->table ."?action=update&id={$id}";
 				
@@ -154,6 +161,7 @@ class Terms extends CI_Controller {
 							<td><input type='checkbox' name='id[]' value='{$id}' class='sub_check' /></td>
 							<td><a href='{$update_link}'>{$term}</a></td>
 							<td>{$semester}</td>
+							<td class='order'>{$order}</td>
 						</tr>
 					";
 				}
@@ -221,6 +229,7 @@ class Terms extends CI_Controller {
 		
 		// delete subjects included with the term
 		$delete_subjects_by_term_id = $this->terms_model->delete_subjects_by_term_id($id);
+	
 		
 		$this->index();
 	}
@@ -234,10 +243,12 @@ class Terms extends CI_Controller {
 		$update_validate = $this->update_validation($posted_term_data);
 		
 		if($update_validate) {
+			
 			$data = array(
 				"id" => $this->input->post('id'),
 				"term" => $this->input->post('term'),
-				"semester" => $this->input->post('semester')
+				"semester" => $this->input->post('semester'),
+				"order" => trim($this->input->post('order'))
 			);
 			
 			$update_term = $this->global_model->update($this->table, $data, $data['id']);
@@ -312,17 +323,26 @@ class Terms extends CI_Controller {
 	
 		$term = $data['term'];
 		$semester = $data['semester'];
+		$order = trim($data['order']);
 		
-		$empty_error = false;
+		$have_error = false;
 		
 		$errors = "";
 		
-		if($term == NULL || $semester == NULL) {
+		if($term == NULL || $semester == NULL || $order == NULL) {
 			$errors .= "<p>One of the fields is empty.</p>";
-			$empty_error = true;
-		} 
+			$have_error = true;
+		}
+
+		if($order != NULL) {
+			$valid_number = is_numeric($order);
+			if($valid_number != true) {
+				$errors .= "<p>Order is not a valid number.</p>";
+				$have_error = true;
+			}
+		}
 		
-		if($empty_error) {
+		if($have_error) {
 			$this->set_validation_errors($errors);
 			return false;
 		} else {

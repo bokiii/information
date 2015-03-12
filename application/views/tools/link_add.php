@@ -16,13 +16,13 @@
 				<?php
 					
 					if(isset($check_box)) {	
-						
+					
 						for($i=0; $i < count($link_add_datas['link_add_data']); $i++) {
 							echo "<p><input type='checkbox' name='main_id[]' value='". $link_add_datas['link_add_id'][$i] ."' /> <span class='link_add_text'>" . $link_add_datas['link_add_data'][$i] . "</span></p>";
 						}
 						
 					} else {
-				
+					
 						for($i=0; $i < count($link_add_datas['link_add_data']); $i++) {
 							echo "<p><input type='radio' name='main_id' value='". $link_add_datas['link_add_id'][$i] ."' /> <span class='link_add_text'>" . $link_add_datas['link_add_data'][$i] . "</span></p>";
 						}

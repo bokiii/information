@@ -38,7 +38,6 @@ class Terms_model extends CI_Model {
 		return $query->result();
 	}
 	
-	
 	function school_year_exists($school_year) {
 		$this->db->where('school_year', $school_year);
 		$count = $this->db->count_all_results($this->table);
@@ -64,6 +63,12 @@ class Terms_model extends CI_Model {
 		} else {
 			return false;
 		}
+	}
+	
+	function get_terms_with_order() {
+		$this->db->order_by("order"); 
+		$query = $this->db->get($this->table); 
+		return $query->result();
 	}
 	
 	

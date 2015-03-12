@@ -130,6 +130,12 @@ body {
 	font-weight: bold;
 }
 
+#content #delete_form .order {
+	text-align: center;
+}
+
+
+
 #content #actions {	
 	margin-top: 20px;
 }

@@ -49,6 +49,12 @@ class Course_subjects extends CI_Controller {
 		
 	}
 	
+	function debug($data) {
+		echo "<pre>";
+			print_r($data);
+		echo "</pre>";
+	}
+	
 	function index($id=null) {
 		
 		if($this->input->get('id')) {
@@ -84,6 +90,7 @@ class Course_subjects extends CI_Controller {
 		
 		$get_course = $this->global_model->get_by_id($this->course->table, $course_id);
 		
+
 		foreach($get_course as $row_course) { 
 			$course = $row_course->course;
 		}
@@ -111,13 +118,14 @@ class Course_subjects extends CI_Controller {
 			<h1>". $course ."</h1>
 			<form action='{$popup_form_action}' method='post' id='popup_form'>
 				<table>
+					
 					<tr>
 						<td><label for='subject_id'>Subject:</label></td>
 						<td>
 							<select name='subject_id' id='subject_id'>
 		";
 							$data['popup'] .= "
-								<option value>Select Subject</option>
+								<option value>&nbsp;</option>
 							";
 							for($i = 0; $i < count($subject_data); $i++) {
 								
@@ -132,6 +140,8 @@ class Course_subjects extends CI_Controller {
 						</td>
 						<input type='hidden' name='course_id' value='{$course_id}' />
 					</tr>
+					
+					
 					<tr>
 						<td colspan='4'><input class='popup_actions' type='submit' value='Add'/><input class='popup_actions clear' type='reset' value='Clear' /></td>
 					</tr>
@@ -227,6 +237,8 @@ class Course_subjects extends CI_Controller {
 			}
 		}
 		
+		
+		
 		// global json_path below
 		$path['current_url'] = base_url() . "index.php/" . $this->table;
 		$path['id'] = $course_id;
@@ -247,11 +259,11 @@ class Course_subjects extends CI_Controller {
 		$data['main_content'] = "main_view";
 		$this->load->view('template/content', $data);
 		
-		
 	} 
 	
+	
 	function add_course_subject() {
-		
+	
 		$subject_id = $this->input->post('subject_id');
 		$course_id = $this->input->post('course_id');
 		
@@ -261,6 +273,14 @@ class Course_subjects extends CI_Controller {
 			$this->validation_errors = "<p>Subject is required</p>";
 			
 		} else {
+			
+			// get subject term_id
+			
+			$get_term_id = $this->subjects_model->get_subject_term_id_by_subject_id($subject_id);
+			
+			foreach($get_term_id as $row) {
+				$term_id = $row->term_id;
+			}
 			
 			$count_course_subject_by_subject_id = $this->course_subjects_model->count_course_subject_by_subject_id($subject_id);
 			$count_course_subject_by_subject_id_and_course_id = $this->course_subjects_model->count_course_subject_by_subject_id_and_course_id($subject_id, $course_id);
@@ -272,7 +292,8 @@ class Course_subjects extends CI_Controller {
 				
 				$data = array(
 					"subject_id" => $this->input->post('subject_id'),
-					"course_id" => $this->input->post('course_id')
+					"course_id" => $this->input->post('course_id'),
+					"term_id" => $term_id
 				);
 				
 				$add_course_subject = $this->global_model->add($this->table, $data);

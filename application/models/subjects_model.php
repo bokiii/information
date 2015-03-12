@@ -13,6 +13,13 @@ class Subjects_model extends CI_Model {
 		return $query->result();
 	} 
 	
+	function get_subject_by_subject_id_and_term_id($id, $term_id) {
+		$this->db->where('id', $id);
+		$this->db->where('term_id', $term_id);
+		$query = $this->db->get('subjects');
+		return $query->result();
+	}
+	
 	function course_no_and_descriptive_title_exist_in_id($id, $course_no, $descriptive_title) {
 		$this->db->where('id', $id);
 		$this->db->where('course_no', $course_no);
@@ -109,9 +116,22 @@ class Subjects_model extends CI_Model {
 		return $query->result();
 	}
 	
-	
+	function get_subject_term_id_by_subject_id($subject_id) {
+		$this->db->select('term_id');
+		$this->db->where('id', $subject_id);
+		$query = $this->db->get('subjects');
+		
+		return $query->result();
+	}
 	
 	
 } // end main class
+
+
+
+
+
+
+
 
 

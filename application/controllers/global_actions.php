@@ -497,7 +497,7 @@ class Global_actions extends CI_Controller {
 			foreach($get_by_id as $row) {
 				$term = $row->term;
 				$semester = $row->semester;
-				$school_year = $row->school_year;
+				$order = $row->order;
 			}
 			
 			$popup_form_action = base_url() . "index.php/". $table ."/". $update ."";
@@ -591,8 +591,8 @@ class Global_actions extends CI_Controller {
 							</td>
 						</tr>
 						<tr>
-							<td><label for="school_year">School Year:</label></td>
-							<td><input type="text" name="school_year" id="school_year"  value="'. $school_year .'" /></td>
+							<td><label for="order">Order</label></td>
+							<td><input type="text" maxlength="1" name="order" id="order" value="'. $order .'" /></td>
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Update"/><input class="popup_actions clear" type="reset" value="Reset" /></td>
@@ -623,15 +623,10 @@ class Global_actions extends CI_Controller {
 							<td><label for="semester">Semester:</label></td>
 							<td>
 								<select name="semester" id="semester">
-									<option value>Select Semester</option>
 									<option value="first">First Semester</option>
 									<option value="second">Second Semester</option>
 								</select>
 							</td>
-						</tr>
-						<tr>
-							<td><label for="school_year">School Year:</label></td>
-							<td><input type="text" name="school_year" id="school_year" /></td>
 						</tr>
 						<tr>
 							<td colspan="4"><input class="popup_actions" type="submit" value="Add"/><input class="popup_actions clear" type="reset" value="Clear" /></td>
@@ -640,7 +635,6 @@ class Global_actions extends CI_Controller {
 				</form>
 			';
 		}
-		
 	
 		$data['main_content'] = "tools/popup_option";
 		$this->load->view('template/content', $data);
@@ -809,7 +803,7 @@ class Global_actions extends CI_Controller {
 							<select name='subject_id' id='subject_id'>
 		";
 							$data['popup'] .= "
-								<option value>Select Subject</option>
+								<option value>&nbsp;</option>
 							";
 							for($i = 0; $i < count($subject_data); $i++) {
 								
@@ -937,6 +931,19 @@ class Global_actions extends CI_Controller {
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

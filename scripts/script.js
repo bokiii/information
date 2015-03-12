@@ -256,8 +256,17 @@ var popupModule = (function() {
 			}
 			
 			// set standard css positions for every slide divs 
-			$starting_div.css("left", "0px");
+			/*$starting_div.css("left", "0px");
 			$first_div.css("left", "800px");
+			$second_div.css("left", "800px");
+			$third_div.css("left", "800px");
+			$fourth_div.css("left", "800px");
+			$fifth_div.css("left", "800px");
+			$end_div.css("left", "800px");*/
+			
+			
+			$starting_div.css("display", "none");
+			$first_div.css("left", "0px");
 			$second_div.css("left", "800px");
 			$third_div.css("left", "800px");
 			$fourth_div.css("left", "800px");
@@ -270,10 +279,12 @@ var popupModule = (function() {
 				// below are the statements if the module are having a slide or has_slide
 				
 				// add current_div class 
-				$starting_div.addClass('current_div');
+				//$starting_div.addClass('current_div');
+				$("#popup_container #popup_content form #first_div").addClass('current_div');
 				
 				// set current div 
-				$current_div = $starting_div;
+				//$current_div = $starting_div;
+				$current_div = $("#popup_container #popup_content form #first_div");
 				
 				// set height to current div
 				$has_slide.css({
@@ -299,7 +310,7 @@ var popupModule = (function() {
 		$next.click(function(event){
 			
 			switch (slide_number) {
-				case 1:
+				/*case 1:
 					if($term_id.val() == "") {
 						alert("Select Term");
 						do_slide = false;
@@ -307,8 +318,8 @@ var popupModule = (function() {
 						do_slide = true;
 					}
 					execute_slide(do_slide);
-					break;
-				case 2:
+					break;*/
+				case 1:
 					if($first_name.val() == "" || $last_name.val == "" || $middle_name.val() == "") {
 						alert("First name, Last name or Middle name must not be empty");
 						do_slide = false;
@@ -317,7 +328,7 @@ var popupModule = (function() {
 					}
 					execute_slide(do_slide);
 					break;
-				case 3:
+				case 2:
 					if($age.val() == "" || $gender.val == "" || $birth_date.val() == "" || $civil_status.val() == "" || $religion.val() == "" || $address.val() == "") {
 						alert("Age, Gender, Birthdate, Civil Status, Religion, Address  must not be empty");
 						do_slide = false;
@@ -327,7 +338,7 @@ var popupModule = (function() {
 					execute_slide(do_slide);
 					
 					break;
-				case 4:
+				case 3:
 					if($school_id.val() == "") {
 						alert("Select School");
 						do_slide = false;
@@ -337,7 +348,7 @@ var popupModule = (function() {
 					execute_slide(do_slide);
 				
 					break;
-				case 5:
+				case 4:
 					
 					if($course_id_select.val() == "") {
 						alert("Select Course");
@@ -348,7 +359,7 @@ var popupModule = (function() {
 					
 					execute_slide(do_slide);
 					break;
-				case 6:
+				case 5:
 					var subjects_length = $(document).find(".subjects:checked").length;
 					if(subjects_length == 0) {
 						alert("Select Subject");
@@ -520,12 +531,17 @@ var studentSlideShowModule = (function() {
 			
 			$subject_source = $(this).find("#subject_source").val();
 			$course_id = $(this).find("#course_id").val();
-			
+		
 			$.get($subject_source + "?id=" + $course_id, function(data){
-				var datas = eval('msg=' + data);
-				$fifth_div.html(datas.subjects);
 				
-				$fifth_div.find('div').css({
+			
+				var datas = eval('msg=' + data);
+				
+				$fifth_div.children("div").html(datas.subjects);
+				
+				// set the css design
+				
+				/*$fifth_div.find('div').css({
 					"padding": "10px"
 				});
 				
@@ -546,9 +562,12 @@ var studentSlideShowModule = (function() {
 				
 				$fifth_div.find('input').css({
 					"margin": "0px 10px 0px 20px"
-				});
+				});*/
 				
-				$subjects = $(document).find(".subjects");
+				
+				
+				// set the subjects value 
+				//$subjects = $(document).find(".subjects");
 				
 			});
 			

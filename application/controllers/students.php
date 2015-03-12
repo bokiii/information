@@ -19,6 +19,10 @@ class Students extends CI_Controller {
 	
 	private $student_id;
 	
+	private $current_num_row;
+	private $dummy_num_row;
+	private $added_semester_title_status = false;
+	
 	function __construct() {
 		parent::__construct();
 		
@@ -639,42 +643,93 @@ class Students extends CI_Controller {
 		echo json_encode($data);
 		
 	}
-	
+
+	function process_decision_to_insert_semester_title() {
+		if($this->dummy_num_row == 0) {
+			$this->added_semester_title_status = true;
+		} else {
+			if($this->current_num_row == $this->dummy_num_row) {
+				$this->added_semester_title_status = false;
+				$this->dummy_num_row == $this->current_num_row;
+			} else {
+				$this->added_semester_title_status = true;
+			}
+		}
+	}
+
 	function get_subjects() {
 		
 		$id = $this->input->get('id');
+		$data = array();
 		
 		if(isset($id) && $id != NULL) {
-			
-			$data['subjects'] = "<h2>Subject</h2>";
 			
 			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
 			
 			if($get_course_subjects_by_course_id != NULL) {
 				
-				foreach($get_course_subjects_by_course_id as $row) {
-					$subject_id = $row->subject_id;
-					
-					$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
-					
-					foreach($get_subject_by_subject_id as $row_a) {
-						
-						$course_no = $row_a->course_no;
-						$descriptive_title = $row_a->descriptive_title;
-						
-						$data['subjects'] .= "
-							<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
-						";
-						
-					}
-				}
+				// get terms then arrange it by order
+				$get_terms = $this->terms_model->get_terms_with_order();
 				
+				$data['subjects'] = "";
+				
+				foreach($get_terms as $row_term) {
+					
+					$term_id = $row_term->id;
+					$term = $row_term->term;
+					$semester = $row_term->semester;
+					$order = $row_term->order;
+				
+					$get_course_subjects = $this->course_subjects_model->get_course_subjects_by_term_id_and_course_id($term_id, $id);
+					
+					//$this->debug($get_course_subjects);
+					
+					$this->current_num_row = count($get_course_subjects);
+					
+				
+					$this->dummy_num_row = count($get_course_subjects);
+					
+					
+					foreach($get_course_subjects as $row) {
+					
+						$subject_id = $row->subject_id;
+						
+						$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
+						
+						foreach($get_subject_by_subject_id as $row_a) {
+							
+							$course_no = $row_a->course_no;
+							$descriptive_title = $row_a->descriptive_title;
+							$current_term_id = $row_a->term_id;
+							
+							$this->process_decision_to_insert_semester_title();
+							
+							
+							if($this->added_semester_title_status == false) {
+								$data['subjects'] .= "<h2>{$term} year - {$semester} semester </h2>";
+								$this->dummy_num_row -= 1;
+								$this->added_semester_title_status == true;
+							}
+							
+						
+							$data['subjects'] .= "
+								<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+							";
+			
+						}
+					
+					
+					
+					
+					}
+				
+				} // end foreach loop
+			
+			
 			} else {
 				$data['subjects'] = "
-					<div>
-						<h2>Subjects</h2>
-						<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
-					</div>
+					<h2>Subjects</h2>
+					<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
 				";
 			}
 			
@@ -682,16 +737,16 @@ class Students extends CI_Controller {
 		} else {
 		
 			$data['subjects'] = "
-				<div>
-					<h2>Subjects</h2>
-					<p class='center'>Please go back and select course first.</p>
-				</div>
+				<h2>Subjects</h2>
+				<p class='center'>Please go back and select course first.</p>
 			";
 			
 		}
-		
+	
 		echo json_encode($data);
 	}
+	
+	
 	
 	function empty_students_related_table() {
 		$this->students_model->empty_table();
@@ -735,7 +790,6 @@ class Students extends CI_Controller {
 				</div>
 			</form>
 		";
-		
 		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
@@ -1028,7 +1082,6 @@ class Students extends CI_Controller {
 		
 		if(isset($id) && $id != NULL) {
 			
-			$data['subjects'] = "<h2>Subject</h2>";
 			
 			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
 			
@@ -1079,6 +1132,7 @@ class Students extends CI_Controller {
 	}
 	
 	
+
 } // end class
 
 
