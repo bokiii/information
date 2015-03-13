@@ -153,6 +153,13 @@
 	margin: 0px;
 }
 
+#popup_container #popup_content form #fifth_div div p.no_subject {
+	text-align: center;
+	
+}
+
+
+
 #popup_container #popup_content form #fifth_div div h3 {
 	text-align: center;
 }

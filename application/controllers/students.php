@@ -37,6 +37,7 @@ class Students extends CI_Controller {
 		$this->load->model('students_model');
 		$this->load->model('schools_model');
 		$this->load->model('terms_model');
+	
 	}
 	
 	function debug($data) {
@@ -102,8 +103,7 @@ class Students extends CI_Controller {
 						<td><label for='term_id'>Terms</label></td>
 						<td>
 							<select name='term_id' id='term_id'>
-								<option value>Select Term</option>
-						
+							<option value>&nbsp;</option>
 		";
 							for($i = 0; $i < count($terms_data); $i++) {
 								$data['popup'] .= "
@@ -141,7 +141,7 @@ class Students extends CI_Controller {
 						<td><label for='age'>Age:</label></td>
 						<td>
 							<select name='age' id='age'>
-								<option value>Select</option>
+								<option value>&nbsp;</option>
 								<option value='15'>15</option>
 								<option value='16'>16</option>
 								<option value='17'>17</option>
@@ -166,7 +166,7 @@ class Students extends CI_Controller {
 						<td><label for='gender'>Gender:</label></td>
 						<td>
 							<select name='gender' id='gender'>
-								<option value>Select</option>
+								<option value>&nbsp;</option>
 								<option value='male'>Male</option>
 								<option value='female'>Female</option>
 							</select>
@@ -178,7 +178,7 @@ class Students extends CI_Controller {
 						<td><label for='civil_status'>Civil Status:</label></td>
 						<td>
 							<select name='civil_status' id='civil_status'>
-								<option value>Select</option>
+								<option value>&nbsp;</option>
 								<option>Single</option>
 								<option>Married</option>
 								<option>Widowed</option>
@@ -218,7 +218,7 @@ class Students extends CI_Controller {
 						<td><label for='school_id'>School:</label></td>
 						<td>
 							<select name='school_id' id='school_id'>
-								<option value>Select School</option>
+								<option value>&nbsp;</option>
 		";
 		
 						for($i = 0; $i < count($schools_data); $i++ ) {
@@ -382,6 +382,12 @@ class Students extends CI_Controller {
 	
 	function add_student() {
 		
+		$start_year = date('Y');
+		$end_year = date('Y', strtotime('+1 years'));
+		$school_year = $start_year . "-" . $end_year;
+		
+		//$this->debug($this->input->post());
+		
 		$data = array(
 			"term_id" => $this->input->post('term_id'),
 			"first_name" => $this->input->post('first_name'),
@@ -395,8 +401,11 @@ class Students extends CI_Controller {
 			"address" => $this->input->post('address'),
 			"school_id" => $this->input->post('school_id'),
 			"course_id" => $this->input->post('course_id'),
-			"subject" => $this->input->post('subject')
+			"subject" => $this->input->post('subject'), 
+			"school_year" => $school_year
 		);
+		
+		$this->debug($data);
 		
 		// set student data
 		$student_data = array(
@@ -491,7 +500,8 @@ class Students extends CI_Controller {
 				"subject" => $subject,
 				"course_id" => $course_id,
 				"student_id" => $student_id,
-				"term_id" => $this->input->post('term_id')
+				"term_id" => $this->input->post('term_id'),
+				"school_year" => $school_year
 			); 
 				
 			// insert student subject
@@ -606,7 +616,7 @@ class Students extends CI_Controller {
 					<td><label for='course_id'>Course</label></td>
 					<td>
 						<select name='course_id' id='course_id'>
-							<option value>Select Course</option>
+							<option value>&nbsp;</option>
 			";
 			
 			$get_school_courses_by_school_id = $this->school_courses_model->get_school_courses_by_school_id($id);
@@ -724,7 +734,7 @@ class Students extends CI_Controller {
 						";
 						
 						
-						$data['subjects'] .= "<p>No subject added in this semester</p>";
+						$data['subjects'] .= "<p class='no_subject'>No subject added in this semester</p>";
 					}
 					
 				} // end foreach loop
@@ -749,7 +759,6 @@ class Students extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-
 	function empty_students_related_table() {
 		$this->students_model->empty_table();
 	}
@@ -907,7 +916,7 @@ class Students extends CI_Controller {
 	}
 	
 	function update_student_main_data() {
-		
+	
 		$id = $this->input->post('id');
 		
 		$student_data = array(
@@ -915,7 +924,6 @@ class Students extends CI_Controller {
 			"last_name" => trim($this->input->post('last_name')),
 			"middle_name" => trim($this->input->post('middle_name'))
 		);
-		
 		
 		$students_others_data = array(
 			"age" => trim($this->input->post('age')),
@@ -931,7 +939,7 @@ class Students extends CI_Controller {
 		
 		$data['status'] = true;
 		
-		echo json_encode($data);
+		echo json_encode($data);	
 	}
 	
 	function update_student_academic_data() {
@@ -994,7 +1002,6 @@ class Students extends CI_Controller {
 			foreach($get_term_by_id as $row_term) {
 				$term = ucwords($row_term->term);
 				$semester = ucwords($row_term->semester);
-				$school_year = ucwords($row_term->school_year);
 			}
 			
 			//get subject by descriptive title
@@ -1013,7 +1020,7 @@ class Students extends CI_Controller {
 			
 			$data['subjects'][] = array(
 				"id" => $subject_id,
-				"subject_semester" => $term . " year - " . $semester . " semester - " . $school_year, 
+				"subject_semester" => $term . " year - " . $semester . " semester", 
 				"course_no" => $subject_course_no,
 				"descriptive_title" => $subject,
 				"credit" => $subject_credit,
@@ -1021,6 +1028,8 @@ class Students extends CI_Controller {
 			);
 			
 		}
+		
+		//$this->debug($data);
 		
 		echo json_encode($data);
 		
@@ -1051,7 +1060,6 @@ class Students extends CI_Controller {
 		}
 		
 		echo json_encode($data);
-		
 	}
 	
 	function add_subject() {
@@ -1133,7 +1141,7 @@ class Students extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	
+
 
 } // end class
 

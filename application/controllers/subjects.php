@@ -250,6 +250,7 @@ class Subjects extends CI_Controller {
 			}
 		} else {
 			$get_content_data = $this->global_model->get($this->table);
+			//$get_content_data = $this->subjects_model->get_subjects();
 			if($get_content_data != NULL) {
 				foreach($get_content_data as $row) {
 					$id = $row->id;

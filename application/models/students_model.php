@@ -126,7 +126,7 @@ class Students_model extends CI_Model {
 	
 	function get_student_main_data_by_id($id) {
 	
-		$this->db->select('*');
+		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students_others.age, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_school.school, students_course.course, students_course.school_id');                                          
 		$this->db->from('students');
 		$this->db->join('students_others', "students_others.student_id = students.id", 'left');
 		$this->db->join('students_school', "students_school.student_id = students.id", 'left');
@@ -156,6 +156,7 @@ class Students_model extends CI_Model {
 	// below are for updates in managing students 
 	
 	function update_student($id, $data) {
+	
 		$this->db->where('id', $id);
 		$query = $this->db->update($this->students_table, $data);
 		

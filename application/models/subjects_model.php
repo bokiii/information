@@ -7,6 +7,17 @@ class Subjects_model extends CI_Model {
 		$this->load->database();
 	}
 	
+	
+	function get_subjects() {
+		$this->db->select('*');
+		$this->db->from('subjects');
+		$this->db->join('terms', 'terms.id = subjects.term_id');
+		$this->db->order_by('terms.order');
+		$query = $this->db->get();
+		return $query->result();
+	
+	}
+	
 	function get_subject_by_subject_id($id) {
 		$this->db->where('id', $id);
 		$query = $this->db->get('subjects');
