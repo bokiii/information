@@ -122,10 +122,6 @@
 	width: 100%;
 }
 
-
-
-
-
 #popup_container #popup_content form #fifth_div {
 	position: absolute;
 	bottom: 90px;
@@ -140,10 +136,21 @@
 	padding: 10px 0px 10px 0px;
 }
 
-
 #popup_container #popup_content form #fifth_div div h2 {
 	text-align: center;
 	font-weight: bold;
+	padding-top: 15px;
+	border-top: 1px solid #DDDDDD;
+}
+
+#popup_container #popup_content form #fifth_div div h2:first-child {
+	padding: 0px;
+	border-top: none;
+}
+
+#popup_container #popup_content form #fifth_div div p.semester {
+	text-align: center;
+	margin: 0px;
 }
 
 #popup_container #popup_content form #fifth_div div h3 {
@@ -153,6 +160,7 @@
 #popup_container #popup_content form #fifth_div div p {
 	display: block;
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 #popup_container #popup_content form #fifth_div div input[type='checkbox'] {
@@ -162,9 +170,6 @@
 #popup_container #popup_content form #fifth_div div .center {
 	text-align: center;
 }
-
-
-
 
 
 #popup_container #popup_content form #end_div {
