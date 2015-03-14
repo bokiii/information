@@ -27,6 +27,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	$scope.getSubjects = function() {
 		$http.get(studentAcademicUrl).success(function(data){
 			$scope.subjects = data.subjects;
+			
 		});
 	};
 	

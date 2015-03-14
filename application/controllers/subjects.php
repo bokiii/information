@@ -383,10 +383,10 @@ class Subjects extends CI_Controller {
 		if($this->form_validation->run() == TRUE) {
 			
 			$data = array(
-				"course_no" => $this->input->post('course_no'),
-				"descriptive_title" => $this->input->post('descriptive_title'),
-				"credit" => $this->input->post('credit'),
-				"term_id" => $this->input->post('term_id')
+				"course_no" => trim($this->input->post('course_no')),
+				"descriptive_title" => trim($this->input->post('descriptive_title')),
+				"credit" => trim($this->input->post('credit')),
+				"term_id" => trim($this->input->post('term_id'))
 			);
 			
 			$add_subject = $this->global_model->add($this->table, $data);
@@ -437,16 +437,16 @@ class Subjects extends CI_Controller {
 				
 				$data = array(
 					"id" => $this->input->post('id'),
-					"course_no" => $this->input->post('course_no'),
-					"descriptive_title" => $this->input->post('descriptive_title'),
-					"credit" => $this->input->post('credit'),
+					"course_no" => trim($this->input->post('course_no')),
+					"descriptive_title" => trim($this->input->post('descriptive_title')),
+					"credit" => trim($this->input->post('credit')),
 					"term_id" => $this->input->post('term_id')
 				);
 				
 				$update_subject = $this->global_model->update($this->table, $data, $data['id']);
 			
 				$this->prompt_status = true;
-					
+		
 			} elseif($course_no_exist) {
 				// update via descriptive title 
 					

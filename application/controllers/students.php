@@ -785,8 +785,19 @@ class Students extends CI_Controller {
 			$course_id = $row_course->id;
 		}
 		
-		$subject_source = base_url() . "index.php/". $this->table ."/get_student_subjects";
+		$get_terms = $this->global_model->get('terms');
+		$terms_data = array();
+		if($get_terms != NULL) {
+			foreach($get_terms as $row_terms) {
+				$terms_data[] = array(
+					"id" => $row_terms->id,
+					"term" => ucwords($row_terms->term),
+					"semester" => ucwords($row_terms->semester)
+				); 
+			}
+		}
 		
+		$subject_source = base_url() . "index.php/". $this->table ."/get_student_subjects";
 		$popup_form_action = base_url() . "index.php/". $this->table ."/add_subject";
 	
 		$data['popup'] = "
@@ -795,10 +806,34 @@ class Students extends CI_Controller {
 			<form action='{$popup_form_action}' method='post' id='subject_popup_form'>
 				<input type='hidden' name='subject_source' id='subject_source' value='{$subject_source}' />
 				<input type='hidden' name='course_id' id='course_id' value='{$course_id}' />
+				<input type='hidden' name='student_id' id='student_id' value='{$id}' />
+				
 				<div id='subjects_container'>
 					<h2>Subjects</h2>
 					<p class='no'>There are no subjects to select</p>
 				</div>
+				
+				
+				<table>
+					<tr>
+					
+						<td><label for='term_id'>Select Term</label></td>
+						<td>
+							<select name='term_id' id='term_id'>
+							<option value>&nbsp;</option>
+		";
+							for($i = 0; $i < count($terms_data); $i++) {
+								$data['popup'] .= "
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester </option>
+								";
+							}
+							
+		$data['popup'] .= "
+							</select>
+						</td>
+					</tr>
+				</table>
+				<input type='submit' value='Add Subject' />
 			</form>
 		";
 		
@@ -969,13 +1004,11 @@ class Students extends CI_Controller {
 		
 		if($action == "Delete") {
 			$delete_student_subject_id = $this->global_model->delete('students_subject', $subject_id_delete);
+			$delete_student_grade_by_subject_id = $this->students_model->delete_student_grade_by_subject_id($subject_id_delete);
+			
 			$data['delete_status'] = true;
 		}
-		
-		if($action == "Add") {
-			$data['add_status'] = true;
-		}
-		
+	
 		echo json_encode($data);
 	} 
 	
@@ -1060,30 +1093,6 @@ class Students extends CI_Controller {
 		}
 		
 		echo json_encode($data);
-	}
-	
-	function add_subject() {
-		//$this->debug($this->input->post());
-		$set_subject_id = $this->input->post("subject");
-		
-		for($i = 0; $i < count($set_subject_id); $i++ ) {
-			
-			// get subject title 
-			$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
-			foreach($get_subject_by_subject_id as $row_subject_id) {
-				$subject_title = $row_subject_id->descriptive_title;
-			}
-			
-			// get subject course id 
-			$get_course_id = $this->course_subjects_model->get_course_id_id_by_subject_id($set_subject_id[$i]);
-			foreach($get_course_id as $row_course_id) {
-				$course_id = $row_course_id->course_id;
-			}
-			
-			
-		}
-		
-	
 	}
 	
 	function get_student_subjects() {
@@ -1177,10 +1186,73 @@ class Students extends CI_Controller {
 	
 		echo json_encode($data);
 	
+	}
+	
+	function add_subject() {
+	
+		$start_year = date('Y');
+		$end_year = date('Y', strtotime('+1 years'));
+		$school_year = $start_year . "-" . $end_year;
+		
+		$student_id = $this->input->post("student_id");
+		$term_id = $this->input->post('term_id');
+		
+		$get_students_course_course_id_by_student_id = $this->students_model->get_students_course_course_id_by_student_id($student_id);
+		
+		foreach($get_students_course_course_id_by_student_id as $row_s) {
+			$course_id = $row_s->id;
+		}
+	
+		$set_subject_id = $this->input->post("subject");
+		
+		$insert_data = array();
+		
+		$insert_grade_data = array();
+		
+		for($i = 0; $i < count($set_subject_id); $i++ ) {
+			
+			$get_subjects = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
+			//$this->debug($get_subjects);
+			
+			foreach($get_subjects as $row_a) {
+				$descriptive_title = $row_a->descriptive_title;
+			}
+			
+			$subject_data = array(
+				"subject" => $descriptive_title,
+				"course_id" => $course_id,
+				"student_id" => $student_id,
+				"term_id" => $term_id,
+				"school_year" => $school_year
+			);
+			
+			// insert subject
+			$insert_subject = $this->global_model->add("students_subject", $subject_data);
+			
+			// get subject id by descriptive title 
+			$get_new_subject_id = $this->students_model->get_students_subject_subject_id_by_descriptive_title($descriptive_title);
+			foreach($get_new_subject_id as $row_e) {
+				$subject_id = $row_e->id;
+			}
+			
+			$grade_data = array(
+				"grade" => 0,
+				"subject_id" => $subject_id
+			);
+			
+			// insert grade
+			
+			$insert_grade = $this->global_model->add("students_grade", $grade_data);
+			
+		}
+		
+		$data['status'] = true;
+		
+		echo json_encode($data);
 	
 	}
 	
-
+	
 
 } // end class
 

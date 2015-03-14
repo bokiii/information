@@ -1112,12 +1112,6 @@ var manageStudents = (function() {
 				$loading_container.fadeOut('fast');
 			}
 			
-			if(data.add_status) {
-				//alert("Let's execute addition of subjects");
-
-				$loading_container.fadeOut('fast');
-			}
-		
 		}
 	
 	};		
@@ -1138,11 +1132,9 @@ var manageStudents = (function() {
 				
 				$.get($subject_source + "?id=" + $course_id, function(data){
 					var datas = eval('msg=' + data);
-					console.log(datas);
 					//$popup_container.children("#subject_popup_form").html(datas);
 					
 					$(document).find("#subjects_container").html(datas.subjects);
-					//$(document).find("#subjects_container").append("<input type='submit' value='Add Subject' />");
 				});
 			
 			});
@@ -1150,6 +1142,38 @@ var manageStudents = (function() {
 			return false;
 		});
 	
+	};
+	
+	var subject_popup_form_submit = function() {
+	
+		$("#subject_popup_form").ajaxForm({
+			dataType: 'json',
+			forceSync: true,
+			beforeSubmit: loading,
+			success: success_status
+		});
+		
+		function loading() {
+			$loading_container.fadeIn('fast');
+		}
+		
+		function success_status(data) {
+			
+			if(data.status == true) {
+				$(".student_angular_trigger").trigger('click');
+				$loading_container.fadeOut('fast');
+				academic_cancel();
+				$(document).find(".close").trigger('click');
+				
+			}
+	
+			
+		}
+		
+		/*$("#subject_popup_form").on("submit", function(){
+			return false;
+		});*/
+
 	};
 	
 	return {
@@ -1161,7 +1185,8 @@ var manageStudents = (function() {
 		academic_data_form_cancel_click:		academic_data_form_cancel_click,
 		execute_delete_checkbox:				execute_delete_checkbox,
 		academic_data_form_submit:				academic_data_form_submit,
-		add_subject_click:						add_subject_click
+		add_subject_click:						add_subject_click,
+		subject_popup_form_submit:				subject_popup_form_submit
 	}
 
 })()
@@ -1179,6 +1204,7 @@ manageStudents.execute_delete_checkbox();
 manageStudents.academic_data_form_submit();
 
 manageStudents.add_subject_click();
+manageStudents.subject_popup_form_submit();
 
 
 

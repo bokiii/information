@@ -59,8 +59,29 @@ class Students_model extends CI_Model {
 		}
 	}
 	
+	function add_student_subject_batch($data) {
+		$query = $this->db->insert_batch('students_subject', $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	
+	}
+	
 	function add_student_grade($data) {
 		$query = $this->db->insert($this->students_grade_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function delete_student_grade_by_subject_id($subject_id) {
+		$this->db->where_in('subject_id', $subject_id);
+		$query = $this->db->delete($this->students_grade_table);
+		
 		if($query) {
 			return true;
 		} else {
@@ -99,6 +120,28 @@ class Students_model extends CI_Model {
 		$query = $this->db->get($this->students_course_table);
 		return $query->result();
 	}
+	
+	function get_students_course_course_id_by_student_id($student_id) {
+		$this->db->select('id');
+		$this->db->where('student_id', $student_id);
+		
+		$query = $this->db->get($this->students_course_table);
+		
+		return $query->result();
+	
+	}
+	
+	function get_students_subject_subject_id_by_descriptive_title($descriptive_title) {
+		
+		$this->db->select('id');
+		$this->db->where('subject', $descriptive_title);
+		$query = $this->db->get('students_subject');
+		
+		return $query->result();
+		
+		
+	}
+	
 	
 	function empty_table() {
 		
@@ -208,6 +251,8 @@ class Students_model extends CI_Model {
 		}
 		
 	}
+	
+	
 	
 }
 
