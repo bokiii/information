@@ -1123,9 +1123,9 @@ var manageStudents = (function() {
 	};		
 	
 	var add_subject_click = function() {
-	
+
 		$add_subject.click(function(){
-			
+		
 			$popup_container.fadeIn("fast", function(){
 				
 				$popup_content.css({
@@ -1142,11 +1142,11 @@ var manageStudents = (function() {
 					//$popup_container.children("#subject_popup_form").html(datas);
 					
 					$(document).find("#subjects_container").html(datas.subjects);
-					$(document).find("#subjects_container").append("<input type='submit' value='Add Subject' />");
+					//$(document).find("#subjects_container").append("<input type='submit' value='Add Subject' />");
 				});
 			
 			});
-		
+			
 			return false;
 		});
 	

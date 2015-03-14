@@ -228,32 +228,56 @@
 
 /* below is the design for the popup of adding subjects in managing students */
 
-#subject_popup_form {
-	/*text-align: center; */
+#subject_popup_form div {
 	-webkit-box-sizing: border-box; 
 	-moz-box-sizing: border-box;    
-	box-sizing: border-box;   
+	box-sizing: border-box;
+	
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	height: 300px;
+	overflow: auto;
+	padding: 10px 0px 10px 0px;
 }
 
-#subject_popup_form h2 {
+#subject_popup_form div h2 {
+	text-align: center;
 	font-weight: bold;
+	padding-top: 15px;
+	border-top: 1px solid #DDDDDD;
+}
+
+#subject_popup_form div h2:first-child {
+	padding: 0px;
+	border-top: none;
+}
+
+#subject_popup_form div p.semester {
+	text-align: center;
+	margin: 0px;
+}
+
+#subject_popup_form div p.no_subject {
+	text-align: center;
+	
+}
+
+#subject_popup_form div h3 {
 	text-align: center;
 }
 
-#subject_popup_form p {
-	padding: 10px;
-	display: inline-block;
+#subject_popup_form div p {
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
-#subject_popup_form p input[type='checkbox'] {
-	margin-right: 5px;
+#subject_popup_form div input[type='checkbox'] {
+	margin: 0px 10px 0px 20px;
 }
 
-#subject_popup_form p.no {
-	margin-top: 10px;
-}
 
-#subject_popup_form input[type='submit'] {
+/*#subject_popup_form input[type='submit'] {
 	display: block;
 	padding: 10px;
 	color: #FFF;
@@ -264,7 +288,7 @@
 	-moz-border-radius: 10px;
 	border: none;
 	cursor: pointer;
-}
+}*/
 
 
 
