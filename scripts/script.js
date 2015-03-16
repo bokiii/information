@@ -1095,6 +1095,13 @@ var manageStudents = (function() {
 		});
 		
 		function loading() {
+			var proceed = confirm("Are you sure?");
+			if (proceed == true) {
+				return true;
+			} else {
+				return false;
+			}
+			
 			$loading_container.fadeIn('fast');
 		}
 		
@@ -1154,6 +1161,13 @@ var manageStudents = (function() {
 		});
 		
 		function loading() {
+			var proceed = confirm("Are you sure?");
+			if (proceed == true) {
+				return true;
+			} else {
+				return false;
+			}
+			
 			$loading_container.fadeIn('fast');
 		}
 		
@@ -1167,13 +1181,8 @@ var manageStudents = (function() {
 				
 			}
 	
-			
 		}
 		
-		/*$("#subject_popup_form").on("submit", function(){
-			return false;
-		});*/
-
 	};
 	
 	return {
