@@ -457,9 +457,19 @@ var popupModule = (function() {
 		
 	};
 	
+
+	jQuery.fn.extend({
+		check: function() {
+			return this.each(function() { this.checked = true; });
+		},
+		uncheck: function() {
+			return this.each(function() { this.checked = false; });
+		}
+	});
+	
 	var close_click = function() {
 		$popup_close.click(function(){
-		
+	
 			slide_number = 1;
 			// standard actions for close
 			$clear_button.trigger('click');
@@ -1036,6 +1046,14 @@ var manageStudents = (function() {
 		});
 		
 		function loading() {
+			var proceed = confirm("Are you sure?");
+			
+			if (proceed == true) {
+				return true;
+			} else {
+				return false;
+			}
+			
 			$loading_container.fadeIn('fast');
 		}
 		
@@ -1119,6 +1137,8 @@ var manageStudents = (function() {
 				$loading_container.fadeOut('fast');
 			}
 			
+			$(document).find("#content #academic_data_form .main_check").uncheck();
+			
 		}
 	
 	};		
@@ -1139,8 +1159,6 @@ var manageStudents = (function() {
 				
 				$.get($subject_source + "?id=" + $course_id, function(data){
 					var datas = eval('msg=' + data);
-					//$popup_container.children("#subject_popup_form").html(datas);
-					
 					$(document).find("#subjects_container").html(datas.subjects);
 				});
 			
@@ -1174,9 +1192,14 @@ var manageStudents = (function() {
 		function success_status(data) {
 			
 			if(data.status == true) {
+				
+				$(document).find("#content #academic_data_form .main_check").uncheck();
+				
 				$(".student_angular_trigger").trigger('click');
 				$loading_container.fadeOut('fast');
 				academic_cancel();
+	
+				$(document).find("#content #academic_data_form .main_check").uncheck();
 				$(document).find(".close").trigger('click');
 				
 			}

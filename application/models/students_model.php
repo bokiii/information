@@ -252,6 +252,15 @@ class Students_model extends CI_Model {
 		
 	}
 	
+	function update_students_subject_subject_by_course_subject_id($data, $id) {
+		$this->db->where('course_subject_id', $id);
+		$query = $this->db->update($this->students_subject_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	
 }

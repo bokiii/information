@@ -483,8 +483,14 @@ class Students extends CI_Controller {
 		$set_subject_id = $this->input->post('subject');
 		
 		for($i = 0; $i < count($set_subject_id); $i++) {
-			// get subject by subject id
+		
 			$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
+			
+			$get_course_subject_id = $this->course_subjects_model->get_course_subject_id_by_subject_id($set_subject_id[$i]);
+			foreach($get_course_subject_id as $row_c) {
+				$course_subject_id = $row_c->id;
+			}
+			
 			foreach($get_subject_by_subject_id as $row_subject_id) {
 				$subject = $row_subject_id->descriptive_title;
 			}
@@ -501,7 +507,8 @@ class Students extends CI_Controller {
 				"course_id" => $course_id,
 				"student_id" => $student_id,
 				"term_id" => $this->input->post('term_id'),
-				"school_year" => $school_year
+				"school_year" => $school_year,
+				"course_subject_id" => $course_subject_id
 			); 
 				
 			// insert student subject
@@ -700,7 +707,7 @@ class Students extends CI_Controller {
 						foreach($get_course_subjects as $row) {
 						
 							$subject_id = $row->subject_id;
-							
+			
 							$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
 							
 							foreach($get_subject_by_subject_id as $row_a) {
@@ -1096,6 +1103,7 @@ class Students extends CI_Controller {
 	}
 	
 	function get_student_subjects() {
+	
 		
 		$id = $this->input->get('id');
 		$data = array();
@@ -1184,6 +1192,8 @@ class Students extends CI_Controller {
 			
 		}
 	
+		//$this->debug($data);
+	
 		echo json_encode($data);
 	
 	}
@@ -1212,18 +1222,24 @@ class Students extends CI_Controller {
 		for($i = 0; $i < count($set_subject_id); $i++ ) {
 			
 			$get_subjects = $this->subjects_model->get_subject_by_subject_id($set_subject_id[$i]);
-			//$this->debug($get_subjects);
 			
 			foreach($get_subjects as $row_a) {
 				$descriptive_title = $row_a->descriptive_title;
 			}
+			
+			$get_course_subject_id = $this->course_subjects_model->get_course_subject_id_by_subject_id($set_subject_id[$i]);
+			foreach($get_course_subject_id as $row_c) {
+				$course_subject_id = $row_c->id;
+			}
+			
 			
 			$subject_data = array(
 				"subject" => $descriptive_title,
 				"course_id" => $course_id,
 				"student_id" => $student_id,
 				"term_id" => $term_id,
-				"school_year" => $school_year
+				"school_year" => $school_year,
+				"course_subject_id" => $course_subject_id
 			);
 			
 			// insert subject

@@ -42,6 +42,7 @@ class Subjects extends CI_Controller {
 		$this->load->model('courses_model');
 		$this->load->model('school_courses_model');
 		$this->load->model('subjects_model');
+		$this->load->model('students_model');
 	}
 	
 	function debug($data) {
@@ -444,6 +445,10 @@ class Subjects extends CI_Controller {
 				);
 				
 				$update_subject = $this->global_model->update($this->table, $data, $data['id']);
+				
+				// below is for other updates
+				$this->other_updates($this->input->post('term_id'), $data['id'], $data['descriptive_title']);
+			
 			
 				$this->prompt_status = true;
 		
@@ -464,6 +469,9 @@ class Subjects extends CI_Controller {
 				
 					$update_via_descriptive_title = $this->subjects_model->update_via_descriptive_title($this->get_update_id(), $descriptive_title, $credit);
 				
+					// below is for other updates
+					$this->other_updates($this->input->post('term_id'), $this->get_update_id(), $descriptive_title);
+					
 					$this->prompt_status = true;
 					
 				} else {
@@ -472,7 +480,7 @@ class Subjects extends CI_Controller {
 				}
 				
 			} elseif($descriptive_title_exist) {
-					
+			
 				// update via course_no
 				
 				$course_no = $this->input->post('course_no');
@@ -487,6 +495,9 @@ class Subjects extends CI_Controller {
 				if($this->form_validation->run() == TRUE) {
 				
 					$update_via_course_no = $this->subjects_model->update_via_course_no($this->get_update_id(), $course_no, $credit);
+				
+					// below is for other updates
+					$this->other_updates($this->input->post('term_id'), $this->get_update_id(), $descriptive_title);
 				
 					$this->prompt_status = true;
 					
@@ -510,6 +521,9 @@ class Subjects extends CI_Controller {
 					
 					$update_subject = $this->global_model->update($this->table, $data, $this->get_update_id());
 					
+					// below is for other updates
+					$this->other_updates($this->input->post('term_id'), $this->get_update_id(), $descriptive_title);
+					
 					$this->prompt_status = true;
 				
 				} else {
@@ -530,6 +544,24 @@ class Subjects extends CI_Controller {
 		$this->index();
 	
 	}
+	
+	
+	private function other_updates($term_id, $id, $descriptive_title) {
+		// update the term_id of course subject
+		$course_subject_update_data = array(
+			"term_id" => $term_id
+		);
+		$update_course_subject_term_id = $this->course_subjects_model->update_course_subject_term_id_by_subject_id($course_subject_update_data, $id);      
+		$get_course_subject_id = $this->course_subjects_model->get_course_subject_id_by_subject_id($id);
+		foreach($get_course_subject_id as $row_e) {
+			$course_subject_id = $row_e->id;
+		}
+		$students_subject_update_data = array(
+			"subject" => $descriptive_title
+		);
+		$update_student_subject_by_course_subject_id = $this->students_model->update_students_subject_subject_by_course_subject_id($students_subject_update_data, $course_subject_id);   
+	}
+	
 	
 	private function prompt() {
 		if($this->prompt_status === true) {

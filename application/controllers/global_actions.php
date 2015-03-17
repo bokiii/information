@@ -216,8 +216,7 @@ class Global_actions extends CI_Controller {
 				$terms_data[] = array(
 					"id" => $row_terms->id,
 					"term" => ucwords($row_terms->term),
-					"semester" => ucwords($row_terms->semester),
-					"school_year" => $row_terms->school_year
+					"semester" => ucwords($row_terms->semester)
 				); 
 			}
 		}
@@ -244,7 +243,6 @@ class Global_actions extends CI_Controller {
 				foreach($get_term_by_term_id as $row_term_id) {
 					$term = ucwords($row_term_id->term);
 					$semester = ucwords($row_term_id->semester);
-					$school_year = $row_term_id->school_year;
 				}
 			}
 				
@@ -268,11 +266,11 @@ class Global_actions extends CI_Controller {
 							<td><label for="term_id">Term:</label></td>
 							<td>
 								<select name="term_id" id=term_id">
-									<option value="'. $term_id .'">'. $term .' year - '. $semester .' semester - '. $school_year .'</option>
+									<option value="'. $term_id .'">'. $term .' year - '. $semester .' semester</option>
 			';
 							for($i = 0; $i < count($terms_data); $i++) {
 								$data['popup'] .= "
-									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester - {$terms_data[$i]['school_year']}</option>
+									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester</option>
 								";
 							}
 						
