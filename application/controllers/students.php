@@ -1104,7 +1104,6 @@ class Students extends CI_Controller {
 	
 	function get_student_subjects() {
 	
-		
 		$id = $this->input->get('id');
 		$data = array();
 		
@@ -1137,13 +1136,16 @@ class Students extends CI_Controller {
 						
 							$subject_id = $row->subject_id;
 							
-							$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
+							//$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
 							
+							$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id_and_course_id_join_course_subjects($subject_id, $id);
+					
 							foreach($get_subject_by_subject_id as $row_a) {
 								
 								$course_no = $row_a->course_no;
 								$descriptive_title = $row_a->descriptive_title;
 								$current_term_id = $row_a->term_id;
+								$course_subject_id = $row_a->course_subject_id;
 								
 								$this->process_decision_to_insert_semester_title();
 								
@@ -1157,9 +1159,20 @@ class Students extends CI_Controller {
 									$this->added_semester_title_status == true;
 								}
 								
-								$data['subjects'] .= "
-									<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
-								";
+								$is_subject_exists = $this->students_model->is_subject_exists($course_subject_id);
+								
+								if($is_subject_exists > 0) {
+								
+									$data['subjects'] .= "
+										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>
+									";
+									
+								} else {
+									$data['subjects'] .= "
+										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+									";
+								}
+							
 							}
 						}
 						
@@ -1192,10 +1205,7 @@ class Students extends CI_Controller {
 			
 		}
 	
-		//$this->debug($data);
-	
 		echo json_encode($data);
-	
 	}
 	
 	function add_subject() {
@@ -1232,7 +1242,6 @@ class Students extends CI_Controller {
 				$course_subject_id = $row_c->id;
 			}
 			
-			
 			$subject_data = array(
 				"subject" => $descriptive_title,
 				"course_id" => $course_id,
@@ -1266,6 +1275,117 @@ class Students extends CI_Controller {
 		
 		echo json_encode($data);
 	
+	}
+	
+	function test() {
+		
+		$id = $this->input->get('id');
+		$data = array();
+		
+		if(isset($id) && $id != NULL) {
+			
+			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
+			
+			if($get_course_subjects_by_course_id != NULL) {
+				
+				// get terms then arrange it by order
+				$get_terms = $this->terms_model->get_terms_with_order();
+				
+				$data['subjects'] = "";
+				
+				foreach($get_terms as $row_term) {
+					
+					$term_id = $row_term->id;
+					$term = ucwords($row_term->term);
+					$semester = ucwords($row_term->semester);
+					$order = $row_term->order;
+				
+					$get_course_subjects = $this->course_subjects_model->get_course_subjects_by_term_id_and_course_id($term_id, $id);
+					
+					if($get_course_subjects != NULL) {
+					
+						$this->current_num_row = count($get_course_subjects);
+						$this->dummy_num_row = count($get_course_subjects);
+						
+						foreach($get_course_subjects as $row) {
+						
+							$subject_id = $row->subject_id;
+							
+							//$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
+							$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id_and_course_id_join_course_subjects($subject_id, $id);
+							
+							foreach($get_subject_by_subject_id as $row_a) {
+								
+								$course_no = $row_a->course_no;
+								$descriptive_title = $row_a->descriptive_title;
+								$current_term_id = $row_a->term_id;
+								$course_subject_id = $row_a->course_subject_id;
+								
+								$this->process_decision_to_insert_semester_title();
+								
+								if($this->added_semester_title_status == false) {
+									$data['subjects'] .= "
+										<h2>{$term} Year </h2>
+										<p class='semester'>{$semester} Semester</p>
+									";
+									
+									$this->dummy_num_row -= 1;
+									$this->added_semester_title_status == true;
+								}
+								
+								/*$data['subjects'] .= "
+									<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+								";*/
+								
+								$is_subject_exists = $this->students_model->is_subject_exists($course_subject_id);
+								
+								if($is_subject_exists > 0) {
+								
+									$data['subjects'] .= "
+										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>
+									";
+									
+								} else {
+									$data['subjects'] .= "
+										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+									";
+								}
+								
+							}
+						}
+						
+					} else {
+						$data['subjects'] .= "
+							<h2>{$term} Year</h2>
+							<p class='semester'>{$semester} Semester</p>
+						";
+						
+						
+						$data['subjects'] .= "<p class='no_subject'>No subject added in this semester</p>";
+					}
+					
+				} // end foreach loop
+			
+			
+			} else {
+				$data['subjects'] = "
+					<h2>Subjects</h2>
+					<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
+				";
+			}
+			
+		} else {
+		
+			$data['subjects'] = "
+				<h2>Subjects</h2>
+				<p class='center'>Please go back and select course first.</p>
+			";
+			
+		}
+	
+	
+		$this->debug($data);
+		
 	}
 	
 	

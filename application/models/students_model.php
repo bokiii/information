@@ -262,6 +262,13 @@ class Students_model extends CI_Model {
 		}
 	}
 	
+	function is_subject_exists($id) {
+		$this->db->where('course_subject_id', $id);
+		$count = $this->db->count_all_results($this->students_subject_table);
+		
+		return $count;
+	}
+	
 	
 }
 

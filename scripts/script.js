@@ -1179,14 +1179,36 @@ var manageStudents = (function() {
 		});
 		
 		function loading() {
-			var proceed = confirm("Are you sure?");
-			if (proceed == true) {
-				return true;
-			} else {
+			
+			var checked_length = 0;
+			var $subjects = $(document).find(".subjects");
+			$subjects.each(function(){
+				
+				if(!$(this).prop('disabled') && $(this).is(":checked")) {
+					
+					checked_length += 1;
+				}
+				
+			});
+			
+			var $term_id = $(document).find("#term_id");
+			
+			if($term_id.val() == "" || checked_length == 0){
+				alert("You must select Subject and Term to Proceed.");
+				
 				return false;
+			} else {
+			
+				var proceed = confirm("Proceed?");
+				if (proceed == true) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 			
 			$loading_container.fadeIn('fast');
+	
 		}
 		
 		function success_status(data) {
