@@ -543,41 +543,10 @@ var studentSlideShowModule = (function() {
 			$course_id = $(this).find("#course_id").val();
 		
 			$.get($subject_source + "?id=" + $course_id, function(data){
-				
 			
 				var datas = eval('msg=' + data);
 				
 				$fifth_div.children("div").html(datas.subjects);
-				
-				// set the css design
-				
-				/*$fifth_div.find('div').css({
-					"padding": "10px"
-				});
-				
-				$fifth_div.find('h2').css({
-					"text-align": "center",
-					"font-weight": "bold"
-				});
-				
-				$fifth_div.find('p').css({
-					"display": "inline-block",
-					"margin-top": "20px"
-				});
-				
-				$fifth_div.find('.center').css({
-					"display": "block",
-					"text-align": "center"
-				});
-				
-				$fifth_div.find('input').css({
-					"margin": "0px 10px 0px 20px"
-				});*/
-				
-				
-				
-				// set the subjects value 
-				//$subjects = $(document).find(".subjects");
 				
 			});
 			
@@ -1113,14 +1082,43 @@ var manageStudents = (function() {
 		});
 		
 		function loading() {
-			var proceed = confirm("Are you sure?");
-			if (proceed == true) {
-				return true;
-			} else {
-				return false;
+			
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
 			
-			$loading_container.fadeIn('fast');
+			var gradeValue;
+			var countInvalidNumber = 0; 
+			var countMoreThanFiveOrlessThanZero = 0;
+			var $grade = $(document).find(".grade");
+			
+			$grade.each(function(){
+				grade_value = $(this).val();
+				
+				if(!isNumber(grade_value)) {
+					countInvalidNumber += 1;
+				} else {
+					if(grade_value > 5 || grade_value < 0) {
+						countMoreThanFiveOrlessThanZero += 1;
+					}
+				} 
+			});
+			
+			
+			if(countInvalidNumber > 0 || countMoreThanFiveOrlessThanZero > 0) {
+				alert("One of the Subject is having an Invalid Grade");
+				return false;
+			} else {
+			
+				var proceed = confirm("Are you sure?");
+				if (proceed == true) {
+					return true;
+					
+					$loading_container.fadeIn('fast');
+				} else {
+					return false;
+				}
+			}           
 		}
 		
 		function success_status(data) {

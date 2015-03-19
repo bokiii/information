@@ -142,7 +142,6 @@ class Students_model extends CI_Model {
 		
 	}
 	
-	
 	function empty_table() {
 		
 		$this->db->empty_table('students');
@@ -164,6 +163,16 @@ class Students_model extends CI_Model {
 		
 	}
 	
+	function get_subject_main_credit_by_grade_subject_id($subject_id) {
+		$this->db->select('students_subject.course_subject_id, course_subjects.subject_id, subjects.credit');
+		$this->db->where('students_grade.subject_id', $subject_id);
+		$this->db->from("students_grade");
+		$this->db->join("students_subject", "students_subject.id = students_grade.subject_id");
+		$this->db->join("course_subjects", "course_subjects.id = students_subject.course_subject_id");
+		$this->db->join("subjects", "subjects.id = course_subjects.subject_id");
+		$query = $this->db->get();
+		return $query->result();
+	}
 	
 	// below are for all the functions of selecting the data for students after enrolled
 	
@@ -188,11 +197,26 @@ class Students_model extends CI_Model {
 		return $query->result();
 	}
 	
-	function get_student_subject_grade_by_student_subject_id($subject_id) {	
-		$this->db->select('grade');
+	function get_student_earned_credit_subject_grade_and_status_by_student_subject_id($subject_id) {	
+		$this->db->select('earned_credit, grade, status');
 		$this->db->where('subject_id', $subject_id);
 		$query = $this->db->get($this->students_grade_table);
 		
+		return $query->result();
+	}
+	
+	function get_students_grade_by_subject_id($subject_id) {
+		$this->db->where("subject_id", $subject_id);
+		$query = $this->db->get($this->students_grade_table);
+		return $query->result();
+	}
+	
+	function get_student_grade_status_by_course_subject_id($course_subject_id) {
+		$this->db->select("students_grade.status");
+		$this->db->where("students_subject.course_subject_id", $course_subject_id);
+		$this->db->from("students_subject");
+		$this->db->join("students_grade", "students_grade.subject_id = students_subject.id");
+		$query = $this->db->get();
 		return $query->result();
 	}
 	
@@ -267,6 +291,16 @@ class Students_model extends CI_Model {
 		$count = $this->db->count_all_results($this->students_subject_table);
 		
 		return $count;
+	}
+	
+	function update_student_grade_and_etc_by_subject_id($data, $subject_id) {
+		$this->db->where('subject_id', $subject_id);
+		$query = $this->db->update($this->students_grade_table, $data);
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	

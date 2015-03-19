@@ -100,7 +100,7 @@ class Students extends CI_Controller {
 				
 				<table id='starting_div' class='slide_div'>
 					<tr>
-						<td><label for='term_id'>Terms</label></td>
+						<td><label for='term_id' class='right'>Term</label></td>
 						<td>
 							<select name='term_id' id='term_id'>
 							<option value>&nbsp;</option>
@@ -122,13 +122,13 @@ class Students extends CI_Controller {
 		$data['popup'] .= "
 			<table id='first_div' class='slide_div'>
 				<tr>
-					<td><label for='first_name'>First Name:</label></td>
+					<td><label for='first_name'>First Name</label></td>
 					<td><input type='text' name='first_name' id='first_name' /></td>
-					<td><label for='last_name'>Last Name:</label></td>
+					<td><label for='last_name'>Last Name</label></td>
 					<td><input type='text' name='last_name' id='last_name' /></td>
 				</tr>
 				<tr>
-					<td><label for='middle_name'>Middle Name:</label></td>
+					<td><label for='middle_name'>Middle Name</label></td>
 					<td><input type='text' name='middle_name' id='middle_name' /></td>
 				</tr>
 			</table>
@@ -138,7 +138,7 @@ class Students extends CI_Controller {
 				
 				<table id='second_div' class='slide_div'>
 					<tr>
-						<td><label for='age'>Age:</label></td>
+						<td><label for='age'>Age</label></td>
 						<td>
 							<select name='age' id='age'>
 								<option value>&nbsp;</option>
@@ -163,7 +163,7 @@ class Students extends CI_Controller {
 								<option value='33'>33</option>	
 							</select>
 						</td>
-						<td><label for='gender'>Gender:</label></td>
+						<td><label for='gender'>Gender</label></td>
 						<td>
 							<select name='gender' id='gender'>
 								<option value>&nbsp;</option>
@@ -173,7 +173,7 @@ class Students extends CI_Controller {
 						</td>
 					</tr>
 					<tr>
-						<td><label for='birth_date'>Birthdate:</label></td>
+						<td><label for='birth_date'>Birthdate</label></td>
 						<td><input type='text' name='birth_date' id='birth_date' /></td>
 						<td><label for='civil_status'>Civil Status:</label></td>
 						<td>
@@ -186,7 +186,7 @@ class Students extends CI_Controller {
 						</td>
 					</tr>
 					<tr>
-						<td><label for='religion'>Religion:</label></td>
+						<td><label for='religion'>Religion</label></td>
 						<td><input type='text' name='religion' id='religion' /></td>
 						<td><label for='address'>Address</label></td>
 						<td><input type='text' name='address' id='address' /></td>
@@ -215,7 +215,7 @@ class Students extends CI_Controller {
 				<table id='third_div' class='slide_div'>
 					<input type='hidden' name='course_source' id='course_source' value='{$course_source}' />
 					<tr>
-						<td><label for='school_id'>School:</label></td>
+						<td><label for='school_id' class='right'>School</label></td>
 						<td>
 							<select name='school_id' id='school_id'>
 								<option value>&nbsp;</option>
@@ -238,7 +238,7 @@ class Students extends CI_Controller {
 		$data['popup'] .= "
 			<table id='fourth_div' class='slide_div'>
 				<tr>
-					<td><label for='course_id'>Course</label></td>
+					<td><label for='course_id' class='right'>Course</label></td>
 					<td>Please go back and select school first.</td>
 				</tr>
 			</table>
@@ -525,7 +525,9 @@ class Students extends CI_Controller {
 			
 			foreach($student_subjects as $row_subject) {
 				$data = array(
+					'earned_credit' => 0,
 					'grade' => 0,
+					'status' => 'enrolled', 
 					'subject_id' => $row_subject->id
 				); 
 				
@@ -620,7 +622,7 @@ class Students extends CI_Controller {
 			$data['courses'] = "
 				<tr>
 					<input type='hidden' name='subject_source' id='subject_source' value='{$subject_source}' />
-					<td><label for='course_id'>Course</label></td>
+					<td><label for='course_id' class='right'>Course</label></td>
 					<td>
 						<select name='course_id' id='course_id'>
 							<option value>&nbsp;</option>
@@ -651,7 +653,7 @@ class Students extends CI_Controller {
 			
 			$data['courses'] = "
 				<tr>
-					<td><label for='course_id'>Course</label></td>
+					<td><label for='course_id' class='right'>Course</label></td>
 					<td>Please go back and select school first.</td>
 				</tr>
 			";
@@ -917,6 +919,7 @@ class Students extends CI_Controller {
 							<th>Descriptive Title</th>
 							<th>Credit</th>
 							<th>Grade</th>
+							<th>Status</th>
 						</tr>
 		";
 		
@@ -927,7 +930,8 @@ class Students extends CI_Controller {
 					<td>{{subject.course_no}}</td>
 					<td>{{subject.descriptive_title}}</td>
 					<td>{{subject.credit}}</td>
-					<td><input type='text' name='grade[]' class='grade' value='{{subject.subject_grade}}' disabled='disabled'/></td>
+					<td><input type='text' name='grade[]' class='grade' value='{{subject.subject_grade}}' maxlength='1' disabled='disabled'/></td>
+					<td>{{subject.status}}</td>
 					<input type='hidden' name='student_id' value='{{academicData.id}}' />
 					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
@@ -1003,7 +1007,44 @@ class Students extends CI_Controller {
 				$grade_id_to_update =  $grade[$u];
 				$subject_id_to_update = $subject_id_update[$u];
 				
-				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_by_subject_id($grade_id_to_update, $subject_id_to_update);
+				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_by_subject_id($grade_id_to_update, $subject_id_to_update);                 
+				
+				$get_student_grade = $this->students_model->get_students_grade_by_subject_id($subject_id_to_update);
+				
+				foreach($get_student_grade as $row_g) {
+					
+					$current_grade = $row_g->grade;
+					
+					if($current_grade == 0) {
+					
+						$grade_data = array(
+							"earned_credit" => 0, 
+							"status" => "enrolled"
+						);
+						
+					} elseif($current_grade <= 3) {
+					
+						$get_subject_credit = $this->students_model->get_subject_main_credit_by_grade_subject_id($subject_id_to_update);
+						foreach($get_subject_credit as $row_c) {
+							$credit = $row_c->credit;
+						}
+						
+						$grade_data = array(
+							"earned_credit" => $credit, 
+							"status" => "passed"
+						);
+					
+					} else {
+						$grade_data = array(
+							"earned_credit" => 0, 
+							"status" => "failed"
+						);
+					}
+					
+					$update_student_grade = $this->students_model->update_student_grade_and_etc_by_subject_id($grade_data, $subject_id_to_update);
+				
+				}
+				
 			}
 			
 			$data['update_status'] = true;
@@ -1052,10 +1093,12 @@ class Students extends CI_Controller {
 				$subject_credit = $row_main_subject->credit;
 			}
 			
-			$get_subject_grade = $this->students_model->get_student_subject_grade_by_student_subject_id($subject_id);
+			$get_subject_grade = $this->students_model->get_student_earned_credit_subject_grade_and_status_by_student_subject_id($subject_id);
 		
 			foreach($get_subject_grade as $row_grade) {
+				$earned_credit = $row_grade->earned_credit;
 				$subject_grade = $row_grade->grade;
+				$status = $row_grade->status;
 			}
 			
 			$data['subjects'][] = array(
@@ -1063,8 +1106,9 @@ class Students extends CI_Controller {
 				"subject_semester" => $term . " year - " . $semester . " semester", 
 				"course_no" => $subject_course_no,
 				"descriptive_title" => $subject,
-				"credit" => $subject_credit,
-				"subject_grade" => $subject_grade
+				"credit" => $earned_credit,
+				"subject_grade" => $subject_grade,
+				"status" => ucwords($status)
 			);
 			
 		}
@@ -1163,10 +1207,23 @@ class Students extends CI_Controller {
 								
 								if($is_subject_exists > 0) {
 								
-									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>
-									";
+									$get_student_subject_status = $this->students_model->get_student_grade_status_by_course_subject_id($course_subject_id);
+								
+									foreach($get_student_subject_status as $row_s) {
+										$subject_status = trim($row_s->status);
+									}
 									
+									if($subject_status == "failed") {
+										$data['subjects'] .= "
+											<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+										";
+									
+									} else {
+										$data['subjects'] .= "
+											<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>   
+										";
+									}
+								
 								} else {
 									$data['subjects'] .= "
 										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
@@ -1261,7 +1318,9 @@ class Students extends CI_Controller {
 			}
 			
 			$grade_data = array(
+				"earned_credit" => 0,
 				"grade" => 0,
+				"status" => "enrolled", 
 				"subject_id" => $subject_id
 			);
 			
@@ -1278,118 +1337,14 @@ class Students extends CI_Controller {
 	}
 	
 	function test() {
-		
-		$id = $this->input->get('id');
-		$data = array();
-		
-		if(isset($id) && $id != NULL) {
-			
-			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
-			
-			if($get_course_subjects_by_course_id != NULL) {
-				
-				// get terms then arrange it by order
-				$get_terms = $this->terms_model->get_terms_with_order();
-				
-				$data['subjects'] = "";
-				
-				foreach($get_terms as $row_term) {
-					
-					$term_id = $row_term->id;
-					$term = ucwords($row_term->term);
-					$semester = ucwords($row_term->semester);
-					$order = $row_term->order;
-				
-					$get_course_subjects = $this->course_subjects_model->get_course_subjects_by_term_id_and_course_id($term_id, $id);
-					
-					if($get_course_subjects != NULL) {
-					
-						$this->current_num_row = count($get_course_subjects);
-						$this->dummy_num_row = count($get_course_subjects);
-						
-						foreach($get_course_subjects as $row) {
-						
-							$subject_id = $row->subject_id;
-							
-							//$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id($subject_id);
-							$get_subject_by_subject_id = $this->subjects_model->get_subject_by_subject_id_and_course_id_join_course_subjects($subject_id, $id);
-							
-							foreach($get_subject_by_subject_id as $row_a) {
-								
-								$course_no = $row_a->course_no;
-								$descriptive_title = $row_a->descriptive_title;
-								$current_term_id = $row_a->term_id;
-								$course_subject_id = $row_a->course_subject_id;
-								
-								$this->process_decision_to_insert_semester_title();
-								
-								if($this->added_semester_title_status == false) {
-									$data['subjects'] .= "
-										<h2>{$term} Year </h2>
-										<p class='semester'>{$semester} Semester</p>
-									";
-									
-									$this->dummy_num_row -= 1;
-									$this->added_semester_title_status == true;
-								}
-								
-								/*$data['subjects'] .= "
-									<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
-								";*/
-								
-								$is_subject_exists = $this->students_model->is_subject_exists($course_subject_id);
-								
-								if($is_subject_exists > 0) {
-								
-									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>
-									";
-									
-								} else {
-									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
-									";
-								}
-								
-							}
-						}
-						
-					} else {
-						$data['subjects'] .= "
-							<h2>{$term} Year</h2>
-							<p class='semester'>{$semester} Semester</p>
-						";
-						
-						
-						$data['subjects'] .= "<p class='no_subject'>No subject added in this semester</p>";
-					}
-					
-				} // end foreach loop
-			
-			
-			} else {
-				$data['subjects'] = "
-					<h2>Subjects</h2>
-					<p class='center'>No subjects added in the selected course. Please update subjects in the course module.</p>
-				";
-			}
-			
-		} else {
-		
-			$data['subjects'] = "
-				<h2>Subjects</h2>
-				<p class='center'>Please go back and select course first.</p>
-			";
-			
-		}
 	
-	
-		$this->debug($data);
+		$get_student_subject_status = $this->students_model->get_student_grade_status_by_course_subject_id(40);
+		$this->debug($get_student_subject_status);
 		
 	}
 	
 	
-
+	
 } // end class
 
 
