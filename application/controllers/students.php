@@ -1338,9 +1338,8 @@ class Students extends CI_Controller {
 	
 	function test() {
 	
-		$get_student_subject_status = $this->students_model->get_student_grade_status_by_course_subject_id(40);
-		$this->debug($get_student_subject_status);
-		
+		$this->load->helper('pdf_helper');
+		$this->load->view('transcript_view');
 	}
 	
 	
