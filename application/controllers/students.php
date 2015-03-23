@@ -848,11 +848,19 @@ class Students extends CI_Controller {
 		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
+		$profile_image = base_url() . "profiles/panoy.png"; 
 		
 		$data['content'] ="
 			<div ng-controller='StudentAcademicCtrl'>
 				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
-					<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
+					
+					<div id='profile'>
+						<img src='{$profile_image}' alt='Student Image Profile'  />
+						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
+						
+					</div>
+					
+					
 					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
 					<table>
 						<tr>
@@ -876,9 +884,23 @@ class Students extends CI_Controller {
 						<tr>
 							<td>Address:</td>
 							<td><input type='text' id='address' name='address' value='{{mainData.address}}' disabled /></td>
-							<td><input type='hidden' name='id' value='{{mainData.student_id}}' /></td>
-							<td></td>
+							<td>Place of Birth:</td>
+							<td><input type='text' id='place_of_birth' name='place_of_birth' value='{{mainData.place_of_birth}}' disabled /></td>
+						</tr> 
+						<tr> 
+							<td>Entrance Data:</td>
+							<td><input type='text' id='entrance_data' name='entrance_data' value='{{mainData.entrance_data}}' disabled /></td>
+							<td>Remarks</td>
+							<td><input type='text' id='remarks' name='remarks' value='{{mainData.remarks}}' disabled /></td>
 						</tr>
+						<tr>  
+							<td><input type='hidden' name='id' value='{{mainData.student_id}}' /></td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+						
+						</tr>
+						
 						<tr>
 							<td class='action'><input type='submit' value='Update'/></td>
 							<td><button class='cancel'>Cancel</button></td>
@@ -978,11 +1000,14 @@ class Students extends CI_Controller {
 			"birth_date" => trim($this->input->post('birth_date')),
 			"civil_status" => trim($this->input->post('civil_status')),
 			"religion" => trim($this->input->post('religion')),
-			"address" => trim($this->input->post('address'))
+			"address" => trim($this->input->post('address')), 
+			"place_of_birth" => trim($this->input->post('address')),  
+			"entrance_data" => trim($this->input->post('entrance_data')),   
+			"remarks" => trim($this->input->post('remarks'))
 		);
 		
 		$update_student_data = $this->students_model->update_student($id, $student_data);
-		$update_students_others_date = $this->students_model->update_students_others($id, $students_others_data);
+		$update_students_others_data = $this->students_model->update_students_others($id, $students_others_data);
 		
 		$data['status'] = true;
 		
@@ -1179,6 +1204,9 @@ class Students extends CI_Controller {
 			$data['civil_status'] = trim($row->civil_status);
 			$data['religion'] = trim($row->religion);
 			$data['address'] = trim($row->address);
+			$data['place_of_birth'] = trim($row->place_of_birth);
+			$data['entrance_data'] = trim($row->entrance_data);
+			$data['remarks'] = trim($row->remarks);
 			$data['school'] = trim($row->school);
 			$data['course'] = trim($row->course);
 			$data['school_id'] = $row->school_id;

@@ -13,18 +13,28 @@
 	cursor: pointer;
 }
 
-#content #main_data_form h2 {
-	font-size: 30px;
+#content #main_data_form #profile {
+	margin: 20px auto 0px auto;
+} 
+
+#content #main_data_form #profile img {
+	display: block;
+	margin: 0px auto;
+	width: 140;
+	height: 140;
+}
+
+
+#content #main_data_form #profile h2 {
+	font-size: 20px;
+	font-style: times new roman;
 	color: #51A5E4;
 	text-align: center;
 	padding: 10px;
-	margin: 10px auto 30px auto;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 	text-transform: uppercase;
-	border-bottom: 1px solid #D7D7D7;
-	width: 300px;
 }
 
 #content #main_data_form table {

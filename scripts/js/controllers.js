@@ -36,6 +36,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 		}*/
 	
 		$scope.subjects = data.subjects; 
+	
 		
 	});
 	
@@ -51,7 +52,8 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	$scope.mainData;
 	
 	$http.get(studentMainDataUrl).success(function(data){
-		$scope.mainData = data;
+		$scope.mainData = data;   
+		console.log($scope.mainData);
 	});
 	
 	$scope.getMainData = function(){
