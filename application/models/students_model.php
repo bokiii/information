@@ -198,7 +198,7 @@ class Students_model extends CI_Model {
 	}
 	
 	function get_student_earned_credit_subject_grade_and_status_by_student_subject_id($subject_id) {	
-		$this->db->select('earned_credit, grade, status');
+		$this->db->select('earned_credit, grade, comp, status');
 		$this->db->where('subject_id', $subject_id);
 		$query = $this->db->get($this->students_grade_table);
 		
@@ -256,10 +256,11 @@ class Students_model extends CI_Model {
 		
 	}
 	
-	function update_student_grade_by_subject_id($grade, $subject_id) {
+	function update_student_grade_and_comp_by_subject_id($grade, $comp_grade,  $subject_id) {
 		
 		$data = array(
 			'grade' => $grade,
+			'comp' => $comp_grade, 
 			'subject_id' => $subject_id
 			
 		);
@@ -275,6 +276,8 @@ class Students_model extends CI_Model {
 		}
 		
 	}
+	
+
 	
 	function update_students_subject_subject_by_course_subject_id($data, $id) {
 		$this->db->where('course_subject_id', $id);

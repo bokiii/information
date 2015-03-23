@@ -1039,7 +1039,10 @@ var manageStudents = (function() {
 	function academic_cancel() {
 		$academic_data_form_submit_button.hide('fast');
 		$academic_data_form_cancel_button.hide('fast');
-		$(document).find("#content #academic_data_form input").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		$(document).find("#content #academicdata_form input[type='checkbox']").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		$(document).find("#content #academic_data_form input.grade").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		$(document).find("#content #academic_data_form input.comp").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		
 		$academic_data_form_edit.show('fast');
 	}
 	
@@ -1049,17 +1052,27 @@ var manageStudents = (function() {
 		
 			$academic_data_form_submit_button.show('fast');
 			$academic_data_form_cancel_button.show('fast');
-			$(document).find("#content #academic_data_form input").removeAttr('disabled').css("border", "1px solid #51A5E4");
+			$(document).find("#content #academic_data_form input[type='checkbox']").removeAttr('disabled').css("border", "1px solid #51A5E4");
 			
+			$(document).find("#content #academic_data_form input.grade").removeAttr('disabled').css("border", "1px solid #51A5E4");
+			
+			var gradeInput = $(document).find("#content #academic_data_form input.grade"); 
+		
+			gradeInput.each(function(){
+				if($(this).val() == "INC") {
+					$(this).parent().next().children(".comp").removeAttr('disabled').css("border", "1px solid #51A5E4");
+					$(this).attr('readonly', "");
+				} else {
+					$(this).parent().next().children(".comp").removeAttr('disabled').css("border", "1px solid #51A5E4").attr('readonly', "");
+				}
+			});
 			// exception for enabling the school and course
-			$(document).find("#content #academic_data_form #school").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
-			$(document).find("#content #academic_data_form #course").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
-			
+			//$(document).find("#content #academic_data_form #school").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+			//$(document).find("#content #academic_data_form #course").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
 			
 			$(this).hide('fast');
 			
 		});
-	
 	};
 	
 	var academic_data_form_cancel_click = function() {
@@ -1085,22 +1098,48 @@ var manageStudents = (function() {
 			
 			function isNumber(n) {
 			  return !isNaN(parseFloat(n)) && isFinite(n);
-			}
+			}  
 			
 			var gradeValue;
 			var countInvalidNumber = 0; 
 			var countMoreThanFiveOrlessThanZero = 0;
-			var $grade = $(document).find(".grade");
+			var $grade = $(document).find(".grade"); 
+			var $comp = $(document).find(".comp");
+			
+			function checkSampleGrade(sampleGrade) {
+				if(sampleGrade > 5 || sampleGrade < 0) {
+					countMoreThanFiveOrlessThanZero += 1;
+				}  
+			}		
 			
 			$grade.each(function(){
 				grade_value = $(this).val();
 				
-				if(!isNumber(grade_value)) {
-					countInvalidNumber += 1;
+				if(!isNumber(grade_value)) { 
+					if(grade_value != "INC") {
+						countInvalidNumber += 1;
+					} else {
+						comp_value = $(this).parent().next().children(".comp").val();  
+						
+						if(comp_value != "") {
+						
+							if(isNaN(comp_value)) {
+								countMoreThanFiveOrlessThanZero += 1;
+							} else {
+								if(comp_value > 5 || comp_value < 1) {
+									countMoreThanFiveOrlessThanZero += 1;
+								}
+							}
+						}
+						
+						
+					}
+				
 				} else {
 					if(grade_value > 5 || grade_value < 0) {
 						countMoreThanFiveOrlessThanZero += 1;
 					}
+				
 				} 
 			});
 			
@@ -1113,14 +1152,16 @@ var manageStudents = (function() {
 				var proceed = confirm("Are you sure?");
 				if (proceed == true) {
 					return true;
-					
 					$loading_container.fadeIn('fast');
 				} else {
 					return false;
 				}
-			}           
+			}         
+	
+			
 		}
-		
+	
+	
 		function success_status(data) {
 			
 			if(data.update_status == true) {
@@ -1138,8 +1179,12 @@ var manageStudents = (function() {
 			$(document).find("#content #academic_data_form .main_check").uncheck();
 			
 		}
-	
+		
 	};		
+	
+	
+	
+	
 	
 	var add_subject_click = function() {
 
@@ -1183,7 +1228,6 @@ var manageStudents = (function() {
 			$subjects.each(function(){
 				
 				if(!$(this).prop('disabled') && $(this).is(":checked")) {
-					
 					checked_length += 1;
 				}
 				

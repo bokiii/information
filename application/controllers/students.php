@@ -919,6 +919,7 @@ class Students extends CI_Controller {
 							<th>Descriptive Title</th>
 							<th>Credit</th>
 							<th>Grade</th>
+							<th>Comp.</th>
 							<th>Status</th>
 						</tr>
 		";
@@ -930,13 +931,13 @@ class Students extends CI_Controller {
 					<td>{{subject.course_no}}</td>
 					<td>{{subject.descriptive_title}}</td>
 					<td>{{subject.credit}}</td>
-					<td><input type='text' name='grade[]' class='grade' value='{{subject.subject_grade}}' maxlength='1' disabled='disabled'/></td>
+					<td><input type='text' name='grade[]' class='grade' value='{{subject.subject_grade}}' maxlength='4' disabled='disabled'/></td>
+					<td><input type='text' name='comp[]' class='comp' value='{{subject.comp}}' maxlength='4' disabled='disabled'/></td>
 					<td>{{subject.status}}</td>
 					<input type='hidden' name='student_id' value='{{academicData.id}}' />
 					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
 		";
-
 		
 		$data['content'] .= "
 						<tr>
@@ -990,14 +991,13 @@ class Students extends CI_Controller {
 	
 	function update_student_academic_data() {
 		
-		$student_id = $this->input->post('student_id');
-		
 		$school = $this->input->post('school');
 		$course = $this->input->post('course');
 		
 		$subject_id_delete = $this->input->post('subject_id_delete'); // this one is an array
 		$subject_id_update = $this->input->post('subject_id_update'); // this one is an array
 		$grade = $this->input->post('grade'); // this one is an array
+		$comp = $this->input->post('comp');
 		
 		$action = $this->input->post('action');
 		
@@ -1006,16 +1006,53 @@ class Students extends CI_Controller {
 			for($u = 0; $u < count($subject_id_update); $u++) {
 				$grade_id_to_update =  $grade[$u];
 				$subject_id_to_update = $subject_id_update[$u];
+				$comp_value_to_update = $comp[$u];
 				
-				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_by_subject_id($grade_id_to_update, $subject_id_to_update);                 
+				$update_student_grade_by_subject_id = $this->students_model->update_student_grade_and_comp_by_subject_id($grade_id_to_update, $comp_value_to_update, $subject_id_to_update);                 
 				
 				$get_student_grade = $this->students_model->get_students_grade_by_subject_id($subject_id_to_update);
 				
 				foreach($get_student_grade as $row_g) {
 					
-					$current_grade = $row_g->grade;
+					$current_grade = trim($row_g->grade);
+					$comp_grade = trim($row_g->comp);
 					
-					if($current_grade == 0) {
+					if($current_grade == "INC") {
+					
+						if($comp_grade != "") {
+							
+							
+							if($comp_grade <= 3) {
+								
+								$get_subject_credit = $this->students_model->get_subject_main_credit_by_grade_subject_id($subject_id_to_update);
+								foreach($get_subject_credit as $row_f) {
+									$credit = $row_f->credit;
+								}
+								
+								$grade_data = array(
+									"earned_credit" => $credit, 
+									"status" => "passed"
+								);
+							
+							} else {
+							
+								$grade_data = array(
+									"earned_credit" => 0, 
+									"status" => "failed"
+								);
+								
+							}						
+						
+							
+							
+						} else {
+							$grade_data = array(
+								"earned_credit" => 0, 
+								"status" => "incomplete"
+							);   
+						}
+						
+					}elseif($current_grade == 0) {
 					
 						$grade_data = array(
 							"earned_credit" => 0, 
@@ -1045,6 +1082,8 @@ class Students extends CI_Controller {
 				
 				}
 				
+			
+			
 			}
 			
 			$data['update_status'] = true;
@@ -1058,6 +1097,7 @@ class Students extends CI_Controller {
 		}
 	
 		echo json_encode($data);
+	
 	} 
 	
 	function get_student_academic_data_via_angular() {
@@ -1098,6 +1138,7 @@ class Students extends CI_Controller {
 			foreach($get_subject_grade as $row_grade) {
 				$earned_credit = $row_grade->earned_credit;
 				$subject_grade = $row_grade->grade;
+				$comp = $row_grade->comp;
 				$status = $row_grade->status;
 			}
 			
@@ -1107,13 +1148,13 @@ class Students extends CI_Controller {
 				"course_no" => $subject_course_no,
 				"descriptive_title" => $subject,
 				"credit" => $earned_credit,
-				"subject_grade" => $subject_grade,
+				"subject_grade" => $subject_grade,  
+				"comp" => $comp, 
 				"status" => ucwords($status)
 			);
 			
 		}
 		
-		//$this->debug($data);
 		
 		echo json_encode($data);
 		
@@ -1342,7 +1383,7 @@ class Students extends CI_Controller {
 		$this->load->view('transcript_view');
 	}
 	
-	
+
 	
 } // end class
 
