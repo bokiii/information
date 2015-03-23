@@ -245,7 +245,7 @@ class Students_model extends CI_Model {
 			"address" => $other_data['address'], 
 			"place_of_birth" => $other_data['place_of_birth'],  
 			"entrance_data" => $other_data['entrance_data'],   
-			"remarks" => $other_data['entrance_data']
+			"remarks" => $other_data['remarks']
 		);
 		
 		$this->db->where('student_id', $id);

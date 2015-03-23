@@ -22,8 +22,14 @@
 	margin: 0px auto;
 	width: 140;
 	height: 140;
-}
+}  
 
+#content #main_data_form #profile .transcript_button {
+	text-decoration: none;
+	background-color: #4585F3;
+	color: #FFFFFF; 
+	padding: 10px;
+}
 
 #content #main_data_form #profile h2 {
 	font-size: 20px;

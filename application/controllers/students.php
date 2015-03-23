@@ -822,7 +822,6 @@ class Students extends CI_Controller {
 					<p class='no'>There are no subjects to select</p>
 				</div>
 				
-				
 				<table>
 					<tr>
 					
@@ -857,7 +856,7 @@ class Students extends CI_Controller {
 					<div id='profile'>
 						<img src='{$profile_image}' alt='Student Image Profile'  />
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
-						
+						<p><a class='transcript_button' href='#'>View Transcript</a></p>
 					</div>
 					
 					
@@ -1405,10 +1404,12 @@ class Students extends CI_Controller {
 	
 	}
 	
-	function test() {
+	function generate_transcript() {
 	
-		$this->load->helper('pdf_helper');
-		$this->load->view('transcript_view');
+		$this->debug($this->input->get());
+	
+		/*$this->load->helper('pdf_helper');
+		$this->load->view('transcript_view');*/
 	}
 	
 
