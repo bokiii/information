@@ -7,7 +7,6 @@ class Subjects_model extends CI_Model {
 		$this->load->database();
 	}
 	
-	
 	function get_subjects() {
 		$this->db->select('*');
 		$this->db->from('subjects');
@@ -145,8 +144,6 @@ class Subjects_model extends CI_Model {
 		
 		return $query->result();
 	}
-	
-	
 	
 	
 } // end main class

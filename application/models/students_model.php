@@ -280,8 +280,6 @@ class Students_model extends CI_Model {
 		
 	}
 	
-
-	
 	function update_students_subject_subject_by_course_subject_id($data, $id) {
 		$this->db->where('course_subject_id', $id);
 		$query = $this->db->update($this->students_subject_table, $data);
@@ -307,6 +305,51 @@ class Students_model extends CI_Model {
 		} else {
 			return false;
 		}
+	}
+	
+	// below are the functions for the process of transcript   
+	
+	function get_transcript_data_by_student_id($student_id) {
+		$this->db->select("students.first_name, students.last_name, students.middle_name, students_others.age, students_others.gender, DATE_FORMAT(students_others.birth_date, '%M %d, %Y') as birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.id AS students_course_id", FALSE);
+		$this->db->where('students.id', $student_id);
+		$this->db->from("students");
+		$this->db->join("students_others", "students_others.student_id = students.id");
+		$this->db->join("students_school", "students_school.student_id = students.id");
+		$this->db->join("students_course", "students_course.student_id = students.id");
+		$query = $this->db->get();
+		
+		return $query->result();
+	}
+	
+	function get_student_subjects_by_students_course_course_id($student_course_id) {
+		$this->db->select("students_subject.subject, students_subject.school_year, students_grade.earned_credit, students_grade.grade, students_grade.comp, students_grade.status");
+		$this->db->where("students_subject.course_id", $student_course_id);
+		$this->db->from("students_subject");
+		$this->db->join("students_grade", "students_grade.subject_id = students_subject.id");
+		$query = $this->db->get();  
+	
+		return $query->result_array();
+	}
+	
+	function get_students_school_year_by_term_id($term_id) {
+		$this->db->select('school_year');
+		$this->db->where('term_id', $term_id);
+		$this->db->from("students_subject");
+		$this->db->group_by('school_year');
+		$query = $this->db->get();
+		return $query->result();
+	}   
+	
+	function get_students_subject_by_term_id_and_school_year($term_id, $school_year) {
+		$this->db->select('students_subject.subject, students_grade.earned_credit, students_grade.grade, students_grade.comp, students_grade.status, subjects.course_no');
+		$this->db->where('students_subject.term_id', $term_id);
+		$this->db->where('students_subject.school_year', $school_year);
+		$this->db->from("students_subject");
+		$this->db->join("students_grade", "students_grade.subject_id = students_subject.id");
+		$this->db->join("course_subjects", "course_subjects.id = students_subject.course_subject_id");
+		$this->db->join("subjects", "subjects.id = course_subjects.subject_id");
+		$query = $this->db->get();
+		return $query->result_array();
 	}
 	
 	

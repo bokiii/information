@@ -59,30 +59,6 @@
 			border-right: 1px solid #000;
 		}
 		
-		table.grade td.main {
-			width: 100;
-		}
-		
-		table.grade td.course_no {
-			width: 72;
-		}
-		
-		table.grade td.descriptive_title {
-			width: 235;
-		} 
-		
-		table.grade td.final_grade {
-			width: 50;
-		}
-		
-		table.grade td.completion {
-			width: 55;
-		}
-		
-		table.grade td.credit {
-			width: 55;
-		}    
-	
 		
 	</style>
 	
@@ -103,283 +79,45 @@
 	</table>
 	<br /><br />
 	<table id="details" cellspacing="12">
-		
 		<tr> 
 			<td width="75" align="left">Name:</td>
-			<td style="border-bottom: 1px solid #000;" width="180" align="left">BORIBOR, MARK B.</td>
+			<td style="border-bottom: 1px solid #000;" width="180" align="left"><?php printf("%s, %s %s.", $last_name, $first_name, substr($middle_name, 0, -4)); ?></td>
 			<td width="72" align="left">Date:</td>
-			<td style="border-bottom: 1px solid #000;" width="175" align="left">January 8, 2013</td>
+			<td style="border-bottom: 1px solid #000;" width="175" align="left"><?php echo date("F j, Y"); ?></td>
 		</tr>
 		<tr>
 			<td align="left">Home Address:</td>
-			<td style="border-bottom: 1px solid #000;">Don T. Lutero West Janiuay, Iloilo</td>
+			<td style="border-bottom: 1px solid #000;"><?php printf("%s", $address); ?></td>
 			<td align="left">Date of Birth:</td>
-			<td style="border-bottom: 1px solid #000;">May 16, 1990</td>
+			<td style="border-bottom: 1px solid #000;"><?php printf("%s", $birth_date); ?></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td align="left">Place of Birth: </td>
-			<td style="border-bottom: 1px solid #000;">RTMDH, Cabatuan, Iloilo</td>
+			<td style="border-bottom: 1px solid #000;"><?php printf("%s", $place_of_birth); ?></td>
 		</tr>
 		<tr>
 			<td align="left">Curriculum:</td>
-			<td style="border-bottom: 1px solid #000;">Bachelor of Science in Information Technology</td>
+			<td style="border-bottom: 1px solid #000;"><?php printf("%s", $course); ?></td>
 			<td align="left">Entrance Data:</td>
-			<td style="border-bottom: 1px solid #000;">TOR - WVSU, La Paz, Iloilo City</td>
+			<td style="border-bottom: 1px solid #000;"><?php printf("%s", $entrance_data); ?></td>
 		</tr>
 	</table>
 	<br /><br />
-	
 	<table  class="grade_head" cellpadding="5">
 		<tr>
-			<th width="100">TERM</th>
+			<th width="100">TERM</th>	
 			<th width="72">COURSE NO.</th>
 			<th width="235">DESCRIPTIVE TITLE</th>
 			<th width="50">FINAL</th>
 			<th width="55">COMP.</th>
 			<th width="55">CREDIT</th>
 		</tr>
-	</table>
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
 	</table>  
-	
+
 	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>  
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>  
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>  
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>  
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>   
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
-	</table>   
-	
-	<table class="grade" cellpadding="5">
-		
-		<tr>
-			<td class="main" rowspan="3">
-				SECOND YEAR <br />
-				1st Sem. <br />  
-				2014-2015
-			</td>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>
-		<tr>
-			<td class="course_no">PHYS 216</td>
-			<td class="descriptive_title">Thesis Writing in Information Technology</td>
-			<td class="final_grade">INC</td>
-			<td class="completion">2.0</td>
-			<td class="credit">3</td>
-		</tr>		
+	<?php echo $subjects; ?>  
 	</table>
 	
 	<p align="center">================================  End of Transcript ===============================</p>

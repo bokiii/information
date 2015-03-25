@@ -849,6 +849,8 @@ class Students extends CI_Controller {
 		$edit_image = base_url() . "images/modify.png";
 		$profile_image = base_url() . "profiles/panoy.png"; 
 		
+		$view_transcript_link = base_url() . "index.php/students/generate_transcript?id=" . $id;
+		
 		$data['content'] ="
 			<div ng-controller='StudentAcademicCtrl'>
 				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
@@ -856,7 +858,7 @@ class Students extends CI_Controller {
 					<div id='profile'>
 						<img src='{$profile_image}' alt='Student Image Profile'  />
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
-						<p><a class='transcript_button' href='#'>View Transcript</a></p>
+						<p><a class='transcript_button' href='{$view_transcript_link}'>View Transcript</a></p>
 					</div>
 					
 					
@@ -1406,15 +1408,208 @@ class Students extends CI_Controller {
 	
 	function generate_transcript() {
 	
-		$this->debug($this->input->get());
+		$student_id = $this->input->get('id');
+		$get_student_data = $this->students_model->get_transcript_data_by_student_id($student_id);
+		
+		foreach($get_student_data as $row) {
+			$students_course_id = $row->students_course_id;   
+			
+			$data['first_name'] = ucwords($row->first_name);
+			$data['last_name'] = ucwords($row->last_name);
+			$data['middle_name'] = ucwords($row->middle_name);
+			$data['age'] = ucwords($row->age);
+			$data['gender'] = ucwords($row->gender);
+			$data['birth_date'] = ucwords($row->birth_date);
+			$data['civil_status'] = ucwords($row->civil_status);  
+			$data['religion'] = ucwords($row->religion);  
+			$data['address'] =  ucwords($row->address);
+			$data['place_of_birth'] = ucwords($row->place_of_birth);    
+			$data['entrance_data'] = ucwords($row->entrance_data); 
+			$data['remarks'] = ucwords($row->remarks);
+			$data['school'] = ucwords($row->school);  
+			$data['course'] = ucwords($row->course);  
+			$data['students_course_id'] = $row->students_course_id;
+		}       
+		
+		$data['subjects'] = "";
 	
-		/*$this->load->helper('pdf_helper');
-		$this->load->view('transcript_view');*/
-	}
+		$get_terms = $this->terms_model->get_terms_with_order();
+		foreach($get_terms as $row_term) {
+			$term_id = $row_term->id;
+			$term_name = strtoupper($row_term->term . " Year");   
+			
+			if($row_term->semester == "first") {
+				$semester = "1ST";
+			}  
+			
+			if($row_term->semester == "second") {
+				$semester = "2nd";
+			} 
+			
+			$semester_name = strtoupper($semester . " Semester");
+	
+			$get_term_school_year = $this->students_model->get_students_school_year_by_term_id($term_id);
+	
+			foreach($get_term_school_year as $row_s) {
+				$school_year = $row_s->school_year;
+			
+				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year($term_id, $school_year);
+				$row_span = count($get_students_subject_by_term_id_and_school_year);
+				
+				for($i = 0; $i < count($get_students_subject_by_term_id_and_school_year); $i++) {
+					
+					$course_no = $get_students_subject_by_term_id_and_school_year[$i]['course_no'];
+					$descriptive_title = $get_students_subject_by_term_id_and_school_year[$i]['subject'];
+					$final = $get_students_subject_by_term_id_and_school_year[$i]['grade'];
+					$comp = $get_students_subject_by_term_id_and_school_year[$i]['comp'];  
+					$credit = $get_students_subject_by_term_id_and_school_year[$i]['earned_credit'];
+					
+					if($i == 0) {
+						$data['subjects'] .= '
+							<tr>
+								<td width="100" rowspan="'. $row_span .'">
+									' . $term_name . '<br />' .
+									$semester_name . ' <br />' .
+									$school_year . '   
+								</td>
+								<td width="72">' . $course_no . '</td>
+								<td width="235">' . $descriptive_title . '</td>
+								<td width="50">' . $final . '</td>
+								<td width="55">' . $comp . '</td>
+								<td width="55">' . $credit . '</td>
+							</tr>
+						';
+					} else {
+		
+						$data['subjects'] .= '
+							<tr>
+								<td width="72">' . $course_no . '</td>
+								<td width="235">' . $descriptive_title . '</td>
+								<td width="50">' . $final . '</td>
+								<td width="55">' . $comp . '</td>
+								<td width="55">' . $credit . '</td>
+							</tr>
+						';
+					}
+		
+				}  
+				
+			} // end foreach loop
+			
+		} // end foreach loop  
+	
+		
+		$this->load->helper('pdf_helper');
+		$this->load->view('transcript_view', $data);
+	}   
+	
+	function test() {
+		
+		$student_id = 27;
+		$get_student_data = $this->students_model->get_transcript_data_by_student_id($student_id);
+		
+		//echo "<p>Below is for student properties</p>";
+		//$this->debug($get_student_data);
+		foreach($get_student_data as $row) {
+			$students_course_id = $row->students_course_id;   
+			
+			$data['first_name'] = ucwords($row->first_name);
+			$data['last_name'] = ucwords($row->last_name);
+			$data['middle_name'] = ucwords($row->middle_name);
+			$data['age'] = ucwords($row->age);
+			$data['gender'] = ucwords($row->gender);
+			$data['birth_date'] = ucwords($row->birth_date);
+			$data['civil_status'] = ucwords($row->civil_status);  
+			$data['religion'] = ucwords($row->religion);  
+			$data['address'] =  ucwords($row->address);
+			$data['place_of_birth'] = ucwords($row->place_of_birth);    
+			$data['entrance_data'] = ucwords($row->entrance_data); 
+			$data['remarks'] = ucwords($row->remarks);
+			$data['school'] = ucwords($row->school);  
+			$data['course'] = ucwords($row->course);  
+			$data['students_course_id'] = $row->students_course_id;
+		}       
+		
+		$data['subjects'] = "<table class='grade' cellpadding='5'>";
+		
+		//echo "<p>Below is for the terms</p>";
+		$get_terms = $this->terms_model->get_terms_with_order();
+		//$this->debug($get_terms);
+		foreach($get_terms as $row_term) {
+			$term_id = $row_term->id;
+			$term_name = $row_term->term . " Year";   
+			$semester_name = $row_term->semester . " Semester";
+		
+			//echo "<p>Below is students subject by term and year</p>";
+			$get_term_school_year = $this->students_model->get_students_school_year_by_term_id($term_id);
+			//$this->debug($get_term_school_year);
+	
+			foreach($get_term_school_year as $row_s) {
+				$school_year = $row_s->school_year;
+				
+				//echo "<p>Below is for school year subjects</p>";
+				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year($term_id, $school_year);
+				//$this->debug($get_students_subject_by_term_id_and_school_year);
+			
+				for($i = 0; $i < count($get_students_subject_by_term_id_and_school_year); $i++) {
+					
+					$course_no = $get_students_subject_by_term_id_and_school_year[$i]['course_no'];
+					$descriptive_title = $get_students_subject_by_term_id_and_school_year[$i]['subject'];
+					$final = $get_students_subject_by_term_id_and_school_year[$i]['grade'];
+					$comp = $get_students_subject_by_term_id_and_school_year[$i]['comp'];  
+					$credit = $get_students_subject_by_term_id_and_school_year[$i]['earned_credit'];
+					
+					if($i == 0) {
+						$data['subjects'] .= "
+							<tr>
+								<td  class='main' rowspan='3'>
+									{$term_name} <br />
+									{$semester_name} <br />
+									{$school_year}
+								</td>
+								<td>{$course_no}</td>
+								<td>{$descriptive_title}</td>
+								<td>{$final}</td>
+								<td>{$comp}</td>
+								<td>{$credit}</td>
+							</tr>
+						";
+					} else {
+		
+						$data['subjects'] .= "
+							<tr>
+								<td>{$course_no}</td>
+								<td>{$descriptive_title}</td>
+								<td>{$final}</td>
+								<td>{$comp}</td>
+								<td>{$credit}</td>
+							</tr>
+						";
+					}
+		
+				}  
+				
+				
+			
+			} // end foreach loop
+			
+		} // end foreach loop  
+		
+		$data['subjects'] .= "</table>";   
+		
+		echo json_encode($data);
+		
+	} // end function
 	
 
-	
 } // end class
+
+
+
+
+
+
+
 
 
 
