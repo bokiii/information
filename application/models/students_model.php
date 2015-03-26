@@ -243,9 +243,7 @@ class Students_model extends CI_Model {
 			"civil_status" => $other_data['civil_status'],
 			"religion" => $other_data['religion'],
 			"address" => $other_data['address'], 
-			"place_of_birth" => $other_data['place_of_birth'],  
-			"entrance_data" => $other_data['entrance_data'],   
-			"remarks" => $other_data['remarks']
+			"place_of_birth" => $other_data['place_of_birth']
 		);
 		
 		$this->db->where('student_id', $id);
@@ -331,9 +329,10 @@ class Students_model extends CI_Model {
 		return $query->result_array();
 	}
 	
-	function get_students_school_year_by_term_id($term_id) {
+	function get_students_school_year_by_term_id_and_student_id($term_id, $student_id) {
 		$this->db->select('school_year');
-		$this->db->where('term_id', $term_id);
+		$this->db->where('term_id', $term_id);  
+		$this->db->where('student_id', $student_id);
 		$this->db->from("students_subject");
 		$this->db->group_by('school_year');
 		$query = $this->db->get();
@@ -351,6 +350,16 @@ class Students_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+	
+	function get_student_id_by_username_and_password($username, $password) {
+		$this->db->select('id');
+		$this->db->where('username', $username);
+		$this->db->where('password', md5($password));
+		$query = $this->db->get('students');
+		return $query->result();
+	
+	}
+	
 	
 	
 }

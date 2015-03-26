@@ -18,10 +18,11 @@
 </head>
 <body>
 	<div id="container">
+	
 		<div id="header" class="full_width">
 			<div id="logo" class="left">
 				<img class="left" src="<?php echo base_url(); ?>images/graduate.png" alt="" />
-				<h1 class="right">Information <br /> System</h1>
+				<h1 class="right">Student <br />Information <br /> System</h1>
 				<div class="clear"></div>
 			</div>
 			<form action="<?php echo base_url(); ?>index.php/search" method="get" id="search_form" class="left">
@@ -59,7 +60,5 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
-		
-		
-		
+	
 		

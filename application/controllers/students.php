@@ -1460,7 +1460,7 @@ class Students extends CI_Controller {
 			
 			$semester_name = strtoupper($semester . " Semester");
 	
-			$get_term_school_year = $this->students_model->get_students_school_year_by_term_id($term_id);
+			$get_term_school_year = $this->students_model->get_students_school_year_by_term_id_and_student_id($term_id, $student_id);
 	
 			foreach($get_term_school_year as $row_s) {
 				$school_year = $row_s->school_year;

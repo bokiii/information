@@ -81,7 +81,7 @@
 	<table id="details" cellspacing="12">
 		<tr> 
 			<td width="75" align="left">Name:</td>
-			<td style="border-bottom: 1px solid #000;" width="180" align="left"><?php printf("%s, %s %s.", $last_name, $first_name, substr($middle_name, 0, -4)); ?></td>
+			<td style="border-bottom: 1px solid #000;" width="180" align="left"><?php printf("%s, %s %s.", $last_name, $first_name, substr($middle_name, 0, 1)); ?></td>
 			<td width="72" align="left">Date:</td>
 			<td style="border-bottom: 1px solid #000;" width="175" align="left"><?php echo date("F j, Y"); ?></td>
 		</tr>
