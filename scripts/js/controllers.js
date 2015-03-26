@@ -16,34 +16,17 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	var protocol = window.location.protocol + "//" + window.location.host;
 	var fullUrl = protocol + window.location.pathname + window.location.search;
 	
-	var subjectLength;
-	
 	// below is for getting the subjects
 	var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_via_angular");
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){
-	    
-		/*subjectLength = data.subjects.length;
-		var i;
-		var current_grade;
-		for(i=0; i < subjectLength; i++) {
-			current_grade = data.subjects[i].subject_grade; 
-			if(current_grade == "INC") {
-				data.subjects[i]["completion"] = "For INC";
-				
-			}
-		}*/
-	
-		$scope.subjects = data.subjects; 
-	
-		
+		$scope.subjects = data.subjects; 	
 	});
 	
 	$scope.getSubjects = function() {
 		$http.get(studentAcademicUrl).success(function(data){
 			$scope.subjects = data.subjects;  
-		
 		});
 	};
 	
@@ -53,7 +36,6 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	
 	$http.get(studentMainDataUrl).success(function(data){
 		$scope.mainData = data;   
-		console.log($scope.mainData);
 	});
 	
 	$scope.getMainData = function(){

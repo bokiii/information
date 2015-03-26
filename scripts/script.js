@@ -1018,12 +1018,11 @@ var manageStudents = (function() {
 			var proceed = confirm("Are you sure?");
 			
 			if (proceed == true) {
+				$loading_container.fadeIn('fast');
 				return true;
 			} else {
 				return false;
 			}
-			
-			$loading_container.fadeIn('fast');
 		}
 		
 		function success_status(data) {
@@ -1151,14 +1150,14 @@ var manageStudents = (function() {
 			
 				var proceed = confirm("Are you sure?");
 				if (proceed == true) {
-					return true;
 					$loading_container.fadeIn('fast');
+					return true;
 				} else {
-					return false;
+					return false;  
+					
 				}
 			}         
-	
-			
+		
 		}
 	
 	
@@ -1181,10 +1180,6 @@ var manageStudents = (function() {
 		}
 		
 	};		
-	
-	
-	
-	
 	
 	var add_subject_click = function() {
 

@@ -143,7 +143,7 @@
 	<table id="remarks" cellpadding="3"> 
 		<tr>   
 			<td width="100">Remarks:</td>
-			<td width="467" style="border-bottom: 1px solid #000;">Granted Transfer Credential</td>
+			<td width="467" style="border-bottom: 1px solid #000;"><?php printf("%s", $remarks); ?></td>
 		</tr>
 	</table>
 	

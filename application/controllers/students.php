@@ -847,8 +847,8 @@ class Students extends CI_Controller {
 		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
-		$profile_image = base_url() . "profiles/panoy.png"; 
-		
+		//$profile_image = base_url() . "profiles/panoy.png"; 
+		$profile_image = "../../images/blank.png"; 
 		$view_transcript_link = base_url() . "index.php/students/generate_transcript?id=" . $id;
 		
 		$data['content'] ="
@@ -858,9 +858,8 @@ class Students extends CI_Controller {
 					<div id='profile'>
 						<img src='{$profile_image}' alt='Student Image Profile'  />
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
-						<p><a class='transcript_button' href='{$view_transcript_link}'>View Transcript</a></p>
+						<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>
 					</div>
-					
 					
 					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
 					<table>
@@ -895,11 +894,18 @@ class Students extends CI_Controller {
 							<td><input type='text' id='remarks' name='remarks' value='{{mainData.remarks}}' disabled /></td>
 						</tr>
 						<tr>  
+							<td><label for='username'>Account Username:</label></td>
+							<td><input type='text' id='username' name='username' value='{{mainData.username}}' disabled/></td>
+							<td><label for='password'>Account Password: </label></td>
+							<td><input type='text' id='password' name='password' value='{{mainData.string_password}}' disabled/></td>
+							
+						</tr>  
+						
+						<tr>
 							<td><input type='hidden' name='id' value='{{mainData.student_id}}' /></td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
-						
 						</tr>
 						
 						<tr>
@@ -992,7 +998,10 @@ class Students extends CI_Controller {
 		$student_data = array(
 			"first_name" => trim($this->input->post('first_name')),
 			"last_name" => trim($this->input->post('last_name')),
-			"middle_name" => trim($this->input->post('middle_name'))
+			"middle_name" => trim($this->input->post('middle_name')),  
+			"username" => trim($this->input->post('username')),
+			"string_password" => $this->input->post('password'),
+			"password" => md5($this->input->post('password'))
 		);
 		
 		$students_others_data = array(
@@ -1002,7 +1011,7 @@ class Students extends CI_Controller {
 			"civil_status" => trim($this->input->post('civil_status')),
 			"religion" => trim($this->input->post('religion')),
 			"address" => trim($this->input->post('address')), 
-			"place_of_birth" => trim($this->input->post('address')),  
+			"place_of_birth" => trim($this->input->post('place_of_birth')),  
 			"entrance_data" => trim($this->input->post('entrance_data')),   
 			"remarks" => trim($this->input->post('remarks'))
 		);
@@ -1199,6 +1208,9 @@ class Students extends CI_Controller {
 			$data['first_name'] = trim($row->first_name);
 			$data['last_name'] = trim($row->last_name);
 			$data['middle_name'] = trim($row->middle_name);
+			$data['username'] = trim($row->username);
+			$data['string_password'] = trim($row->string_password);
+			$data['password'] = trim($row->password);
 			$data['age'] = trim($row->age);
 			$data['gender'] = trim($row->gender);
 			$data['birth_date'] = trim($row->birth_date);
@@ -1456,6 +1468,8 @@ class Students extends CI_Controller {
 				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year($term_id, $school_year);
 				$row_span = count($get_students_subject_by_term_id_and_school_year);
 				
+				$last_row = $row_span - 1;
+				
 				for($i = 0; $i < count($get_students_subject_by_term_id_and_school_year); $i++) {
 					
 					$course_no = $get_students_subject_by_term_id_and_school_year[$i]['course_no'];
@@ -1467,7 +1481,7 @@ class Students extends CI_Controller {
 					if($i == 0) {
 						$data['subjects'] .= '
 							<tr>
-								<td width="100" rowspan="'. $row_span .'">
+								<td style="border-bottom: 1px solid #000;" width="100" rowspan="'. $row_span .'">
 									' . $term_name . '<br />' .
 									$semester_name . ' <br />' .
 									$school_year . '   
@@ -1477,6 +1491,16 @@ class Students extends CI_Controller {
 								<td width="50">' . $final . '</td>
 								<td width="55">' . $comp . '</td>
 								<td width="55">' . $credit . '</td>
+							</tr>
+						';
+					} else if($i == $last_row) {
+						$data['subjects'] .= '
+							<tr>
+								<td style="border-bottom: 1px solid #000;" width="72">' . $course_no . '</td>
+								<td style="border-bottom: 1px solid #000;" width="235">' . $descriptive_title . '</td>
+								<td style="border-bottom: 1px solid #000;" width="50">' . $final . '</td>
+								<td style="border-bottom: 1px solid #000;" width="55">' . $comp . '</td>
+								<td style="border-bottom: 1px solid #000;" width="55">' . $credit . '</td>
 							</tr>
 						';
 					} else {

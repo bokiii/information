@@ -31,6 +31,7 @@ class Login extends CI_Controller {
 			redirect("students");
 	
 		} else {
+		
 			$this->session->set_flashdata("error", "Invalid username or password");
 			redirect("login");
 		}
