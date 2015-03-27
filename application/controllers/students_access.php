@@ -4,12 +4,6 @@ class Students_access extends CI_Controller {
 
 	public $table = "students_access";
 	
-	function debug($data) {
-		echo "<pre>";
-			print_r($data);
-		echo "</pre>";
-	}
-	
 	function __construct() {
 		parent::__construct();  
 		$this->load->model("students_model"); 
@@ -22,14 +16,41 @@ class Students_access extends CI_Controller {
 		
 	}  
 	
+	function debug($data) {
+		echo "<pre>";
+			print_r($data);
+		echo "</pre>";
+	}
+	
 	function index() {
 	
 		$id = $this->session->userdata('student_id');
-	
+		$popup_form_action = base_url() . "index.php/upload";
+		
+		$data['popup'] = "
+			<a class='close' href='#'>&#215;</a>
+			<h1>Profile Image</h1>
+			
+			<form action='{$popup_form_action}' method='post' id='profile_upload'  enctype='multipart/form-data'>
+			
+				<div id='island_map_upload'>
+					
+					<input type='file' accept='image/*' name='profile_pic' id='profile_pic' size='20' /> 
+					<input type='submit' value='Upload' />  
+				
+				</div>
+		
+			</form>
+			
+			
+		";
+		
+		
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
 		//$profile_image = base_url() . "profiles/panoy.png"; 
-		$profile_image = "../images/blank.png"; 
+		//$profile_image = "../images/blank.png"; 
+		$profile_image = "../profiles/"; 
 		$view_transcript_link = base_url() . "index.php/students_access/generate_transcript?id=" . $id;
 		
 		$data['content'] ="
@@ -37,7 +58,11 @@ class Students_access extends CI_Controller {
 				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
 					
 					<div id='profile'>
-						<img src='{$profile_image}' alt='Student Image Profile'  />
+						<div id='profile_image_wrapper'>
+							<a id='upload' href='#'>Change Profile</a>
+							<img src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
+						</div>
+						
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
 						<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>
 					</div>
@@ -73,7 +98,6 @@ class Students_access extends CI_Controller {
 							<td><input type='text' id='username' name='username' value='{{mainData.username}}' disabled/></td>
 							<td><label for='password'>Account Password: </label></td>
 							<td><input type='text' id='password' name='password' value='{{mainData.string_password}}' disabled/></td>
-							
 						</tr>  
 						
 						<tr>
@@ -196,7 +220,8 @@ class Students_access extends CI_Controller {
 			$data['remarks'] = trim($row->remarks);
 			$data['school'] = trim($row->school);
 			$data['course'] = trim($row->course);
-			$data['school_id'] = $row->school_id;
+			$data['school_id'] = $row->school_id;   
+			$data['file_name'] = $row->file_name;
 		}
 		
 		echo json_encode($data);
@@ -430,8 +455,21 @@ class Students_access extends CI_Controller {
 			$data['school'] = ucwords($row->school);  
 			$data['course'] = ucwords($row->course);  
 			$data['students_course_id'] = $row->students_course_id;
-		}       
+		}          
 		
+		
+		$get_profile_image = $this->students_model->get_student_profile_image_by_student_id($student_id);
+		if($get_profile_image != NULL) {
+			
+			foreach($get_profile_image as $row_f) {
+				$data['file_name'] = $row_f->file_name;
+			} 
+			
+		} else {
+			$data['file_name'] = "blank.png";
+		}
+		
+	
 		$data['subjects'] = "";
 	
 		$get_terms = $this->terms_model->get_terms_with_order();
@@ -511,12 +549,14 @@ class Students_access extends CI_Controller {
 			
 		} // end foreach loop  
 	
+	
 		
 		$this->load->helper('pdf_helper');
-		$this->load->view('transcript_view', $data);
+		$this->load->view('transcript_view', $data); 
+		
 	}   
 	
-
+	
 }  
 
 

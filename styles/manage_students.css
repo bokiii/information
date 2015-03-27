@@ -1,7 +1,7 @@
 /* Design for main data form below */
 
 #content #main_data_form {
-	background-color: #FFFFFF;
+	background-color: #F7F7F7;
 	padding: 10px 10px 10px 10px;
 	position: relative;
 }
@@ -17,11 +17,31 @@
 	margin: 20px auto 0px auto;
 } 
 
+#content #main_data_form #profile #profile_image_wrapper { 
+	position: relative;
+	width: 120px;  
+	margin: 0px auto;
+}  
+
+#content #main_data_form #profile #profile_image_wrapper #upload {
+	display: block;
+	padding: 10px;
+	color: #FFF;  
+	background-color: #4585F3;  
+	position: absolute;
+	top: 60px;
+	left: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	display: none;
+}
+
 #content #main_data_form #profile img {
 	display: block;
 	margin: 0px auto;
 	width: 140;
-	height: 140;
+	height: 140;  
+	cursor: pointer;
 }  
 
 #content #main_data_form #profile .transcript_button {
@@ -29,6 +49,7 @@
 	background-color: #4585F3;
 	color: #FFFFFF; 
 	padding: 10px;
+	
 }
 
 #content #main_data_form #profile h2 {
@@ -110,7 +131,7 @@
 /* academic data form below */
 
 #content #academic_data_form {
-	background-color: #FFFFFF;
+	background-color: #F7F7F7;
 	padding: 25px 10px 10px 10px;
 	border-top: 1px solid #F1F1F1;
 	position: relative;

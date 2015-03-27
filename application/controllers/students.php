@@ -116,7 +116,7 @@ class Students extends CI_Controller {
 					</tr>
 				
 				</table>
-			
+				
 		";
 		
 		$data['popup'] .= "
@@ -848,7 +848,8 @@ class Students extends CI_Controller {
 		$update_main_data_action = base_url() . "index.php/". $this->table ."/update_student_main_data";
 		$edit_image = base_url() . "images/modify.png";
 		//$profile_image = base_url() . "profiles/panoy.png"; 
-		$profile_image = "../../images/blank.png"; 
+		//$profile_image = "../../images/blank.png"; 
+		$profile_image = "../../profiles/"; 
 		$view_transcript_link = base_url() . "index.php/students/generate_transcript?id=" . $id;
 		
 		$data['content'] ="
@@ -856,7 +857,7 @@ class Students extends CI_Controller {
 				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
 					
 					<div id='profile'>
-						<img src='{$profile_image}' alt='Student Image Profile'  />
+						<img src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
 						<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>
 					</div>
@@ -1222,7 +1223,8 @@ class Students extends CI_Controller {
 			$data['remarks'] = trim($row->remarks);
 			$data['school'] = trim($row->school);
 			$data['course'] = trim($row->course);
-			$data['school_id'] = $row->school_id;
+			$data['school_id'] = $row->school_id;  
+			$data['file_name'] = $row->file_name;
 		}
 		
 		echo json_encode($data);
@@ -1440,8 +1442,20 @@ class Students extends CI_Controller {
 			$data['remarks'] = ucwords($row->remarks);
 			$data['school'] = ucwords($row->school);  
 			$data['course'] = ucwords($row->course);  
-			$data['students_course_id'] = $row->students_course_id;
+			$data['students_course_id'] = $row->students_course_id;  
+			
 		}       
+	
+		$get_profile_image = $this->students_model->get_student_profile_image_by_student_id($student_id);
+		if($get_profile_image != NULL) {
+			
+			foreach($get_profile_image as $row_f) {
+				$data['file_name'] = $row_f->file_name;
+			} 
+			
+		} else {
+			$data['file_name'] = "blank.png";
+		}
 		
 		$data['subjects'] = "";
 	

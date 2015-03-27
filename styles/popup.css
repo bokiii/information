@@ -226,6 +226,23 @@
 }
 
 
+/* below is the design for upload profile image popup */
+
+#popup_container #popup_content form #island_map_upload {
+	margin: 10px;
+	padding: 20px 20px 20px 20px;
+}  
+
+#popup_container #popup_content form #island_map_upload input[type='file'] {
+	padding: 10px;
+}
+
+#popup_container #popup_content form #island_map_upload input[type='submit'] {
+	padding: 10px;
+}
+
+
+
 
 
 

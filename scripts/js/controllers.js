@@ -26,11 +26,17 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	$scope.mainData;
 	
 	$http.get(studentMainDataUrl).success(function(data){
+		if(data.file_name == null) {
+			data.file_name = "blank.png";
+		}
 		$scope.mainData = data;   
 	});
 	
 	$scope.getMainData = function(){
 		$http.get(studentMainDataUrl).success(function(data){
+			if(data.file_name == null) {
+				data.file_name = "blank.png";
+			}
 			$scope.mainData = data;
 		});
 	};
@@ -62,11 +68,18 @@ controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 	$scope.mainData;
 	
 	$http.get(studentMainDataUrl).success(function(data){
-		$scope.mainData = data;   
+		if(data.file_name == null) {
+			data.file_name = "blank.png";
+		}
+		
+		$scope.mainData = data;      
 	});
 	
 	$scope.getMainData = function(){
 		$http.get(studentMainDataUrl).success(function(data){
+			if(data.file_name == null) {
+				data.file_name = "blank.png";
+			}
 			$scope.mainData = data;
 		});
 	};

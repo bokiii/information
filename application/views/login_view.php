@@ -9,7 +9,7 @@
 	<div id="container">
 		<div id="header">
 			<img class="left" src="<?php echo base_url(); ?>images/graduate.png" alt="graduation hat" />
-			<h1 class="left">Information <br />System</h1>
+			<h1 class="left">Student <br />Information <br />System</h1>
 			<div class="clear"></div>
 		</div>
 		<div id="content">

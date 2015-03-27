@@ -886,11 +886,13 @@ var manageStudents = (function() {
 	
 	// below are the variables for the adding subject popup
 	var $popup_container = $("#popup_container");
-	$add_subject = $("#add_subject");
+	var $add_subject = $("#add_subject");
 	var $popup_content = $("#popup_container #popup_content");
 	var windowHeight = window.innerHeight;
 	var $subject_source;
-	var $course_id;
+	var $course_id;  
+	
+	var upload_input = $("#profile_upload #island_map_upload #profile_pic"); 
 	
 	
 	// below are variables for main_data_form 
@@ -1267,6 +1269,71 @@ var manageStudents = (function() {
 		
 	};
 	
+	var upload_click = function() {
+		$("#upload").click(function(){
+			$("#popup_container").fadeIn("fast", function(){
+				$popup_content.css({
+					"margin-top": windowHeight/2-$popup_content.height()/2
+				});
+			});
+			
+			return false;
+		});
+	};     
+	
+	var profile_image_hover = function() {
+		
+		$("#profile_image_wrapper").mouseenter(function(){
+			$("#upload").fadeIn("fast");
+		}).mouseleave(function(){
+			$("#upload").fadeOut("fast");
+		});   
+		
+	};
+	
+	var upload_submit = function() {
+		
+		$("#profile_upload").ajaxForm({
+			dataType: 'json',
+			forceSync: true,
+			beforeSubmit: loading,
+			success: success_status
+		});
+		
+		function loading() {
+		
+		
+			if(upload_input.val() == "") {
+				alert("Select Profile image to upload.");
+				return false;
+			} else { 
+			
+				$loading_container.fadeIn('fast');
+				return true;
+
+			}
+		}
+		
+		function success_status(data) {
+			
+			if(data.status == true) {
+			
+				$(".student_angular_trigger").trigger('click');
+				$loading_container.fadeOut('fast');
+				upload_input.val("");
+				$(document).find(".close").trigger('click'); 
+				
+			} else {
+			
+				$loading_container.fadeOut('fast');
+				alert("Upload failed.Please try again");
+			
+			}
+	
+		}
+
+	};
+	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
 		main_data_form_edit_click: 				main_data_form_edit_click,
@@ -1277,7 +1344,10 @@ var manageStudents = (function() {
 		execute_delete_checkbox:				execute_delete_checkbox,
 		academic_data_form_submit:				academic_data_form_submit,
 		add_subject_click:						add_subject_click,
-		subject_popup_form_submit:				subject_popup_form_submit
+		subject_popup_form_submit:				subject_popup_form_submit, 
+		upload_click:							upload_click, 
+		profile_image_hover:					profile_image_hover, 
+		upload_submit:							upload_submit
 	}
 
 })()
@@ -1295,7 +1365,12 @@ manageStudents.execute_delete_checkbox();
 manageStudents.academic_data_form_submit();
 
 manageStudents.add_subject_click();
-manageStudents.subject_popup_form_submit();
+manageStudents.subject_popup_form_submit();  
+
+manageStudents.upload_click();
+manageStudents.profile_image_hover();   
+manageStudents.upload_submit();
+
 
 
 

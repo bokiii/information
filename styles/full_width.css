@@ -4,12 +4,12 @@ html {
 
 .full_width { 
 	position: relative;
-	background: #F1F1F1;
+	background: #C1E8ED;
 }
 
 .full_width:before, .full_width:after {
 	content: "";
-	background: #F1F1F1;
+	background: #C1E8ED;
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -29,15 +29,15 @@ html {
 }
 
 .full_width:nth-of-type(1), .full_width:nth-of-type(1):before, .full_width:nth-of-type(1):after { 
-	background: #F1F1F1;
+	background: #C1E8ED;
 }
 
 .full_width:nth-of-type(2), .full_width:nth-of-type(2):before, .full_width:nth-of-type(2):after { 
-	background: #F1F1F1;
+	background: #C1E8ED;
 }
 
 .full_width:nth-of-type(3), .full_width:nth-of-type(3):before, .full_width:nth-of-type(3):after { 
-	background: #F1F1F1;
+	background: #C1E8ED;
 }
 
 .left-only:after {

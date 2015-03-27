@@ -6,6 +6,14 @@
 	vertical-align: baseline;
 }
 
+html {
+	background-color: #C1E8ED;
+	background-image: url('../images/background.png'); 
+	background-repeat: repeat-x;
+	background-position: -55% 192%; 
+
+}
+
 .left {
 	float: left;
 }
@@ -23,7 +31,9 @@ input:focus, textarea:focus, select:focus {
 }
 
 body {
-	color: #333;
+	color: #333; 
+	
+	
 }
 
 #container {

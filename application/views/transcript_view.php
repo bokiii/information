@@ -40,6 +40,14 @@
 ?>		
 	
 	
+<?php 
+	if(isset($file_name) && $file_name != NULL) {
+		$image_name = $file_name;
+	} else {
+		$image_name = "blank.png";
+	}
+?>	
+	
 	<style type="text/css">
 
 		table.grade_head th {
@@ -73,7 +81,9 @@
 				Janiuay, Iloilo <br />  <br />
 				<strong>OFFICIAL TRANSCRIPT OF RECORDS</strong>
 			</td>
-			<td width="158" align="right"><img src="profiles/panoy.png" alt="Profile Pic" /></td>
+		
+			
+			<td width="158" align="right"><img src="profiles/<?php echo $file_name; ?>" alt="Profile Pic" /></td>
 		</tr>
 		
 	</table>
