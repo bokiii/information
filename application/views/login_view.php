@@ -14,7 +14,7 @@
 		</div>
 		<div id="content">
 			<div id="login">
-				<img src="<?php echo base_url(); ?>images/anonymous.png" alt="Student Login Image" />
+				<img width="130" height="120" src="<?php echo base_url(); ?>images/bokie.png" alt="Student Login Image" />
 				<form action="<?php echo site_url(); ?>/login/process_login" method="post" autocomplete="off">
 					<input class="login_input" type="text" name="username" placeholder="Username" />
 					<input  class="login_input" type="password" name="password" placeholder="Password" />

@@ -60,7 +60,7 @@ class Students_access extends CI_Controller {
 					<div id='profile'>
 						<div id='profile_image_wrapper'>
 							<a id='upload' href='#'>Change Profile</a>
-							<img src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
+							<img width='120' height='120' src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
 						</div>
 						
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
