@@ -995,7 +995,8 @@ var manageStudents = (function() {
 				"border-radius": "2px"
 			});
 			
-			$(this).hide("fast");
+			$(this).hide("fast");    
+			
 		});
 	};
 	

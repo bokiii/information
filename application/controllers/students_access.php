@@ -70,28 +70,28 @@ class Students_access extends CI_Controller {
 					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
 					<table>
 						<tr>
-							<td><label for='first_name'>Name:</label></td>
-							<td><input type='text' id='first_name' name='first_name' value='{{mainData.first_name}}' disabled /> <input type='text' id='middle_name' name='middle_name' value='{{mainData.middle_name}}' disabled /> <input type='text' id='last_name' name='last_name' value='{{mainData.last_name}}' disabled /> </td>                                                   
-							<td><label for='birth_date'>Date of Birth: </label></td>
-							<td><input type='text' id='birth_date' name='birth_date' value='{{mainData.birth_date}}' disabled/></td>
+							<td>Name:</td>
+							<td class='main_data'>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</td>                                                   
+							<td>Date of Birth:</td>
+							<td class='main_data'>{{mainData.birth_date}}</td>
 						</tr>
 						<tr>
 							<td>Age:</td>
-							<td><input type='text' id='age' name='age' value='{{mainData.age}}' disabled /></td>
+							<td class='main_data'>{{mainData.age}}</td>
 							<td>Gender:</td>
-							<td><input type='text' id='gender' name='gender' value='{{mainData.gender}}' disabled /></td>
+							<td class='main_data'>{{mainData.gender}}</td>
 						</tr>
 						<tr>
 							<td>Civil Status:</td>
-							<td><input type='text' id='civil_status' name='civil_status' value='{{mainData.civil_status}}' disabled /></td>
+							<td class='main_data'>{{mainData.civil_status}}</td>
 							<td>Religion:</td>
-							<td><input type='text' id='religion' name='religion' value='{{mainData.religion}}' disabled /></td>
+							<td class='main_data'>{{mainData.religion}}</td>
 						</tr>
 						<tr>
 							<td>Address:</td>
-							<td><input type='text' id='address' name='address' value='{{mainData.address}}' disabled /></td>
+							<td class='main_data'>{{mainData.address}}</td>
 							<td>Place of Birth:</td>
-							<td><input type='text' id='place_of_birth' name='place_of_birth' value='{{mainData.place_of_birth}}' disabled /></td>
+							<td class='main_data'>{{mainData.place_of_birth}}</td>
 						</tr> 
 						<tr>  
 							<td><label for='username'>Account Username:</label></td>
@@ -291,7 +291,13 @@ class Students_access extends CI_Controller {
 	
 		$id = $this->input->post('id');
 		
-		$student_data = array(
+		$student_account_data = array(
+			"username" => trim($this->input->post('username')),
+			"string_password" => $this->input->post('password'),
+			"password" => md5($this->input->post('password'))
+		);
+		
+		/*$student_data = array(
 			"first_name" => trim($this->input->post('first_name')),
 			"last_name" => trim($this->input->post('last_name')),
 			"middle_name" => trim($this->input->post('middle_name')),  
@@ -312,13 +318,16 @@ class Students_access extends CI_Controller {
 		
 		$update_student_data = $this->students_model->update_student($id, $student_data);
 		$update_students_others_data = $this->students_model->update_students_others($id, $students_others_data);
+		*/
 		
+		$update_student_account_data = $this->students_model->update_student($id, $student_account_data);
+		
+	
 		$data['status'] = true;
+	
 		
-		echo json_encode($data);	
-	
-	
-	
+		echo json_encode($data);
+		
 	}
 	
 	function update_student_academic_data() {

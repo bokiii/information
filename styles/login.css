@@ -10,8 +10,8 @@ html {
 	background-color: #C1E8ED;
 	background-image: url('../images/background.png'); 
 	background-repeat: repeat-x;
-	background-position: -55% 192%; 
-
+	background-position: -60% 100%;    
+	background-attachment: fixed;
 }
 
 .left {
