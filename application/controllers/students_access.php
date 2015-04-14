@@ -60,7 +60,7 @@ class Students_access extends CI_Controller {
 					<div id='profile'>
 						<div id='profile_image_wrapper'>
 							<a id='upload' href='#'>Change Profile</a>
-							<img width='120' height='120' src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
+							<img width='120' height='120' ng-src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
 						</div>
 						
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
@@ -492,8 +492,8 @@ class Students_access extends CI_Controller {
 			foreach($get_term_school_year as $row_s) {
 				$school_year = $row_s->school_year;
 			
-				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year($term_id, $school_year);
-				$row_span = count($get_students_subject_by_term_id_and_school_year);
+				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year_and_student_id($term_id, $school_year, $student_id);                    
+				$row_span = count($get_students_subject_by_term_id_and_school_year); 
 				
 				$last_row = $row_span - 1;
 				

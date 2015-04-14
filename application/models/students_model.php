@@ -340,10 +340,11 @@ class Students_model extends CI_Model {
 		return $query->result();
 	}   
 	
-	function get_students_subject_by_term_id_and_school_year($term_id, $school_year) {
+	function get_students_subject_by_term_id_and_school_year_and_student_id($term_id, $school_year, $student_id) {
 		$this->db->select('students_subject.subject, students_grade.earned_credit, students_grade.grade, students_grade.comp, students_grade.status, subjects.course_no');
 		$this->db->where('students_subject.term_id', $term_id);
 		$this->db->where('students_subject.school_year', $school_year);
+		$this->db->where('students_subject.student_id', $student_id);
 		$this->db->from("students_subject");
 		$this->db->join("students_grade", "students_grade.subject_id = students_subject.id");
 		$this->db->join("course_subjects", "course_subjects.id = students_subject.course_subject_id");

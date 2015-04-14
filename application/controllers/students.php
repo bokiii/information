@@ -46,6 +46,14 @@ class Students extends CI_Controller {
 		echo "</pre>";
 	}
 	
+	function same_file($file_to_check, $file) {
+		if($file_to_check == $file) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	function get_student_id() {
 		return $this->student_id;
 	}
@@ -543,9 +551,36 @@ class Students extends CI_Controller {
 	function delete_student() {
 		
 		$id = $this->input->post('id');
+		
+		foreach($id as $set_id) {
+			
+			$get_profile_image = $this->students_model->get_student_profile_image_by_student_id($set_id);                                          
+		
+			if($get_profile_image != NULL) {
+			
+				foreach($get_profile_image as $row_i) {
+					$existing_image_file_name = $row_i->file_name;
+				}
+				
+				$profile_file_names = get_filenames("profiles");
+				
+				foreach($profile_file_names as $file) {
+				
+					$same = $this->same_file($existing_image_file_name, $file);
+					if($same) {
+						$file_path = "profiles/" . $file;
+						unlink($file_path);
+					}
+				}    
+				
+				$delete_current_profile_image = $this->students_model->delete_student_profile_image_by_student_id($set_id);             
+			}
+			
+		}
+		
 		$delete_student = $this->global_model->delete($this->table, $id);
 		
-		$this->index();
+		$this->index();   
 	}
 	
 	function update_student() {
@@ -857,7 +892,7 @@ class Students extends CI_Controller {
 				<form action='{$update_main_data_action}' method='post' id='main_data_form' class='full_width_3'>
 					
 					<div id='profile'>
-						<img src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
+						<img width='120' height='120' ng-src='{$profile_image}{{mainData.file_name}}' alt='Student Image Profile'  />
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
 						<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>
 					</div>
@@ -1479,7 +1514,7 @@ class Students extends CI_Controller {
 			foreach($get_term_school_year as $row_s) {
 				$school_year = $row_s->school_year;
 			
-				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year($term_id, $school_year);
+				$get_students_subject_by_term_id_and_school_year = $this->students_model->get_students_subject_by_term_id_and_school_year_and_student_id($term_id, $school_year, $student_id);
 				$row_span = count($get_students_subject_by_term_id_and_school_year);
 				
 				$last_row = $row_span - 1;
