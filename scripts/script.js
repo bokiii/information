@@ -474,7 +474,10 @@ var popupModule = (function() {
 			// standard actions for close
 			$clear_button.trigger('click');
 			window.history.pushState("Standard Location", "Standard Location", $current_url); 
-			$popup_container.fadeOut('fast');
+			$popup_container.fadeOut('fast');   
+			
+			$(document).find("#fifth_div").html("");   
+			$(document).find("#fifth_div").append("<div><h2>Subjects</h2><p class='center'>Please go back and select course first.</p></div>");   
 			
 			return false;
 		});
@@ -547,6 +550,7 @@ var studentSlideShowModule = (function() {
 				var datas = eval('msg=' + data);
 				
 				$fifth_div.children("div").html(datas.subjects);
+				$fifth_div.prepend(datas.student_type);
 				
 			});
 			

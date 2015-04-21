@@ -126,6 +126,14 @@
 	position: absolute;
 	bottom: 90px;
 	width: 100%;
+}   
+
+#popup_container #popup_content form #fifth_div #student_type_form {
+	padding: 10px;
+}
+
+#popup_container #popup_content form #fifth_div #student_type_form input[type='submit'] {
+	visibility: hidden;
 }
 
 #popup_container #popup_content form #fifth_div div {
@@ -156,8 +164,7 @@
 #popup_container #popup_content form #fifth_div div p.no_subject {
 	text-align: center;
 	
-}
-
+}  
 
 
 #popup_container #popup_content form #fifth_div div h3 {

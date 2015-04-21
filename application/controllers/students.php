@@ -254,11 +254,13 @@ class Students extends CI_Controller {
 		
 		// the fifth div will be the container of the selected course subjects 
 		$data['popup'] .= "
-			<div id='fifth_div' class='slide_div'>
+			<div id='fifth_div' class='slide_div'> 
+			
 				<div>
 					<h2>Subjects</h2>
 					<p class='center'>Please go back and select course first.</p>
 				</div>
+				
 			</div>
 		";
 		
@@ -798,7 +800,22 @@ class Students extends CI_Controller {
 				<p class='center'>Please go back and select course first.</p>
 			";
 			
-		}
+		} 
+		
+		$data['student_type'] = "
+			
+			<form id='student_type_form' action='#' method='post'>
+				<label for='student_type'>Student Type</label>
+				<select name='student_type' id='student_type'>
+					<option value></option>  
+					<option value='regular'>Regular</option>   
+					<option value='irregular'>Irregular</option>
+				</select>
+				
+				<input type='submit' value='Submit'/>
+			</form>
+			
+		";
 	
 		echo json_encode($data);
 	}
