@@ -396,8 +396,6 @@ class Students extends CI_Controller {
 		$end_year = date('Y', strtotime('+1 years'));
 		$school_year = $start_year . "-" . $end_year;
 		
-		//$this->debug($this->input->post());
-		
 		$data = array(
 			"term_id" => $this->input->post('term_id'),
 			"first_name" => $this->input->post('first_name'),
@@ -415,13 +413,13 @@ class Students extends CI_Controller {
 			"school_year" => $school_year
 		);
 		
-		$this->debug($data);
-		
+	
 		// set student data
 		$student_data = array(
 			"first_name" => trim($this->input->post('first_name')),
 			"last_name" => trim($this->input->post('last_name')),
-			"middle_name" => trim($this->input->post('middle_name'))
+			"middle_name" => trim($this->input->post('middle_name')), 
+			"student_type" => trim($this->input->post('student_type'))
 		);
 		
 		// insert student data 
@@ -768,7 +766,7 @@ class Students extends CI_Controller {
 								}
 								
 								$data['subjects'] .= "
-									<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+									<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' disabled='disabled' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
 								";
 							}
 						}
@@ -804,16 +802,15 @@ class Students extends CI_Controller {
 		
 		$data['student_type'] = "
 			
-			<form id='student_type_form' action='#' method='post'>
+			<div id='student_type_div'>
 				<label for='student_type'>Student Type</label>
 				<select name='student_type' id='student_type'>
 					<option value></option>  
 					<option value='regular'>Regular</option>   
 					<option value='irregular'>Irregular</option>
-				</select>
-				
-				<input type='submit' value='Submit'/>
-			</form>
+				</select>   
+				<p></p>
+			</div>
 			
 		";
 	

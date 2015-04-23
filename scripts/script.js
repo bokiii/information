@@ -518,10 +518,22 @@ var studentSlideShowModule = (function() {
 	var $school_id = $("#popup_container #popup_content form #third_div #school_id");
 	// below will get its value on a ajax generated content 
 	var $subject_source;
-	var $course_id;
+	var $course_id;   
+	var studentTypeValue;
+	var classTermId;  
+	var currentSemesterHasSubjects;
 	
 	// below is the variable for student slide show for submission
 	var $student_slideshow_form = $("#popup_container #popup_content .student_slideshow_form");
+	
+	jQuery.fn.extend({
+		check: function() {
+			return this.each(function() { this.checked = true; });
+		},
+		uncheck: function() {
+			return this.each(function() { this.checked = false; });
+		}
+	});
 	
 	var get_courses_by_school_id = function() {
 	
@@ -549,8 +561,9 @@ var studentSlideShowModule = (function() {
 			
 				var datas = eval('msg=' + data);
 				
-				$fifth_div.children("div").html(datas.subjects);
-				$fifth_div.prepend(datas.student_type);
+				$fifth_div.children("div:last-child").html(datas.subjects);
+				$fifth_div.prepend(datas.student_type);      
+				$fifth_div.children("#student_type_div").children("p").text($(document).find("#term_id option:selected").text());
 				
 			});
 			
@@ -558,9 +571,69 @@ var studentSlideShowModule = (function() {
 		
 	};
 	
+	var fifth_div_form_change = function() {
+		
+		jQuery.fn.exists = function() {
+			return this.length > 0;
+		}
+		
+		$(document).on("change", "#fifth_div #student_type_div #student_type", function() { 
+		
+			studentTypeValue = $(this).val();    
+			classTermId = "." + $(document).find("#term_id").val();
+			currentSemesterHasSubjects = $(document).find(classTermId).exists();
+			
+			if(studentTypeValue == "regular") {  
+				if(currentSemesterHasSubjects == true) {
+					$fifth_div.find(".subjects").uncheck(); 
+					$(document).find(classTermId).check();   
+					$(document).find(classTermId).removeAttr("disabled").attr('onclick', 'return false');  
+				
+				} else {
+					alert("There are no subjects for the selected semester");
+				}
+			} else if(studentTypeValue == "irregular") {
+				$(document).find(".subjects").removeAttr("disabled");   
+				$(document).find(".subjects").removeAttr("onclick");   
+				$fifth_div.find(".subjects").uncheck(); 
+			} else {
+				$(document).find(".subjects").attr("disabled", "disabled");     
+				$(document).find(".subjects").removeAttr("onclick");  
+				$fifth_div.find(".subjects").uncheck(); 
+			}
+			
+		});
+
+	};  
+	
+	var term_id_change = function() {
+		
+		jQuery.fn.exists = function() {
+			return this.length > 0;
+		}
+		
+		var currentSemester;
+		
+		$(document).find("#term_id").change(function(){
+			currentSemester = $fifth_div.children("#student_type_div").find("p").exists();
+			
+			if(currentSemester == true) {	
+				$fifth_div.children("#student_type_div").children("p").text($(this).children("option:selected").text());
+				$fifth_div.children("#student_type_div").children("#student_type").val("");
+				$fifth_div.find(".subjects").attr("disabled", "disabled");      
+				$fifth_div.find(".subjects").removeAttr("onclick");     
+				$fifth_div.find(".subjects").uncheck(); 
+			}
+		
+		});
+		
+	};
+	
 	return {
 		get_courses_by_school_id:	 get_courses_by_school_id,
-		get_subjects_by_course_id:	 get_subjects_by_course_id
+		get_subjects_by_course_id:	 get_subjects_by_course_id, 
+		fifth_div_form_change:		 fifth_div_form_change,  
+		term_id_change:				 term_id_change
 	}
 	
 })()
@@ -568,7 +641,9 @@ var studentSlideShowModule = (function() {
 // execute studentSlideShowModule 
 
 studentSlideShowModule.get_courses_by_school_id();
-studentSlideShowModule.get_subjects_by_course_id();
+studentSlideShowModule.get_subjects_by_course_id();   
+studentSlideShowModule.fifth_div_form_change();    
+studentSlideShowModule.term_id_change();
 
 
 // login module below 

@@ -128,15 +128,23 @@
 	width: 100%;
 }   
 
-#popup_container #popup_content form #fifth_div #student_type_form {
-	padding: 10px;
+#popup_container #popup_content form #fifth_div #student_type_div {
+	padding: 10px;  
+}   
+ 
+#popup_container #popup_content form #fifth_div #student_type_div label {
+	margin-right: 5px;
+}   
+
+#popup_container #popup_content form #fifth_div #student_type_div select {
+	margin-right: 10px;
 }
 
-#popup_container #popup_content form #fifth_div #student_type_form input[type='submit'] {
-	visibility: hidden;
+#popup_container #popup_content form #fifth_div #student_type_div p{
+	display: inline;
 }
 
-#popup_container #popup_content form #fifth_div div {
+#popup_container #popup_content form #fifth_div div:last-child {
 	border-top: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
 	height: 300px;
