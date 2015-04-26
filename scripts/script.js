@@ -256,22 +256,22 @@ var popupModule = (function() {
 			}
 			
 			// set standard css positions for every slide divs 
-			$starting_div.css("left", "0px");
+			/*$starting_div.css("left", "0px");
 			$first_div.css("left", "800px");
 			$second_div.css("left", "800px");
 			$third_div.css("left", "800px");
 			$fourth_div.css("left", "800px");
 			$fifth_div.css("left", "800px");
-			$end_div.css("left", "800px");
+			$end_div.css("left", "800px");*/
 			
 			
-			/*$starting_div.css("display", "none");
+			$starting_div.css("display", "none");
 			$first_div.css("left", "0px");
 			$second_div.css("left", "800px");
 			$third_div.css("left", "800px");
 			$fourth_div.css("left", "800px");
 			$fifth_div.css("left", "800px");
-			$end_div.css("left", "800px");*/
+			$end_div.css("left", "800px");
 			
 			// fadein popup container
 			$popup_container.fadeIn('fast', function(){
@@ -279,12 +279,12 @@ var popupModule = (function() {
 				// below are the statements if the module are having a slide or has_slide
 				
 				// add current_div class 
-				$starting_div.addClass('current_div');
-				//$("#popup_container #popup_content form #first_div").addClass('current_div');
+				//$starting_div.addClass('current_div');
+				$("#popup_container #popup_content form #first_div").addClass('current_div');
 				
 				// set current div 
-				$current_div = $starting_div;
-				//$current_div = $("#popup_container #popup_content form #first_div");
+				//$current_div = $starting_div;
+				$current_div = $("#popup_container #popup_content form #first_div");
 				
 				// set height to current div
 				$has_slide.css({
@@ -309,7 +309,7 @@ var popupModule = (function() {
 		// below are the functions for clicking the next and prev button
 		$next.click(function(event){
 			
-			switch (slide_number) {
+			/*switch (slide_number) {
 				case 1:
 					if($term_id.val() == "") {
 						alert("Select Term");
@@ -372,7 +372,64 @@ var popupModule = (function() {
 					break;
 				default:
 					execute_slide(true);
+			}*/
+			
+			switch (slide_number) {
+				case 1:
+					if($first_name.val() == "" || $last_name.val == "" || $middle_name.val() == "") {
+						alert("First name, Last name or Middle name must not be empty");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+					break;
+				case 2:
+					if($age.val() == "" || $gender.val == "" || $birth_date.val() == "" || $civil_status.val() == "" || $religion.val() == "" || $address.val() == "") {
+						alert("Age, Gender, Birthdate, Civil Status, Religion, Address  must not be empty");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+					
+					break;
+				case 3:
+					if($school_id.val() == "") {
+						alert("Select School");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					execute_slide(do_slide);
+				
+					break;
+				case 4:
+					
+					if($course_id_select.val() == "") {
+						alert("Select Course");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					
+					execute_slide(do_slide);
+					break;
+				case 5:
+					var subjects_length = $(document).find(".subjects:checked").length;
+					if(subjects_length == 0) {
+						alert("Select Subject");
+						do_slide = false;
+					} else {
+						do_slide = true;
+					}
+					
+					execute_slide(do_slide);
+					break;
+				default:
+					execute_slide(true);
 			}
+			
 			
 			return false;
 		});
@@ -520,6 +577,7 @@ var studentSlideShowModule = (function() {
 	var $subject_source;
 	var $course_id;   
 	var studentTypeValue;
+	var termValue;
 	var classTermId;  
 	var currentSemesterHasSubjects;
 	
@@ -575,15 +633,38 @@ var studentSlideShowModule = (function() {
 		
 		jQuery.fn.exists = function() {
 			return this.length > 0;
+		}    
+		
+		function termIdExists() { 
+			var findTerm = $("#fifth_div #student_term_div #term_id").val();
+			if(findTerm == "") {
+				return false;
+			} else {
+				return true; 
+			}  
+		}  
+		
+		function studentTypeExists() {
+			var findStudentType = $("#fifth_div #student_type_div #student_type").val();  
+			if(findStudentType == "") {
+				return false;
+			} else {
+				return true; 
+			}  
 		}
 		
-		$(document).on("change", "#fifth_div #student_type_div #student_type", function() { 
+		function executeSubjectSelection() {
 		
-			studentTypeValue = $(this).val();    
-			classTermId = "." + $(document).find("#term_id").val();
+			classTermId = "." + $("#fifth_div #student_term_div #term_id").val();
 			currentSemesterHasSubjects = $(document).find(classTermId).exists();
-			
+		
+			studentTypeValue = $("#fifth_div #student_type_div #student_type").val();   
+			termValue = $("#fifth_div #student_term_div #term_id").val();  
+			console.log(termValue);
+			console.log(studentTypeValue);
+	
 			if(studentTypeValue == "regular") {  
+				
 				if(currentSemesterHasSubjects == true) {
 					$fifth_div.find(".subjects").uncheck(); 
 					$(document).find(classTermId).check();   
@@ -592,18 +673,43 @@ var studentSlideShowModule = (function() {
 				} else {
 					alert("There are no subjects for the selected semester");
 				}
+				
 			} else if(studentTypeValue == "irregular") {
+				
 				$(document).find(".subjects").removeAttr("disabled");   
 				$(document).find(".subjects").removeAttr("onclick");   
-				$fifth_div.find(".subjects").uncheck(); 
+				$fifth_div.find(".subjects").uncheck();
+			
+			} else {  
+				// this else codes is not functioning
+				$(document).find(".subjects").attr("disabled", "disabled");     
+				$(document).find(".subjects").removeAttr("onclick");  
+				$fifth_div.find(".subjects").uncheck();
+				
+			}
+
+		}
+		
+		$(document).on("change", "#fifth_div #student_term_div #term_id", function() {  
+			if(studentTypeExists() && termIdExists()) {
+				executeSubjectSelection();
+			}  else {
+				$(document).find(".subjects").attr("disabled", "disabled");     
+				$(document).find(".subjects").removeAttr("onclick");  
+				$fifth_div.find(".subjects").uncheck();
+			} 
+		});
+	
+		$(document).on("change", "#fifth_div #student_type_div #student_type", function() { 
+			if(studentTypeExists() && termIdExists()) {
+				executeSubjectSelection();
 			} else {
 				$(document).find(".subjects").attr("disabled", "disabled");     
 				$(document).find(".subjects").removeAttr("onclick");  
-				$fifth_div.find(".subjects").uncheck(); 
+				$fifth_div.find(".subjects").uncheck();
 			}
-			
-		});
-
+		}); 
+	
 	};  
 	
 	var term_id_change = function() {
@@ -643,7 +749,7 @@ var studentSlideShowModule = (function() {
 studentSlideShowModule.get_courses_by_school_id();
 studentSlideShowModule.get_subjects_by_course_id();   
 studentSlideShowModule.fifth_div_form_change();    
-studentSlideShowModule.term_id_change();
+//studentSlideShowModule.term_id_change();
 
 
 // login module below 
@@ -1263,9 +1369,8 @@ var manageStudents = (function() {
 		
 	};		
 	
-	var add_subject_click = function() {
-
-		
+	var add_subject_click = function() { 
+	
 		function getQueryVariable(variable) {
 			var query = window.location.search.substring(1);
 			var vars = query.split("&");

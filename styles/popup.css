@@ -129,19 +129,21 @@
 }   
 
 #popup_container #popup_content form #fifth_div #student_type_div {
-	padding: 10px;  
-}   
- 
+	padding: 10px;     
+	width: 190px;  
+}    
+
 #popup_container #popup_content form #fifth_div #student_type_div label {
 	margin-right: 5px;
-}   
-
-#popup_container #popup_content form #fifth_div #student_type_div select {
-	margin-right: 10px;
 }
+ 
+#popup_container #popup_content form #fifth_div #student_term_div {
+	padding: 10px; 
+	width: 300px;
+}  
 
-#popup_container #popup_content form #fifth_div #student_type_div p{
-	display: inline;
+#popup_container #popup_content form #fifth_div #student_term_div label {
+	margin-right: 5px;
 }
 
 #popup_container #popup_content form #fifth_div div:last-child {

@@ -84,47 +84,11 @@ class Students extends CI_Controller {
 		
 		// set below the method action
 		$popup_form_action = base_url() . "index.php/". $this->table ."/". $this->add . " ";
-		
-		// get terms below 
-		
-		$get_terms = $this->global_model->get('terms');
-		
-		$terms_data = array();
-		
-		if($get_terms != NULL) {
-			foreach($get_terms as $row_terms) {
-				$terms_data[] = array(
-					"id" => $row_terms->id,
-					"term" => ucwords($row_terms->term),
-					"semester" => ucwords($row_terms->semester)
-				); 
-			}
-		}
-		
+	
 		$data['popup'] = "
 			<a class='close' href='#'>&#215;</a>
 			<h1>". $this->table ."</h1>
 			<form class='has_slide student_slideshow_form' action='{$popup_form_action}' method='post' id='popup_form'>
-				
-				<table id='starting_div' class='slide_div'>
-					<tr>
-						<td><label for='term_id' class='right'>Term</label></td>
-						<td>
-							<select name='term_id' id='term_id'>
-							<option value>&nbsp;</option>
-		";
-							for($i = 0; $i < count($terms_data); $i++) {
-								$data['popup'] .= "
-									<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester </option>
-								";
-							}
-		$data['popup'] .= "
-							</select>
-						</td>
-					</tr>
-				
-				</table>
-				
 		";
 		
 		$data['popup'] .= "
@@ -801,18 +765,51 @@ class Students extends CI_Controller {
 			
 		} 
 		
+		
+		
+		// get terms below 
+		
+		$get_terms = $this->global_model->get('terms');
+		
+		$terms_data = array();
+		
+		if($get_terms != NULL) {
+			foreach($get_terms as $row_terms) {
+				$terms_data[] = array(
+					"id" => $row_terms->id,
+					"term" => ucwords($row_terms->term),
+					"semester" => ucwords($row_terms->semester)
+				); 
+			}
+		}
+		
 		$data['student_type'] = "
-			
-			<div id='student_type_div'>
+		
+			<div id='student_type_div' class='left'>
 				<label for='student_type'>Student Type</label>
 				<select name='student_type' id='student_type'>
-					<option value></option>  
+					<option value></option>     
 					<option value='regular'>Regular</option>   
 					<option value='irregular'>Irregular</option>
 				</select>   
-				<p></p>
 			</div>
-			
+		
+			<div id='student_term_div' class='left'>
+				<label for='term_id'>Term</label>
+				<select name='term_id' id='term_id'>
+					<option value></option>
+		";   
+
+			for($i = 0; $i < count($terms_data); $i++) {
+				$data['student_type'] .= "
+					<option value='{$terms_data[$i]['id']}'>{$terms_data[$i]['term']} year - {$terms_data[$i]['semester']} semester </option>
+				";
+			}
+		
+		$data['student_type'] .= "
+				</select> 
+			</div>  
+			<div class='clear'></div>
 		";
 	
 		echo json_encode($data);
