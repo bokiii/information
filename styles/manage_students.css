@@ -284,12 +284,20 @@
 }
 
 
-
-
-
-
-
 /* below is the design for the popup of adding subjects in managing students */
+
+#subject_popup_form #student_type_div {
+	padding: 10px;
+}  
+
+#subject_popup_form #student_type_div p {
+	display: inline; 
+	margin-left: 10px;
+}    
+
+#subject_popup_form #student_type_div p .current_semester {
+	font-weight: bold;
+}
 
 #subject_popup_form #subjects_container {
 	-webkit-box-sizing: border-box; 

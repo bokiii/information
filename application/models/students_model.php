@@ -175,7 +175,15 @@ class Students_model extends CI_Model {
 	}
 	
 	// below are for all the functions of selecting the data for students after enrolled
+
+	function get_student_type_by_student_id($id) {
+		$this->db->select("student_type, enrolled_term_id");
+		$this->db->where('id', $id);  
+		$query = $this->db->get($this->students_table);   
+		return $query->result();
+	}   
 	
+
 	function get_student_main_data_by_id($id) {
 	
 		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students.username, students.string_password, students.password, students_others.age, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.school_id, profile_image.file_name');                                          

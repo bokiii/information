@@ -419,7 +419,8 @@ class Students extends CI_Controller {
 			"first_name" => trim($this->input->post('first_name')),
 			"last_name" => trim($this->input->post('last_name')),
 			"middle_name" => trim($this->input->post('middle_name')), 
-			"student_type" => trim($this->input->post('student_type'))
+			"student_type" => trim($this->input->post('student_type')), 
+			"enrolled_term_id" => $this->input->post('term_id')
 		);
 		
 		// insert student data 
@@ -866,6 +867,9 @@ class Students extends CI_Controller {
 				<input type='hidden' name='course_id' id='course_id' value='{$course_id}' />
 				<input type='hidden' name='student_id' id='student_id' value='{$id}' />
 				
+				<div id='student_type_div'>  
+				</div>
+				
 				<div id='subjects_container'>
 					<h2>Subjects</h2>
 					<p class='no'>There are no subjects to select</p>
@@ -1281,9 +1285,35 @@ class Students extends CI_Controller {
 	
 	function get_student_subjects() {
 	
-		$id = $this->input->get('id');
+		$id = $this->input->get('id');   
+		$current_student_id = $this->input->get('current_student_id');  
+		
 		$data = array();
 		
+		$get_student_id = $this->students_model->get_student_type_by_student_id($current_student_id);  
+		foreach($get_student_id as $row_a) {
+			$student_type = $row_a->student_type;  
+			$enrolled_term_id = $row_a->enrolled_term_id;
+		}  
+		
+		$studentTypeValue = ucfirst($student_type);
+		$get_term = $this->terms_model->get_term_by_id($enrolled_term_id);
+		foreach($get_term as $row_b) {
+			$term_enrolled = ucfirst($row_b->term);  
+			$semester_enrolled = ucfirst($row_b->semester);
+		}   
+		
+		$current_semester_enrolled = $term_enrolled . " year - " . $semester_enrolled . " semester";
+	
+		$data['student_type'] = "
+			<label for='student_type'>Student Type</label>
+			<select name='student_type' id='student_type'>
+				<option value='{$student_type}'>{$studentTypeValue}</option>  
+			</select>   
+			<p><span class='current_semester'>(Current Semester)</span> {$current_semester_enrolled}</p>
+		";
+		
+	
 		if(isset($id) && $id != NULL) {
 			
 			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
@@ -1348,18 +1378,18 @@ class Students extends CI_Controller {
 									
 									if($subject_status == "failed") {
 										$data['subjects'] .= "
-											<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+											<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
 										";
 									
 									} else {
 										$data['subjects'] .= "
-											<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>   
+											<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>   
 										";
 									}
 								
 								} else {
 									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+										<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
 									";
 								}
 							
@@ -1387,13 +1417,13 @@ class Students extends CI_Controller {
 			}
 			
 		} else {
-		
 			$data['subjects'] = "
 				<h2>Subjects</h2>
 				<p class='center'>Please go back and select course first.</p>
 			";
-			
-		}
+		}   
+		
+	
 	
 		echo json_encode($data);
 	}

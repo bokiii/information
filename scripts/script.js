@@ -1265,6 +1265,20 @@ var manageStudents = (function() {
 	
 	var add_subject_click = function() {
 
+		
+		function getQueryVariable(variable) {
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+				return pair[1];
+				}
+			} 
+			alert('Query Variable ' + variable + ' not found');
+		}
+		
+		
 		$add_subject.click(function(){
 		
 			$popup_container.fadeIn("fast", function(){
@@ -1273,13 +1287,18 @@ var manageStudents = (function() {
 					"margin-top": windowHeight/2-$popup_content.height()/2
 				});
 				
+				// get current student id
+				var currentStudentId = getQueryVariable("id");  
+				
 				// now get all the subjects from the course
 				$subject_source = $(this).find("#subject_source").val();
                 $course_id = $(this).find("#course_id").val();
 				
-				$.get($subject_source + "?id=" + $course_id, function(data){
+				$.get($subject_source + "?id=" + $course_id + "&current_student_id=" + currentStudentId, function(data){
 					var datas = eval('msg=' + data);
 					$(document).find("#subjects_container").html(datas.subjects);
+					$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
+				
 				});
 			
 			});
