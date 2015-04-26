@@ -41,7 +41,8 @@ td {
 
 body {
 	color: #333;
-	background-color: #F7F7F7;
+	/*background-color: #F7F7F7;*/
+	background-color: #C1E8ED;
 	position: relative;
 }
 
@@ -181,8 +182,6 @@ body {
 	margin-top: 20px;
 	padding: 70px 10px 90px 10px;
 	text-align: center;
-	border-bottom: 1px solid #E5E5E5;
-	height: 100%;
 }
 
 #footer a {
