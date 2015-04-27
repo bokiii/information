@@ -186,7 +186,7 @@ class Students_model extends CI_Model {
 
 	function get_student_main_data_by_id($id) {
 	
-		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students.username, students.string_password, students.password, students_others.age, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.school_id, profile_image.file_name');                                          
+		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students.username, students.string_password, students.password, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.school_id, profile_image.file_name');                                          
 		$this->db->from('students');
 		$this->db->join('students_others', "students_others.student_id = students.id", 'left');
 		$this->db->join('students_school', "students_school.student_id = students.id", 'left');
@@ -245,18 +245,17 @@ class Students_model extends CI_Model {
 	
 	function update_students_others($id, $other_data) {
 		
-		$data = array(
-			"age" => $other_data['age'],
+		/*$data = array(
 			"gender" => $other_data['gender'],
 			"birth_date" => $other_data['birth_date'],
 			"civil_status" => $other_data['civil_status'],
 			"religion" => $other_data['religion'],
 			"address" => $other_data['address'], 
 			"place_of_birth" => $other_data['place_of_birth']
-		);
+		);*/
 		
 		$this->db->where('student_id', $id);
-		$query = $this->db->update($this->students_others_table, $data);
+		$query = $this->db->update($this->students_others_table, $other_data);
 		
 		if($query) {
 			return true;

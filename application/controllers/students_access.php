@@ -76,8 +76,6 @@ class Students_access extends CI_Controller {
 							<td class='main_data'>{{mainData.birth_date}}</td>
 						</tr>
 						<tr>
-							<td>Age:</td>
-							<td class='main_data'>{{mainData.age}}</td>
 							<td>Gender:</td>
 							<td class='main_data'>{{mainData.gender}}</td>
 						</tr>
@@ -209,7 +207,6 @@ class Students_access extends CI_Controller {
 			$data['username'] = trim($row->username);
 			$data['string_password'] = trim($row->string_password);
 			$data['password'] = trim($row->password);
-			$data['age'] = trim($row->age);
 			$data['gender'] = trim($row->gender);
 			$data['birth_date'] = trim($row->birth_date);
 			$data['civil_status'] = trim($row->civil_status);

@@ -43,6 +43,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	
 });
 
+
 controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 	
 	var protocol = window.location.protocol + "//" + window.location.host;

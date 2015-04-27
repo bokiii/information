@@ -110,31 +110,6 @@ class Students extends CI_Controller {
 				
 				<table id='second_div' class='slide_div'>
 					<tr>
-						<td><label for='age'>Age</label></td>
-						<td>
-							<select name='age' id='age'>
-								<option value>&nbsp;</option>
-								<option value='15'>15</option>
-								<option value='16'>16</option>
-								<option value='17'>17</option>
-								<option value='18'>18</option>
-								<option value='19'>19</option>
-								<option value='20'>20</option>
-								<option value='21'>21</option>
-								<option value='22'>22</option>
-								<option value='23'>23</option>
-								<option value='24'>24</option>
-								<option value='25'>25</option>
-								<option value='26'>26</option>
-								<option value='27'>27</option>
-								<option value='28'>28</option>
-								<option value='29'>29</option>
-								<option value='30'>30</option>
-								<option value='31'>31</option>
-								<option value='32'>32</option>
-								<option value='33'>33</option>	
-							</select>
-						</td>
 						<td><label for='gender'>Gender</label></td>
 						<td>
 							<select name='gender' id='gender'>
@@ -365,7 +340,6 @@ class Students extends CI_Controller {
 			"first_name" => $this->input->post('first_name'),
 			"last_name" => $this->input->post('last_name'),
 			"middle_name" => $this->input->post('middle_name'),
-			"age" => $this->input->post('age'),
 			"gender" => $this->input->post('gender'),
 			"birth_date" => $this->input->post('birth_date'),
 			"civil_status" => $this->input->post('civil_status'),
@@ -403,7 +377,6 @@ class Students extends CI_Controller {
 		$set_birth_date = str_replace("/", "-", $birth_date);
 		
 		$student_others_data = array(
-			"age" => trim($this->input->post('age')),
 			"gender" => trim($this->input->post('gender')),
 			"birth_date" => $set_birth_date,
 			"civil_status" => trim($this->input->post('civil_status')),
@@ -921,8 +894,6 @@ class Students extends CI_Controller {
 							<td><input type='text' id='birth_date' name='birth_date' value='{{mainData.birth_date}}' disabled/></td>
 						</tr>
 						<tr>
-							<td>Age:</td>
-							<td><input type='text' id='age' name='age' value='{{mainData.age}}' disabled /></td>
 							<td>Gender:</td>
 							<td><input type='text' id='gender' name='gender' value='{{mainData.gender}}' disabled /></td>
 						</tr>
@@ -1056,7 +1027,6 @@ class Students extends CI_Controller {
 		);
 		
 		$students_others_data = array(
-			"age" => trim($this->input->post('age')),
 			"gender" => trim($this->input->post('gender')),
 			"birth_date" => trim($this->input->post('birth_date')),
 			"civil_status" => trim($this->input->post('civil_status')),
@@ -1262,7 +1232,6 @@ class Students extends CI_Controller {
 			$data['username'] = trim($row->username);
 			$data['string_password'] = trim($row->string_password);
 			$data['password'] = trim($row->password);
-			$data['age'] = trim($row->age);
 			$data['gender'] = trim($row->gender);
 			$data['birth_date'] = trim($row->birth_date);
 			$data['civil_status'] = trim($row->civil_status);
