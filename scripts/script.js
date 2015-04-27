@@ -1529,7 +1529,8 @@ var manageStudents = (function() {
 			if(currentStudentTypeValue == "regular") {
 				
 				var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
-				if($(document).find(".non_editable").exists() == false) {
+				if($(document).find(".non_editable").exists() == false) {   
+					$(document).find(".editable").attr("disabled", "disabled").uncheck();
 					$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
 				} else {
 					$(document).find(".editable").attr("disabled", "disabled").uncheck();
