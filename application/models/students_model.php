@@ -303,6 +303,15 @@ class Students_model extends CI_Model {
 		return $count;
 	}
 	
+	function revised_is_subject_exists($id, $student_id) {     
+		$this->db->where('course_subject_id', $id);   
+		$this->db->where('student_id', $student_id);
+		$count = $this->db->count_all_results($this->students_subject_table);
+		
+		return $count;
+	}
+	
+
 	function update_student_grade_and_etc_by_subject_id($data, $subject_id) {
 		$this->db->where('subject_id', $subject_id);
 		$query = $this->db->update($this->students_grade_table, $data);

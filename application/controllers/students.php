@@ -1256,8 +1256,8 @@ class Students extends CI_Controller {
 		
 		$data = array();
 		
-		$get_student_id = $this->students_model->get_student_type_by_student_id($current_student_id);  
-		foreach($get_student_id as $row_a) {
+		$get_student_type_by_student_id = $this->students_model->get_student_type_by_student_id($current_student_id);  
+		foreach($get_student_type_by_student_id as $row_a) {
 			$student_type = $row_a->student_type;  
 			$enrolled_term_id = $row_a->enrolled_term_id;
 		}  
@@ -1332,7 +1332,7 @@ class Students extends CI_Controller {
 									$this->added_semester_title_status == true;
 								}
 								
-								$is_subject_exists = $this->students_model->is_subject_exists($course_subject_id);
+								$is_subject_exists = $this->students_model->revised_is_subject_exists($course_subject_id, $current_student_id);
 								
 								if($is_subject_exists > 0) {
 								
