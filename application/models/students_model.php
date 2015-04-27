@@ -325,7 +325,7 @@ class Students_model extends CI_Model {
 	// below are the functions for the process of transcript   
 	
 	function get_transcript_data_by_student_id($student_id) {
-		$this->db->select("students.first_name, students.last_name, students.middle_name, students_others.age, students_others.gender, DATE_FORMAT(students_others.birth_date, '%M %d, %Y') as birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.id AS students_course_id", FALSE);
+		$this->db->select("students.first_name, students.last_name, students.middle_name, students_others.gender, DATE_FORMAT(students_others.birth_date, '%M %d, %Y') as birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.id AS students_course_id", FALSE);
 		$this->db->where('students.id', $student_id);
 		$this->db->from("students");
 		$this->db->join("students_others", "students_others.student_id = students.id");

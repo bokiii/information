@@ -712,34 +712,10 @@ var studentSlideShowModule = (function() {
 	
 	};  
 	
-	var term_id_change = function() {
-		
-		jQuery.fn.exists = function() {
-			return this.length > 0;
-		}
-		
-		var currentSemester;
-		
-		$(document).find("#term_id").change(function(){
-			currentSemester = $fifth_div.children("#student_type_div").find("p").exists();
-			
-			if(currentSemester == true) {	
-				$fifth_div.children("#student_type_div").children("p").text($(this).children("option:selected").text());
-				$fifth_div.children("#student_type_div").children("#student_type").val("");
-				$fifth_div.find(".subjects").attr("disabled", "disabled");      
-				$fifth_div.find(".subjects").removeAttr("onclick");     
-				$fifth_div.find(".subjects").uncheck(); 
-			}
-		
-		});
-		
-	};
-	
 	return {
 		get_courses_by_school_id:	 get_courses_by_school_id,
 		get_subjects_by_course_id:	 get_subjects_by_course_id, 
-		fifth_div_form_change:		 fifth_div_form_change,  
-		term_id_change:				 term_id_change
+		fifth_div_form_change:		 fifth_div_form_change
 	}
 	
 })()
@@ -749,8 +725,6 @@ var studentSlideShowModule = (function() {
 studentSlideShowModule.get_courses_by_school_id();
 studentSlideShowModule.get_subjects_by_course_id();   
 studentSlideShowModule.fifth_div_form_change();    
-//studentSlideShowModule.term_id_change();
-
 
 // login module below 
 
@@ -1386,6 +1360,10 @@ var manageStudents = (function() {
 		
 		$add_subject.click(function(){
 		
+			jQuery.fn.exists = function() {
+				return this.length > 0;
+			}    
+			
 			$popup_container.fadeIn("fast", function(){
 				
 				$popup_content.css({
@@ -1403,6 +1381,11 @@ var manageStudents = (function() {
 					var datas = eval('msg=' + data);
 					$(document).find("#subjects_container").html(datas.subjects);
 					$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
+				
+					var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
+					if($(document).find(".non_editable").exists() == false) {
+						$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
+					}
 				
 				});
 			
@@ -1538,6 +1521,28 @@ var manageStudents = (function() {
 
 	};
 	
+	var student_type_in_manage = function() {  
+		$(document).on("change", "#popup_content form #student_type_div #student_type", function(){
+			
+			var currentStudentTypeValue = $(this).val();   
+			
+			if(currentStudentTypeValue == "regular") {
+				
+				var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
+				if($(document).find(".non_editable").exists() == false) {
+					$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
+				} else {
+					$(document).find(".editable").attr("disabled", "disabled").uncheck();
+				}
+				
+			} else {
+				$(document).find(".editable").removeAttr("disabled").uncheck();  
+				$(document).find(".editable").removeAttr("onclick").uncheck();
+			}
+			
+		});
+	};
+	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
 		main_data_form_edit_click: 				main_data_form_edit_click,
@@ -1551,7 +1556,8 @@ var manageStudents = (function() {
 		subject_popup_form_submit:				subject_popup_form_submit, 
 		upload_click:							upload_click, 
 		profile_image_hover:					profile_image_hover, 
-		upload_submit:							upload_submit
+		upload_submit:							upload_submit,     
+		student_type_in_manage:					student_type_in_manage 
 	}
 
 })()
@@ -1573,7 +1579,9 @@ manageStudents.subject_popup_form_submit();
 
 manageStudents.upload_click();
 manageStudents.profile_image_hover();   
-manageStudents.upload_submit();
+manageStudents.upload_submit(); 
+
+manageStudents.student_type_in_manage();
 
 
 

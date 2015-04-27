@@ -1260,11 +1260,20 @@ class Students extends CI_Controller {
 		foreach($get_student_type_by_student_id as $row_a) {
 			$student_type = $row_a->student_type;  
 			$enrolled_term_id = $row_a->enrolled_term_id;
-		}  
+		}   
 		
+		if($student_type == "regular") {
+			$other_type = "irregular";
+		} else if($student_type == "irregular") {
+			$other_type = "regular";
+		}
+	
 		$studentTypeValue = ucfirst($student_type);
+		$otherTypeValue =  ucfirst($other_type);
+		
 		$get_term = $this->terms_model->get_term_by_id($enrolled_term_id);
 		foreach($get_term as $row_b) {
+			$term_id_enrolled = $row_b->id;
 			$term_enrolled = ucfirst($row_b->term);  
 			$semester_enrolled = ucfirst($row_b->semester);
 		}   
@@ -1275,8 +1284,10 @@ class Students extends CI_Controller {
 			<label for='student_type'>Student Type</label>
 			<select name='student_type' id='student_type'>
 				<option value='{$student_type}'>{$studentTypeValue}</option>  
+				<option value='{$other_type}'>{$otherTypeValue}</option>  
 			</select>   
-			<p><span class='current_semester'>(Current Semester)</span> {$current_semester_enrolled}</p>
+			<p><span class='current_semester'>(Current Semester)</span> {$current_semester_enrolled}</p>  
+			<input type='hidden' name='term_id_enrolled' id='term_id_enrolled' value='{$term_id_enrolled}' />
 		";
 		
 	
@@ -1344,18 +1355,18 @@ class Students extends CI_Controller {
 									
 									if($subject_status == "failed") {
 										$data['subjects'] .= "
-											<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+											<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}' disabled />{$course_no} {$descriptive_title}</p>
 										";
 									
 									} else {
 										$data['subjects'] .= "
-											<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>   
+											<p><input type='checkbox' class='subjects non_editable {$current_term_id}' name='subject[]' value='{$subject_id}' checked disabled />{$course_no} {$descriptive_title}</p>   
 										";
 									}
 								
 								} else {
 									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects {$current_term_id}' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
+										<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}' disabled />{$course_no} {$descriptive_title}</p>
 									";
 								}
 							
@@ -1389,8 +1400,7 @@ class Students extends CI_Controller {
 			";
 		}   
 		
-	
-	
+
 		echo json_encode($data);
 	}
 	
@@ -1476,7 +1486,6 @@ class Students extends CI_Controller {
 			$data['first_name'] = ucwords($row->first_name);
 			$data['last_name'] = ucwords($row->last_name);
 			$data['middle_name'] = ucwords($row->middle_name);
-			$data['age'] = ucwords($row->age);
 			$data['gender'] = ucwords($row->gender);
 			$data['birth_date'] = ucwords($row->birth_date);
 			$data['civil_status'] = ucwords($row->civil_status);  
