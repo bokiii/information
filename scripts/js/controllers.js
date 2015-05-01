@@ -12,7 +12,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){
-		$scope.subjects = data.subjects; 	
+		$scope.subjects = data.subjects; 	   
 	});
 	
 	$scope.getSubjects = function() {
@@ -29,7 +29,9 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 		if(data.file_name == null) {
 			data.file_name = "blank.png";
 		}
+		
 		$scope.mainData = data;   
+	
 	});
 	
 	$scope.getMainData = function(){
@@ -39,10 +41,9 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 			}
 			$scope.mainData = data;
 		});
-	};
-	
-});
+	};   
 
+});
 
 controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 	
@@ -86,6 +87,8 @@ controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 	};
 	
 });
+
+
 
 
 

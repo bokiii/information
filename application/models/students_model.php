@@ -183,10 +183,29 @@ class Students_model extends CI_Model {
 		return $query->result();
 	}   
 	
-
+	function get_student_join_student_course_by_student_id($student_id) { 
+		$this->db->select('students.student_type, students.enrolled_term_id,students_course.id AS student_course_course_id, students_course.course, courses.id');  
+		$this->db->from('students');
+		$this->db->join('students_course', 'students_course.student_id = students.id', 'left');
+		$this->db->join('courses', 'courses.course = students_course.course', 'left');  
+		$this->db->where('students.id', $student_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	function check_semester_subject_enrolled_to_student($term_id, $course_subject_id, $student_id) {
+		$this->db->where('student_id', $student_id);   
+		$this->db->where('term_id', $term_id);     
+		$this->db->where('course_subject_id', $course_subject_id);   
+		$this->db->from("students_subject");
+		$query = $this->db->get(); 
+		return $query->result();
+	}
+	
+	
 	function get_student_main_data_by_id($id) {
 	
-		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students.username, students.string_password, students.password, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.school_id, profile_image.file_name');                                          
+		$this->db->select('students.id, students.first_name, students.last_name, students.middle_name, students.student_type, students.username, students.string_password, students.password, students_others.gender, students_others.birth_date, students_others.civil_status, students_others.religion, students_others.address, students_others.place_of_birth, students_others.entrance_data, students_others.remarks, students_school.school, students_course.course, students_course.school_id, profile_image.file_name');                                          
 		$this->db->from('students');
 		$this->db->join('students_others', "students_others.student_id = students.id", 'left');
 		$this->db->join('students_school', "students_school.student_id = students.id", 'left');

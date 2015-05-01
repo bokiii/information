@@ -185,6 +185,14 @@
 	border-radius: 4px;
 	border: 1px solid #C3C3C3;
 	text-align: center;
+}    
+
+#content #academic_data_form div.student_status {
+	margin-top: 10px;
+}
+
+#content #academic_data_form div.student_status p { 
+	text-align: center;
 }
 
 #content #academic_data_form table {

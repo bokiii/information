@@ -855,9 +855,9 @@ var dropdownModule = (function() {
 			$(this).children("ul").slideDown("fast");
 		});
 		
-		$second_level_ul.mouseleave(function(){
+		/*$second_level_ul.mouseleave(function(){
 			$(this).fadeOut("fast");
-		});
+		});*/
 	};
 	
 	var document_click = function() {
@@ -865,6 +865,8 @@ var dropdownModule = (function() {
 		$(document).click(function(e){
 			if($(e.target).is('.sub_menu, .sub_menu *:not(.sub_menu li a)')) {
 				return false;
+			} else if($(e.target).is('.student_angular_trigger')) {
+				return true;
 			} else {
 				$second_level_ul.fadeOut("fast");
 			}
@@ -1086,6 +1088,18 @@ var manageStudents = (function() {
 		}
 	});
 	
+	function getQueryVariable(variable) {
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			if (pair[0] == variable) {
+			return pair[1];
+			}
+		} 
+		//alert('Query Variable ' + variable + ' not found');
+	}
+	
 	// below are the variables for the checkboxes
 	
 	var $main_check = $("#content #academic_data_form .main_check");
@@ -1203,6 +1217,8 @@ var manageStudents = (function() {
 		$(document).find("#content #academicdata_form input[type='checkbox']").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
 		$(document).find("#content #academic_data_form input.grade").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
 		$(document).find("#content #academic_data_form input.comp").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
+		$(document).find(".main_check").attr("disabled", "disabled");
+		$(document).find(".subcheck").attr("disabled", "disabled");
 		
 		$academic_data_form_edit.show('fast');
 	}
@@ -1227,10 +1243,7 @@ var manageStudents = (function() {
 					$(this).parent().next().children(".comp").removeAttr('disabled').css("border", "1px solid #51A5E4").attr('readonly', "");
 				}
 			});
-			// exception for enabling the school and course
-			//$(document).find("#content #academic_data_form #school").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
-			//$(document).find("#content #academic_data_form #course").attr('disabled', 'disabled').css("border", "1px solid #C3C3C3");
-			
+	
 			$(this).hide('fast');
 			
 		});
@@ -1343,21 +1356,21 @@ var manageStudents = (function() {
 		
 	};		
 	
+	var academic_delete_click_validation = function() {
+		$("#academic_delete").click(function(){
+			if($(document).find("#student_status").val() == "regular") {
+				alert("Cannot delete a subject to a regular student.");
+				return false;
+			} else {
+				return true;
+			}
+			
+			
+		});
+	};
+	
 	var add_subject_click = function() { 
 	
-		function getQueryVariable(variable) {
-			var query = window.location.search.substring(1);
-			var vars = query.split("&");
-			for (var i=0;i<vars.length;i++) {
-				var pair = vars[i].split("=");
-				if (pair[0] == variable) {
-				return pair[1];
-				}
-			} 
-			alert('Query Variable ' + variable + ' not found');
-		}
-		
-		
 		$add_subject.click(function(){
 		
 			jQuery.fn.exists = function() {
@@ -1383,9 +1396,15 @@ var manageStudents = (function() {
 					$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
 				
 					var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
+					
 					if($(document).find(".non_editable").exists() == false) {
 						$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
+					}         
+
+					if($(document).find("#student_type").val() == "irregular") {
+						$(document).find(".editable").removeAttr('disabled');
 					}
+					
 				
 				});
 			
@@ -1529,20 +1548,63 @@ var manageStudents = (function() {
 			if(currentStudentTypeValue == "regular") {
 				
 				var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
+				
 				if($(document).find(".non_editable").exists() == false) {   
+					
 					$(document).find(".editable").attr("disabled", "disabled").uncheck();
 					$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
+				
 				} else {
-					$(document).find(".editable").attr("disabled", "disabled").uncheck();
+					$(document).find(".editable").attr("disabled", "disabled").uncheck();  
 				}
 				
 			} else {
 				$(document).find(".editable").removeAttr("disabled").uncheck();  
-				$(document).find(".editable").removeAttr("onclick").uncheck();
+				$(document).find(".editable").removeAttr("onclick").uncheck();   
+				
+				
 			}
 			
 		});
 	};
+	
+	var regular_automatic_subject_update = function() {
+		
+		$(window).load(function() {   
+		
+			setInterval(function(){ 
+				
+				var protocol = window.location.protocol + "//" + window.location.host;
+				var fullUrl = protocol + window.location.pathname + window.location.search;   
+				var query = protocol + window.location.pathname;   
+				var n = query.search("manage_students");
+				if(n != -1) {
+					
+					var currentStudentId = getQueryVariable("id");
+					var addSubjectToRegularUrl = query.replace("manage_students", "add_subject_to_regular") + "?student_id=" + currentStudentId;                                
+					
+					$.get(addSubjectToRegularUrl, function(data){
+						var datas = eval('msg=' + data);
+						//console.log(datas.subjects_added.length);          
+						
+						if(datas.subjects_added.length > 0) {
+						
+							for(var i = 0; i < datas.subjects_added.length; i++) {
+								alert(datas.subjects_added[i] + " is added in the student subject");
+								$(".student_angular_trigger").trigger('click');
+								academic_cancel();
+							}
+						}
+					
+					});
+				}
+		
+			}, 1000);  
+
+		});
+		
+	};
+	
 	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
@@ -1558,7 +1620,9 @@ var manageStudents = (function() {
 		upload_click:							upload_click, 
 		profile_image_hover:					profile_image_hover, 
 		upload_submit:							upload_submit,     
-		student_type_in_manage:					student_type_in_manage 
+		student_type_in_manage:					student_type_in_manage, 
+		regular_automatic_subject_update: 		regular_automatic_subject_update, 
+		academic_delete_click_validation: 		academic_delete_click_validation
 	}
 
 })()
@@ -1582,9 +1646,10 @@ manageStudents.upload_click();
 manageStudents.profile_image_hover();   
 manageStudents.upload_submit(); 
 
-manageStudents.student_type_in_manage();
+manageStudents.student_type_in_manage();   
+manageStudents.regular_automatic_subject_update();
 
-
+manageStudents.academic_delete_click_validation();
 
 
 

@@ -958,7 +958,14 @@ class Students extends CI_Controller {
 						<p><input type='text' name='course' id='course' value='{{mainData.course}}' disabled/></p>
 					</div>
 					
-					<div class='clear'></div>
+					<div class='clear'></div>   
+					
+					<div class='student_status'>
+						<label for='student_status'>Student Status</label>
+						<p><input type='text' name='student_status' id='student_status' value='{{mainData.student_type}}' disabled/></p>
+					</div>  
+					
+					
 		";
 		
 		$data['content'] .= "
@@ -1229,6 +1236,7 @@ class Students extends CI_Controller {
 			$data['first_name'] = trim($row->first_name);
 			$data['last_name'] = trim($row->last_name);
 			$data['middle_name'] = trim($row->middle_name);
+			$data['student_type'] = trim($row->student_type);
 			$data['username'] = trim($row->username);
 			$data['string_password'] = trim($row->string_password);
 			$data['password'] = trim($row->password);
@@ -1595,6 +1603,80 @@ class Students extends CI_Controller {
 		$this->load->view('transcript_view', $data);
 	}   
 	
+	function add_subject_to_regular() {
+		
+		$student_id = $this->input->get('student_id');   
+		$data['subjects_added'] = array();
+		
+		$get_student_prime_data = $this->students_model->get_student_join_student_course_by_student_id($student_id);  
+		foreach($get_student_prime_data as $row) {
+			
+			$student_course_course_id = $row->student_course_course_id;
+			$student_type = $row->student_type;   
+			$enrolled_term_id = $row->enrolled_term_id;   
+			$course = $row->course;  
+			$main_course_id = $row->id;
+		}   
+		
+		if($student_type == "regular") {
+		
+			$get_course_subjects_join_to_subjects_by_term_id_and_course_id = $this->course_subjects_model->get_course_subjects_join_to_subjects_by_term_id_and_course_id($enrolled_term_id, $main_course_id);
+			foreach($get_course_subjects_join_to_subjects_by_term_id_and_course_id as $row_a) {
+				
+				$course_subject_id = $row_a->id; 
+				$subject_description = $row_a->descriptive_title;
+				$check = $this->students_model->check_semester_subject_enrolled_to_student($enrolled_term_id, $course_subject_id, $student_id);
+				
+				if($check == NULL) {
+			
+					$start_year = date('Y');
+					$end_year = date('Y', strtotime('+1 years'));
+					$school_year = $start_year . "-" . $end_year;  
+					
+					$subject_data = array(
+						"subject" => $subject_description,
+						"course_id" => $student_course_course_id, 
+						"student_id" => $student_id, 
+						"term_id" => $enrolled_term_id, 
+						"school_year" => $school_year,
+						"course_subject_id" => $course_subject_id
+					);      
+					
+					// insert subject
+					$insert_subject = $this->global_model->add("students_subject", $subject_data);
+					
+					// get subject id by descriptive title 
+					$get_new_subject_id = $this->students_model->get_students_subject_subject_id_by_descriptive_title($subject_description);
+					foreach($get_new_subject_id as $row_e) {
+						$subject_id = $row_e->id;
+					}
+					
+					$grade_data = array(
+						"earned_credit" => 0,
+						"grade" => 0,
+						"status" => "enrolled", 
+						"subject_id" => $subject_id
+					);
+					
+					// insert grade
+					
+					$insert_grade = $this->global_model->add("students_grade", $grade_data);
+					
+					$data['subjects_added'][] = $subject_description;
+				
+				}
+
+			} // end foreach
+		
+		} // end if regular
+		
+		
+		$data['status'] = true;  
+		echo json_encode($data);
+	
+	}
+	
+
 	function test() {
 		
 		$student_id = 27;

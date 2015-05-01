@@ -392,8 +392,12 @@ class Subjects extends CI_Controller {
 			
 			$add_subject = $this->global_model->add($this->table, $data);
 			
-			$this->prompt_status = true;
+			$this->prompt_status = true;      
+			
+			
 		} else {
+			
+			
 			$this->prompt_status = false;
 			//$this->validation_errors = validation_errors();
 			$this->set_validation_errors(validation_errors());
@@ -410,7 +414,6 @@ class Subjects extends CI_Controller {
 		$delete_subject = $this->global_model->delete($this->table, $id);
 	
 		$this->index();
-		
 	}
 	
 	function update_subject() {

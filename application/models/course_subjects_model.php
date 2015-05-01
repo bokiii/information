@@ -36,6 +36,16 @@ class Course_subjects_model extends CI_Model {
 		$this->db->where('course_id', $course_id);
 		$query = $this->db->get('course_subjects');
 		return $query->result();
+	}        
+	
+	function get_course_subjects_join_to_subjects_by_term_id_and_course_id($term_id, $course_id) {
+		$this->db->select('course_subjects.id, subjects.descriptive_title');  
+		$this->db->where('course_subjects.term_id', $term_id);   
+		$this->db->where('course_subjects.course_id', $course_id);   
+		$this->db->from('course_subjects');
+		$this->db->join('subjects', 'subjects.id = course_subjects.subject_id');   
+		$query = $this->db->get();
+		return $query->result();
 	}
 	
 	function get_course_subjects_by_course_id_group_by_term_id($course_id) {
