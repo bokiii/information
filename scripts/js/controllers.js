@@ -23,7 +23,7 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	};
 	
 	// below is for getting the main data
-	var studentMainDataUrl = fullUrl.replace("manage_students", "get_student_main_data_via_angular");
+	var studentMainDataUrl = fullUrl.replace("manage_students", "get_student_main_data_via_angular");  
 	$scope.mainData;
 	
 	$http.get(studentMainDataUrl).success(function(data){
@@ -52,7 +52,8 @@ controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 	var fullUrl = protocol + window.location.pathname + window.location.search;        
 
 	// below is for getting the subjects
-	var studentAcademicUrl = fullUrl + "/get_student_academic_data_via_angular";
+	//var studentAcademicUrl = fullUrl + "/get_student_academic_data_via_angular";   
+	var studentAcademicUrl = fullUrl + "/get_student_academic_data_group_by_school_year";
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){

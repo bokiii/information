@@ -977,12 +977,6 @@ class Students extends CI_Controller {
 					
 					<div class='clear'></div>   
 					
-					<div class='student_status'>
-						<label for='student_status'>Student Status</label>
-						<p><input type='text' name='student_status' id='student_status' value='{{mainData.student_type}}' disabled/></p>
-					</div>  
-					
-					
 		";
 		
 		$data['content'] .= "
@@ -1013,20 +1007,6 @@ class Students extends CI_Controller {
 					<input type='hidden' name='student_id' value='{{academicData.id}}' />
 					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
-		";*/    
-		
-		/*$data['content'] .= "
-		
-			<tr ng-repeat='subject in subjects'>
-				<td><input type='checkbox' name='subject_id_delete[]' value='{{subject.id}}' class='subcheck' disabled='disabled'/></td>
-				<td>{{subject.course_no}}</td>
-				<td>{{subject.descriptive_title}}</td>
-				<td>{{subject.credit}}</td>
-				<td><input type='text' name='grade[]' class='grade' value='{{subject.grade}}' maxlength='4' disabled='disabled'/></td>
-				<td><input type='text' name='comp[]' class='comp' value='{{subject.comp}}' maxlength='4' disabled='disabled'/></td>
-				<td>{{subject.status}}</td>
-				<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
-			</tr>  
 		";*/    
 		
 		$data['content'] .= "

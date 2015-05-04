@@ -15,7 +15,6 @@ html {
 	bottom: 0;
 	width: 9999px;
 	height: 100%;
-	border-bottom: 1px solid #E5E5E5;
 }
 
 .full_width:before {

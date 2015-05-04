@@ -64,7 +64,7 @@ class Students_access extends CI_Controller {
 						</div>
 						
 						<h2>{{mainData.first_name}} {{mainData.middle_name}} {{mainData.last_name}}</h2>
-						<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>
+						<!--<p><a class='transcript_button' target='_blank' href='{$view_transcript_link}'>View Transcript</a></p>-->
 					</div>
 					
 					<abbr title='Edit'><img class='edit' src='{$edit_image}' alt='edit container' /></abbr>
@@ -138,20 +138,22 @@ class Students_access extends CI_Controller {
 		";
 		
 		$data['content'] .= "
+					
 					<table>
+						<thead>
 						<tr>
 							<th style='display: none;'><input type='checkbox' class='main_check' disabled/></th>
-							<th>Term</th>
 							<th>Course No.</th>
 							<th>Descriptive Title</th>
 							<th>Credit</th>
 							<th>Grade</th>
 							<th>Comp.</th>
 							<th>Status</th>
-						</tr>
+						</tr>  
+					</thead>
 		";
 		
-		$data['content'] .= "
+		/*$data['content'] .= "
 				<tr ng-repeat='subject in subjects'>
 					<td style='display: none;'><input type='checkbox' name='subject_id_delete[]' value='{{subject.id}}' class='subcheck' disabled='disabled'/></td>
 					<td>{{subject.subject_semester}}</td>
@@ -164,8 +166,29 @@ class Students_access extends CI_Controller {
 					<input type='hidden' name='student_id' value='{{academicData.id}}' />
 					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
+		";*/   
+		
+		$data['content'] .= "
+			
+			<tbody ng-repeat='(key, values) in subjects'>
+				<tr> 
+					<td style='padding-top: 30px; text-align: center; font-weight: bold;' colspan='8'>{{key}}</td>
+				</tr>
+				<tr ng-repeat='value in values'>  
+					<td style='display: none; '><input type='checkbox' name='subject_id_delete[]' value='{{value.id}}' class='subcheck' disabled='disabled'/></td>
+					<td>{{value.course_no}}</td>
+					<td>{{value.descriptive_title}}</td>
+					<td>{{value.credit}}</td>
+					<td><input type='text' name='grade[]' class='grade' value='{{value.grade}}' maxlength='4' disabled='disabled'/></td>
+					<td><input type='text' name='comp[]' class='comp' value='{{value.comp}}' maxlength='4' disabled='disabled'/></td>
+					<td>{{value.status}}</td>
+					<input type='hidden' name='subject_id_update[]' value='{{value.id}}' />
+				</tr>
+			</tbody>        
+		
 		";
 		
+	
 		$data['content'] .= "
 						<tr>
 							<td><input type='submit' id='academic_delete' name='action' value='Delete' /></td>
@@ -281,6 +304,68 @@ class Students_access extends CI_Controller {
 		
 		
 		echo json_encode($data);
+		
+	} 
+	
+	function get_student_academic_data_group_by_school_year() {
+	
+		$id = $this->session->userdata('student_id'); 
+		
+		$data['subjects'] = array();  
+		
+		$get_school_year = $this->students_model->get_student_academic_school_year_by_student_id($id);  
+	
+		foreach($get_school_year as $row) {
+			
+			$school_year = $row->school_year;    
+			$term_value = $row->term;  
+			$semester_value = $row->semester;  
+			
+			$term_semester_school_year = ucfirst($term_value) . " Year - " . ucfirst($semester_value) . " Semester (" . $school_year . ")"; 
+			
+			$get_student_academic_data = $this->students_model->get_student_academic_data_by_student_id_and_school_year($id, $school_year);
+			for($i = 0; $i < count($get_student_academic_data); $i++) {
+			
+			
+				if($get_student_academic_data[$i]['semester'] == "first") {
+					$semester = "First";
+				}  
+				
+				if($get_student_academic_data[$i]['semester'] == "second") {
+					$semester = "Second";
+				}   
+				
+				$term_name = ucfirst($get_student_academic_data[$i]['term']) . " Year";  
+				$semester_name = $semester . " Semester";   
+				// this school year is at the top    
+				
+				$student_subject_id = $get_student_academic_data[$i]['id'];
+				$course_no = $get_student_academic_data[$i]['course_no']; 
+				$descriptive_title = $get_student_academic_data[$i]['descriptive_title'];       
+				$credit = $get_student_academic_data[$i]['earned_credit'];     
+				$grade = $get_student_academic_data[$i]['grade'];  
+				$comp = $get_student_academic_data[$i]['comp']; 
+				$status = $get_student_academic_data[$i]['status']; 
+				
+				
+				$data['subjects'][$term_semester_school_year][] = array(
+					'id' => $student_subject_id, 
+					'term' => $term_name, 
+					'semester' => $semester_name, 
+					'school_year' => $school_year,  
+					'course_no' => $course_no, 
+					'descriptive_title' => $descriptive_title, 
+					'credit' => $credit, 
+					'grade' => $grade,   
+					'comp' => $comp, 
+					'status' => $status
+				);
+			
+			}
+		
+		}
+		
+		echo json_encode($data); 
 		
 	} 
 	

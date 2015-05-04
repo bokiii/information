@@ -1388,7 +1388,7 @@ var manageStudents = (function() {
 					$(document).find("#subjects_container").html(datas.subjects);
 					
 					
-					$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
+					//$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
 				
 					/*var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
 					
