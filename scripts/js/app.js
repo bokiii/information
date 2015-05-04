@@ -1,3 +1,3 @@
 "use strict";
 
-var app = angular.module('information', ['information.controllers']);
+var app = angular.module('information', ['information.controllers', 'information.filters']);

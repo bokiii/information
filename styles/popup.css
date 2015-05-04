@@ -131,7 +131,7 @@
 #popup_container #popup_content form #fifth_div #student_type_div {
 	padding: 10px;     
 	width: 190px;  
-}    
+}        
 
 #popup_container #popup_content form #fifth_div #student_type_div label {
 	margin-right: 5px;
@@ -139,11 +139,25 @@
  
 #popup_container #popup_content form #fifth_div #student_term_div {
 	padding: 10px; 
-	width: 300px;
-}  
+	min-width: 255px;
+}     
 
 #popup_container #popup_content form #fifth_div #student_term_div label {
 	margin-right: 5px;
+}     
+
+#popup_container #popup_content form #fifth_div #school_year_div {
+	padding: 10px;
+	min-width: 200px;  
+}   
+
+#popup_container #popup_content form #fifth_div #school_year_div label {
+	margin-right: 5px;
+}
+
+#popup_container #popup_content form #fifth_div #school_year_div input[type='text'] {
+	width: 100px; 
+	text-align: center;
 }
 
 #popup_container #popup_content form #fifth_div div:last-child {

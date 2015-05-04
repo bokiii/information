@@ -331,9 +331,11 @@ class Students extends CI_Controller {
 	
 	function add_student() {
 		
-		$start_year = date('Y');
+		/*$start_year = date('Y');
 		$end_year = date('Y', strtotime('+1 years'));
-		$school_year = $start_year . "-" . $end_year;
+		$school_year = $start_year . "-" . $end_year;*/   
+		
+		$school_year = $this->input->post('school_year');
 		
 		$data = array(
 			"term_id" => $this->input->post('term_id'),
@@ -740,6 +742,11 @@ class Students extends CI_Controller {
 		
 		
 		
+		// get current school year 
+		$start_year = date('Y');
+		$end_year = date('Y', strtotime('+1 years'));
+		$school_year = $start_year . "-" . $end_year;
+		
 		// get terms below 
 		
 		$get_terms = $this->global_model->get('terms');
@@ -782,6 +789,13 @@ class Students extends CI_Controller {
 		$data['student_type'] .= "
 				</select> 
 			</div>  
+			
+			<div id='school_year_div' class='left'>  
+				<label for='school_year'>School Year</label>
+				<input type='text' name='school_year' id='school_year' placeholder='{$school_year}' />
+			</div>
+			
+			
 			<div class='clear'></div>
 		";
 	
@@ -861,9 +875,12 @@ class Students extends CI_Controller {
 							
 		$data['popup'] .= "
 							</select>
-						</td>
+						</td>  
+						<td><label for='school_year'>School Year</label></td>
+						<td><input type='text' name='school_year' id='school_year' placeholder='2015-2016'/></td>
 					</tr>
-				</table>
+				</table>   
+				
 				<input type='submit' value='Add Subject' />
 			</form>
 		";
@@ -970,19 +987,20 @@ class Students extends CI_Controller {
 		
 		$data['content'] .= "
 					<table>
-						<tr>
-							<th><input type='checkbox' class='main_check' disabled/></th>
-							<th>Term</th>
-							<th>Course No.</th>
-							<th>Descriptive Title</th>
-							<th>Credit</th>
-							<th>Grade</th>
-							<th>Comp.</th>
-							<th>Status</th>
-						</tr>
+						<thead>
+							<tr>
+								<th><input type='checkbox' class='main_check' disabled/></th>
+								<th>Course No.</th>
+								<th>Descriptive Title</th>
+								<th>Credit</th>
+								<th>Grade</th>
+								<th>Comp.</th>
+								<th>Status</th>
+							</tr>  
+						</thead>
 		";
 		
-		$data['content'] .= "
+		/*$data['content'] .= "
 				<tr ng-repeat='subject in subjects'>
 					<td><input type='checkbox' name='subject_id_delete[]' value='{{subject.id}}' class='subcheck' disabled='disabled'/></td>
 					<td>{{subject.subject_semester}}</td>
@@ -995,7 +1013,42 @@ class Students extends CI_Controller {
 					<input type='hidden' name='student_id' value='{{academicData.id}}' />
 					<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
 				</tr>
+		";*/    
+		
+		/*$data['content'] .= "
+		
+			<tr ng-repeat='subject in subjects'>
+				<td><input type='checkbox' name='subject_id_delete[]' value='{{subject.id}}' class='subcheck' disabled='disabled'/></td>
+				<td>{{subject.course_no}}</td>
+				<td>{{subject.descriptive_title}}</td>
+				<td>{{subject.credit}}</td>
+				<td><input type='text' name='grade[]' class='grade' value='{{subject.grade}}' maxlength='4' disabled='disabled'/></td>
+				<td><input type='text' name='comp[]' class='comp' value='{{subject.comp}}' maxlength='4' disabled='disabled'/></td>
+				<td>{{subject.status}}</td>
+				<input type='hidden' name='subject_id_update[]' value='{{subject.id}}' />
+			</tr>  
+		";*/    
+		
+		$data['content'] .= "
+			
+			<tbody ng-repeat='(key, values) in subjects'>
+				<tr> 
+					<td style='padding-top: 30px; text-align: center; font-weight: bold;' colspan='8'>{{key}}</td>
+				</tr>
+				<tr ng-repeat='value in values'>  
+					<td><input type='checkbox' name='subject_id_delete[]' value='{{value.id}}' class='subcheck' disabled='disabled'/></td>
+					<td>{{value.course_no}}</td>
+					<td>{{value.descriptive_title}}</td>
+					<td>{{value.credit}}</td>
+					<td><input type='text' name='grade[]' class='grade' value='{{value.grade}}' maxlength='4' disabled='disabled'/></td>
+					<td><input type='text' name='comp[]' class='comp' value='{{value.comp}}' maxlength='4' disabled='disabled'/></td>
+					<td>{{value.status}}</td>
+					<input type='hidden' name='subject_id_update[]' value='{{value.id}}' />
+				</tr>
+			</tbody>        
+		
 		";
+		
 		
 		$data['content'] .= "
 						<tr>
@@ -1007,8 +1060,9 @@ class Students extends CI_Controller {
 						</tr>
 					</table>
 				</form>
-		";
-	
+		";         
+		
+		
 		$data['content'] .= "
 				<button ng-click='getSubjects()' class='student_angular_trigger'>Trigger Student Angular</button>
 				<button ng-click='getMainData()' class='student_angular_trigger'>Trigger Student Angular</button>
@@ -1218,10 +1272,71 @@ class Students extends CI_Controller {
 			
 		}
 		
-		
 		echo json_encode($data);
 		
-	} // end main function
+	} // end main function       
+	
+	function get_student_academic_data_group_by_school_year() {
+	
+		$id = $this->input->get('id');  
+		
+		$data['subjects'] = array();  
+		
+		$get_school_year = $this->students_model->get_student_academic_school_year_by_student_id($id);  
+	
+		foreach($get_school_year as $row) {
+			
+			$school_year = $row->school_year;    
+			$term_value = $row->term;  
+			$semester_value = $row->semester;  
+			
+			$term_semester_school_year = ucfirst($term_value) . " Year - " . ucfirst($semester_value) . " Semester (" . $school_year . ")"; 
+			
+			$get_student_academic_data = $this->students_model->get_student_academic_data_by_student_id_and_school_year($id, $school_year);
+			for($i = 0; $i < count($get_student_academic_data); $i++) {
+			
+			
+				if($get_student_academic_data[$i]['semester'] == "first") {
+					$semester = "First";
+				}  
+				
+				if($get_student_academic_data[$i]['semester'] == "second") {
+					$semester = "Second";
+				}   
+				
+				$term_name = ucfirst($get_student_academic_data[$i]['term']) . " Year";  
+				$semester_name = $semester . " Semester";   
+				// this school year is at the top    
+				
+				$student_subject_id = $get_student_academic_data[$i]['id'];
+				$course_no = $get_student_academic_data[$i]['course_no']; 
+				$descriptive_title = $get_student_academic_data[$i]['descriptive_title'];       
+				$credit = $get_student_academic_data[$i]['earned_credit'];     
+				$grade = $get_student_academic_data[$i]['grade'];  
+				$comp = $get_student_academic_data[$i]['comp']; 
+				$status = $get_student_academic_data[$i]['status']; 
+				
+				
+				$data['subjects'][$term_semester_school_year][] = array(
+					'id' => $student_subject_id, 
+					'term' => $term_name, 
+					'semester' => $semester_name, 
+					'school_year' => $school_year,  
+					'course_no' => $course_no, 
+					'descriptive_title' => $descriptive_title, 
+					'credit' => $credit, 
+					'grade' => $grade,   
+					'comp' => $comp, 
+					'status' => $status
+				);
+			
+			}
+		
+		}
+		
+		echo json_encode($data); 
+		
+	} 
 	
 	function get_student_main_data_via_angular() {
 		
@@ -1288,7 +1403,7 @@ class Students extends CI_Controller {
 		
 		$current_semester_enrolled = $term_enrolled . " year - " . $semester_enrolled . " semester";
 	
-		$data['student_type'] = "
+		/*$data['student_type'] = "
 			<label for='student_type'>Student Type</label>
 			<select name='student_type' id='student_type'>
 				<option value='{$student_type}'>{$studentTypeValue}</option>  
@@ -1296,9 +1411,14 @@ class Students extends CI_Controller {
 			</select>   
 			<p><span class='current_semester'>(Current Semester)</span> {$current_semester_enrolled}</p>  
 			<input type='hidden' name='term_id_enrolled' id='term_id_enrolled' value='{$term_id_enrolled}' />
+		";*/     
+		
+		$data['student_type'] = "
+			<p><span class='current_semester'>(Current Semester Enrolled)</span> {$current_semester_enrolled}</p>  
+			<input type='hidden' name='term_id_enrolled' id='term_id_enrolled' value='{$term_id_enrolled}' />
 		";
 		
-	
+		
 		if(isset($id) && $id != NULL) {
 			
 			$get_course_subjects_by_course_id = $this->course_subjects_model->get_course_subjects_by_course_id($id);
@@ -1363,7 +1483,7 @@ class Students extends CI_Controller {
 									
 									if($subject_status == "failed") {
 										$data['subjects'] .= "
-											<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}' disabled />{$course_no} {$descriptive_title}</p>
+											<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}'  />{$course_no} {$descriptive_title}</p>
 										";
 									
 									} else {
@@ -1374,7 +1494,7 @@ class Students extends CI_Controller {
 								
 								} else {
 									$data['subjects'] .= "
-										<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}' disabled />{$course_no} {$descriptive_title}</p>
+										<p><input type='checkbox' class='subjects editable {$current_term_id}' name='subject[]' value='{$subject_id}' />{$course_no} {$descriptive_title}</p>
 									";
 								}
 							
@@ -1410,13 +1530,16 @@ class Students extends CI_Controller {
 		
 
 		echo json_encode($data);
-	}
+	}     
 	
 	function add_subject() {
 	
-		$start_year = date('Y');
+		/*$start_year = date('Y');
 		$end_year = date('Y', strtotime('+1 years'));
-		$school_year = $start_year . "-" . $end_year;
+		$school_year = $start_year . "-" . $end_year;*/ 
+		
+		$school_year = $this->input->post('school_year');
+		
 		
 		$student_id = $this->input->post("student_id");
 		$term_id = $this->input->post('term_id');
@@ -1596,11 +1719,12 @@ class Students extends CI_Controller {
 				
 			} // end foreach loop
 			
-		} // end foreach loop  
+		} // end foreach loop  in getting terms with order 
 	
-		
+
 		$this->load->helper('pdf_helper');
 		$this->load->view('transcript_view', $data);
+		
 	}   
 	
 	function add_subject_to_regular() {
@@ -1675,7 +1799,6 @@ class Students extends CI_Controller {
 		echo json_encode($data);
 	
 	}
-	
 
 	function test() {
 		

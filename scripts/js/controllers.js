@@ -8,16 +8,17 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	var fullUrl = protocol + window.location.pathname + window.location.search;
 	
 	// below is for getting the subjects
-	var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_via_angular");
+	//var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_via_angular");
+	var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_group_by_school_year");
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){
-		$scope.subjects = data.subjects; 	   
+		$scope.subjects = data.subjects; 	    
 	});
 	
 	$scope.getSubjects = function() {
 		$http.get(studentAcademicUrl).success(function(data){
-			$scope.subjects = data.subjects;  
+			$scope.subjects = data.subjects;     
 		});
 	};
 	

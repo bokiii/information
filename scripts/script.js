@@ -1356,23 +1356,16 @@ var manageStudents = (function() {
 		
 	};		
 	
-	var academic_delete_click_validation = function() {
-		$("#academic_delete").click(function(){
-			if($(document).find("#student_status").val() == "regular") {
-				alert("Cannot delete a subject to a regular student.");
-				return false;
-			} else {
-				return true;
-			}
-			
-			
-		});
-	};
-	
 	var add_subject_click = function() { 
-	
+
+		
 		$add_subject.click(function(){
 		
+			console.log($(document).find("#school_year").css({
+				"width": "100px", 
+				"text-align": "center"
+			}));
+			
 			jQuery.fn.exists = function() {
 				return this.length > 0;
 			}    
@@ -1393,9 +1386,11 @@ var manageStudents = (function() {
 				$.get($subject_source + "?id=" + $course_id + "&current_student_id=" + currentStudentId, function(data){
 					var datas = eval('msg=' + data);
 					$(document).find("#subjects_container").html(datas.subjects);
+					
+					
 					$(document).find("#subject_popup_form").children("#student_type_div").html(datas.student_type);
 				
-					var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
+					/*var currentClassTermId = "." + $(document).find("#term_id_enrolled").val();   
 					
 					if($(document).find(".non_editable").exists() == false) {
 						$(currentClassTermId).removeAttr('disabled').check().attr("onclick", "return false");
@@ -1403,9 +1398,8 @@ var manageStudents = (function() {
 
 					if($(document).find("#student_type").val() == "irregular") {
 						$(document).find(".editable").removeAttr('disabled');
-					}
+					}*/
 					
-				
 				});
 			
 			});
@@ -1605,6 +1599,18 @@ var manageStudents = (function() {
 		
 	};
 	
+	var academic_delete_click_validation = function() {
+		$("#academic_delete").click(function(){
+			if($(document).find("#student_status").val() == "regular") {
+				alert("Cannot delete a subject to a regular student.");
+				return false;
+			} else {
+				return true;
+			}
+			
+			
+		});
+	};
 	
 	return {
 		disable_submit_and_cancel_button: 		disable_submit_and_cancel_button,
@@ -1646,10 +1652,9 @@ manageStudents.upload_click();
 manageStudents.profile_image_hover();   
 manageStudents.upload_submit(); 
 
-manageStudents.student_type_in_manage();   
-manageStudents.regular_automatic_subject_update();
-
-manageStudents.academic_delete_click_validation();
+//manageStudents.student_type_in_manage();   
+//manageStudents.regular_automatic_subject_update();
+//manageStudents.academic_delete_click_validation();
 
 
 

@@ -216,11 +216,11 @@
 	font-weight: bold;
 }
 
-#content #academic_data_form table th:nth-child(6) {
+#content #academic_data_form table th:nth-child(5) {
 	text-align: center;
 }  
 
-#content #academic_data_form table th:nth-child(7) {
+#content #academic_data_form table th:nth-child(6) {
 	text-align: center;
 }
 
@@ -229,11 +229,11 @@
 	text-align: left;
 }
 
-#content #academic_data_form table td:nth-child(6) {
+#content #academic_data_form table td:nth-child(5) {
 	text-align: center;
 }
 
-#content #academic_data_form table td:nth-child(6) input {
+#content #academic_data_form table td:nth-child(5) input {
 	text-align: center;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -244,11 +244,11 @@
 }  
 
 
-#content #academic_data_form table td:nth-child(7) {
+#content #academic_data_form table td:nth-child(6) {
 	text-align: center;
 }  
  
-#content #academic_data_form table td:nth-child(7) input {
+#content #academic_data_form table td:nth-child(6) input {
 	text-align: center;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -284,7 +284,7 @@
 	-webkit-border-radius: 4px;
 	text-decoration: none;
 	color: #000;
-	
+	font-weight: normal;
 }
 
 #content .student_angular_trigger {
@@ -355,12 +355,12 @@
 	margin: 0px 10px 0px 20px;
 }
 
-#subject_popup_form table {
-	margin: 20px auto 20px auto;
-}
+#subject_popup_form table {   
+	margin: 20px auto 20px auto;   
+}  
 
-#subject_popup_form table td {
-	
+#subject_popup_form table #manage_school_year {
+	width: 100px;
 }
 
 #subject_popup_form input[type='submit'] {

@@ -40,8 +40,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>scripts/js/app.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>scripts/js/services.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>scripts/js/controllers.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>scripts/js/filters.js"></script>
-
+<script type="text/javascript" src="<?php echo base_url(); ?>scripts/js/filters.js"></script>    
 
 </body>
 </html>
