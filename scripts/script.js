@@ -309,71 +309,6 @@ var popupModule = (function() {
 		// below are the functions for clicking the next and prev button
 		$next.click(function(event){
 			
-			/*switch (slide_number) {
-				case 1:
-					if($term_id.val() == "") {
-						alert("Select Term");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					execute_slide(do_slide);
-					break;
-				case 2:
-					if($first_name.val() == "" || $last_name.val == "" || $middle_name.val() == "") {
-						alert("First name, Last name or Middle name must not be empty");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					execute_slide(do_slide);
-					break;
-				case 3:
-					if($age.val() == "" || $gender.val == "" || $birth_date.val() == "" || $civil_status.val() == "" || $religion.val() == "" || $address.val() == "") {
-						alert("Age, Gender, Birthdate, Civil Status, Religion, Address  must not be empty");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					execute_slide(do_slide);
-					
-					break;
-				case 4:
-					if($school_id.val() == "") {
-						alert("Select School");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					execute_slide(do_slide);
-				
-					break;
-				case 5:
-					
-					if($course_id_select.val() == "") {
-						alert("Select Course");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					
-					execute_slide(do_slide);
-					break;
-				case 6:
-					var subjects_length = $(document).find(".subjects:checked").length;
-					if(subjects_length == 0) {
-						alert("Select Subject");
-						do_slide = false;
-					} else {
-						do_slide = true;
-					}
-					
-					execute_slide(do_slide);
-					break;
-				default:
-					execute_slide(true);
-			}*/
-			
 			switch (slide_number) {
 				case 1:
 					if($first_name.val() == "" || $last_name.val == "" || $middle_name.val() == "") {
@@ -417,12 +352,17 @@ var popupModule = (function() {
 					break;
 				case 5:
 					var subjects_length = $(document).find(".subjects:checked").length;
+					var school_year = $(document).find("#school_year").val();
+					
 					if(subjects_length == 0) {
 						alert("Select Subject");
 						do_slide = false;
+					} else if(school_year == "") {
+						alert("Enter School Year");
+						do_slide = false;
 					} else {
 						do_slide = true;
-					}
+					}   
 					
 					execute_slide(do_slide);
 					break;
@@ -435,7 +375,7 @@ var popupModule = (function() {
 		});
 		
 		$prev.click(function(event){
-			
+		
 			slide_number -= 1;
 			
 			$current_div.animate({"left": "+=800px"}, "slow", function(){
@@ -612,6 +552,10 @@ var studentSlideShowModule = (function() {
 		
 		$fourth_div.change(function(){
 			
+			// empty first the fifth div
+			$(document).find("#fifth_div").html("");   
+			$(document).find("#fifth_div").append("<div><h2>Subjects</h2><p class='center'>Please go back and select course first.</p></div>");   
+			
 			$subject_source = $(this).find("#subject_source").val();
 			$course_id = $(this).find("#course_id").val();
 		
@@ -660,9 +604,7 @@ var studentSlideShowModule = (function() {
 		
 			studentTypeValue = $("#fifth_div #student_type_div #student_type").val();   
 			termValue = $("#fifth_div #student_term_div #term_id").val();  
-			console.log(termValue);
-			console.log(studentTypeValue);
-	
+			
 			if(studentTypeValue == "regular") {  
 				
 				if(currentSemesterHasSubjects == true) {
@@ -1431,9 +1373,10 @@ var manageStudents = (function() {
 			});
 			
 			var $term_id = $(document).find("#term_id");
+			var $school_year = $(document).find("#school_year");
 			
-			if($term_id.val() == "" || checked_length == 0){
-				alert("You must select Subject and Term to Proceed.");
+			if($term_id.val() == "" || checked_length == 0 || $school_year.val() == ""){
+				alert("You must select Subject, selectTerm and enter School Year Proceed.");
 				
 				return false;
 			} else {

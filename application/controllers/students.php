@@ -489,34 +489,41 @@ class Students extends CI_Controller {
 	}
 
 	function delete_student() {
+	
+		$id = $this->input->post('id');  
 		
-		$id = $this->input->post('id');
+	
+		if($id != NULL) {
 		
-		foreach($id as $set_id) {
+			foreach($id as $set_id) {
 			
-			$get_profile_image = $this->students_model->get_student_profile_image_by_student_id($set_id);                                          
-		
-			if($get_profile_image != NULL) {
+				$get_profile_image = $this->students_model->get_student_profile_image_by_student_id($set_id);                                          
 			
-				foreach($get_profile_image as $row_i) {
-					$existing_image_file_name = $row_i->file_name;
+				if($get_profile_image != NULL) {
+				
+					foreach($get_profile_image as $row_i) {
+						$existing_image_file_name = $row_i->file_name;
+					}
+					
+					$profile_file_names = get_filenames("profiles");
+					
+					foreach($profile_file_names as $file) {
+					
+						$same = $this->same_file($existing_image_file_name, $file);
+						if($same) {
+							$file_path = "profiles/" . $file;
+							unlink($file_path);
+						}
+					}    
+					
+					$delete_current_profile_image = $this->students_model->delete_student_profile_image_by_student_id($set_id);             
 				}
 				
-				$profile_file_names = get_filenames("profiles");
-				
-				foreach($profile_file_names as $file) {
-				
-					$same = $this->same_file($existing_image_file_name, $file);
-					if($same) {
-						$file_path = "profiles/" . $file;
-						unlink($file_path);
-					}
-				}    
-				
-				$delete_current_profile_image = $this->students_model->delete_student_profile_image_by_student_id($set_id);             
 			}
-			
-		}
+		
+		} // end if  
+		
+	
 		
 		$delete_student = $this->global_model->delete($this->table, $id);
 		
