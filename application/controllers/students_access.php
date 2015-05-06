@@ -369,6 +369,70 @@ class Students_access extends CI_Controller {
 		
 	} 
 	
+	function get_student_academic_data_group_by_school_year_and_term_id() {
+	
+		$id = $this->session->userdata('student_id');  
+		
+		$data['subjects'] = array();  
+		
+		$get_school_year = $this->students_model->get_student_academic_school_year_by_student_id($id);      
+		
+		foreach($get_school_year as $row) {
+			
+			$term_id = $row->term_id;
+			$school_year = $row->school_year;    
+			$term_value = $row->term;  
+			$semester_value = $row->semester;  
+			
+			$term_semester_school_year = ucfirst($term_value) . " Year - " . ucfirst($semester_value) . " Semester (" . $school_year . ")"; 
+			
+			$get_student_academic_data = $this->students_model->get_student_academic_data_by_student_id_school_year_and_term_id($id, $school_year, $term_id);
+			for($i = 0; $i < count($get_student_academic_data); $i++) {
+			
+			
+				if($get_student_academic_data[$i]['semester'] == "first") {
+					$semester = "First";
+				}  
+				
+				if($get_student_academic_data[$i]['semester'] == "second") {
+					$semester = "Second";
+				}   
+				
+				$term_name = ucfirst($get_student_academic_data[$i]['term']) . " Year";  
+				$semester_name = $semester . " Semester";   
+				// this school year is at the top    
+				
+				$student_subject_id = $get_student_academic_data[$i]['id'];
+				$course_no = $get_student_academic_data[$i]['course_no']; 
+				$descriptive_title = $get_student_academic_data[$i]['descriptive_title'];       
+				$credit = $get_student_academic_data[$i]['earned_credit'];     
+				$grade = $get_student_academic_data[$i]['grade'];  
+				$comp = $get_student_academic_data[$i]['comp']; 
+				$status = $get_student_academic_data[$i]['status']; 
+				
+				
+				$data['subjects'][$term_semester_school_year][] = array(
+					'id' => $student_subject_id, 
+					'term' => $term_name, 
+					'semester' => $semester_name, 
+					'school_year' => $school_year,  
+					'course_no' => $course_no, 
+					'descriptive_title' => $descriptive_title, 
+					'credit' => $credit, 
+					'grade' => $grade,   
+					'comp' => $comp, 
+					'status' => $status
+				);
+			
+			}
+		
+		}   
+		
+		echo json_encode($data); 
+		
+	} 
+	
+	
 	function update_student_main_data() {
 	
 		$id = $this->input->post('id');

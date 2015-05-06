@@ -9,7 +9,9 @@ controllers.controller('StudentAcademicCtrl', function($scope, $http){
 	
 	// below is for getting the subjects
 	//var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_via_angular");
-	var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_group_by_school_year");
+	//var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_group_by_school_year");
+	var studentAcademicUrl = fullUrl.replace("manage_students", "get_student_academic_data_group_by_school_year_and_term_id");
+	
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){
@@ -53,7 +55,7 @@ controllers.controller('StudentAccessAcademicCtrl', function($scope, $http){
 
 	// below is for getting the subjects
 	//var studentAcademicUrl = fullUrl + "/get_student_academic_data_via_angular";   
-	var studentAcademicUrl = fullUrl + "/get_student_academic_data_group_by_school_year";
+	var studentAcademicUrl = fullUrl + "/get_student_academic_data_group_by_school_year_and_term_id";
 	$scope.subjects;
 	
 	$http.get(studentAcademicUrl).success(function(data){

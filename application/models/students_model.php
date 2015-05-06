@@ -418,7 +418,7 @@ class Students_model extends CI_Model {
 	
 	
 	function get_student_academic_school_year_by_student_id($student_id) {
-		$this->db->select('students_subject.school_year, terms.term, terms.semester'); 
+		$this->db->select('students_subject.term_id, students_subject.school_year, terms.term, terms.semester'); 
 		$this->db->where('student_id', $student_id);  
 	
 		$this->db->from('students_subject');    
@@ -426,6 +426,8 @@ class Students_model extends CI_Model {
 		
 		$this->db->group_by('school_year');    
 		$this->db->group_by('term_id'); 
+		
+		
 		$query = $this->db->get();  
 		return $query->result();
 	} 
@@ -445,7 +447,39 @@ class Students_model extends CI_Model {
 		return $query->result_array();
 	}
 	
+	function get_student_academic_data_by_student_id_school_year_and_term_id($student_id, $school_year, $term_id) {
+		$this->db->select('students_subject.id, students_grade.earned_credit, students_grade.grade, students_grade.comp, students_grade.status, subjects.course_no, subjects.descriptive_title, terms.term, terms.semester');               
+		$this->db->where('students_subject.student_id', $student_id);
+		$this->db->where('students_subject.school_year', $school_year);  
+		$this->db->where('students_subject.term_id', $term_id);  
+		$this->db->from('students_subject');     
+		$this->db->join('students_grade', 'students_grade.subject_id = students_subject.id');   
+		$this->db->join('course_subjects', 'course_subjects.id = students_subject.course_subject_id');
+		$this->db->join('subjects', 'subjects.id = course_subjects.subject_id');  
+		$this->db->join('terms', 'terms.id = students_subject.term_id');     
+		$this->db->group_by(array('students_subject.school_year', 'students_subject.course_subject_id'));
+		$this->db->order_by('students_subject.term_id');
+		
+		$query = $this->db->get();  
+		return $query->result_array();
+	}
+	
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
